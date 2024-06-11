@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
 
-import EyeOffIcon from "@/public/login/EyeOffIcon";
-import EyeIcon from "@/public/login/EyeIcon";
-import { useState } from "react";
-import { LoginFormValues } from "./LoginInputs";
 import clsx from "clsx";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+
+import { LoginFormValues } from "./LoginInputs";
 
 interface InputProps {
   type: "email" | "password";
@@ -48,11 +48,15 @@ export default function EmailInput({
         />
         {type === "password" ? (
           <button
-            type="button" // 이 부분을 추가하여 기본 submit 동작을 방지.
+            type="button"
             onClick={togglePasswordVisibility}
             className="absolute inset-y-0 right-0 flex items-center pr-3 pt-4 leading-5"
           >
-            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            {showPassword ? (
+              <EyeSlashIcon className="size-4 text-default-500" />
+            ) : (
+              <EyeIcon className="size-4 text-default-500" />
+            )}
           </button>
         ) : null}
       </div>

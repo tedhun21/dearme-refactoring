@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
@@ -74,14 +76,14 @@ export default function LoginInputs() {
   };
 
   return (
-    <section className="flex h-[360px] w-full flex-col items-center">
+    <section className="flex h-[320px] w-full flex-col items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
         name="loginForm"
         autoComplete="on"
         className="flex h-full w-80 flex-col justify-between"
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <LoginInput
             type="email"
             placeholder="example@domain.com"
