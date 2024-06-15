@@ -7,16 +7,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // 유저
 /// 로그인
 export const signIn = async ({ email, password }: any) => {
-  try {
-    const { data } = await axios.post(`${API_URL}/auth/local`, {
-      identifier: email,
-      password,
-    });
+  const { data } = await axios.post(`${API_URL}/auth/local`, {
+    identifier: email,
+    password,
+  });
 
-    return data;
-  } catch (e) {
-    return null;
-  }
+  return data;
 };
 
 /// 내 정보 가져오기
