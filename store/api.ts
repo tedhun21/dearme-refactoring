@@ -29,7 +29,7 @@ export const getMe = async () => {
   }
 };
 
-// 내 정보 수정하기 (사진 제외)
+/// 내 정보 수정하기 (사진 제외)
 export const updateMe = async ({ userId, updateData }: any) => {
   const access_token = getCookie("access_token");
   if (access_token) {
@@ -105,6 +105,19 @@ export const deleteMe = async ({ userId }: any) => {
     });
     return data;
   }
+};
+
+/// email 중복체크
+export const checkEmail = async (checkData: any) => {
+  const { data } = await axios.get(`${API_URL}/check-email?email=${checkData}`);
+  return data;
+};
+
+export const checkNickname = async (checkData: any) => {
+  const { data } = await axios.get(
+    `${API_URL}/check-nickname?nickname=${checkData}`,
+  );
+  return data;
 };
 
 // todo
