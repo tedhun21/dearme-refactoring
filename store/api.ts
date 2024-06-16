@@ -113,10 +113,21 @@ export const checkEmail = async (checkData: any) => {
   return data;
 };
 
+/// nickname 중복체크
 export const checkNickname = async (checkData: any) => {
   const { data } = await axios.get(
     `${API_URL}/check-nickname?nickname=${checkData}`,
   );
+  return data;
+};
+
+/// create user
+export const createUser = async (createData: any) => {
+  const { data } = await axios.post(
+    `${API_URL}/auth/local/register`,
+    createData,
+  );
+
   return data;
 };
 
