@@ -1,8 +1,7 @@
 import Link from "next/link";
-import BackIcon from "@/public/signup/BackIcon";
 
+import BackIcon from "@/public/common/BackIcon";
 import SignupTitle from "@/public/signup/SignupTitle";
-
 import SignUpInputs from "../ui/signup/SignUpInputs";
 
 export default async function Signup() {

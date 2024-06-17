@@ -22,7 +22,7 @@ export default function EmailInput({
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -53,9 +53,9 @@ export default function EmailInput({
             className="absolute inset-y-0 right-0 flex items-center pr-3 pt-4 leading-5"
           >
             {showPassword ? (
-              <EyeSlashIcon className="size-4 text-default-500" />
-            ) : (
               <EyeIcon className="size-4 text-default-500" />
+            ) : (
+              <EyeSlashIcon className="size-4 text-default-500" />
             )}
           </button>
         ) : null}
