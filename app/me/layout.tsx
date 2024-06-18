@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import axios from "axios";
 
 import Footer from "../ui/footer";
-import MeNav from "../ui/me/MeNav";
+import MeNav from "../ui/me/nav/MeNav";
 import MeProfile from "../ui/me/profile/me/MeProfile";
 import { useQuery } from "@tanstack/react-query";
 import { getMe } from "@/store/api";
@@ -16,7 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 서버 사이드 렌더링
+  // // 서버 사이드 렌더링
   // const cookieStore = cookies();
   // const cookie = cookieStore.get("access_token");
 
