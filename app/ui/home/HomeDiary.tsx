@@ -1,11 +1,13 @@
 "use client";
 
-import ImageIcon from "@/public/home/ImageIcon";
-import RememberIcon from "@/public/me/RememberIcon";
-import { IDiary, diaryListState, settingState } from "@/store/atoms";
-import dayjs from "dayjs";
 import Link from "next/link";
+
 import { useRecoilState } from "recoil";
+import dayjs from "dayjs";
+import { BookmarkSquareIcon } from "@heroicons/react/24/outline";
+
+import ImageIcon from "@/public/home/ImageIcon";
+import { IDiary, diaryListState, settingState } from "@/store/atoms";
 import WeatherIcons from "../diary/WeatherIcons";
 
 export default function HomeDiary() {
@@ -31,7 +33,7 @@ export default function HomeDiary() {
                   </span>
                   <div className="flex gap-1">
                     {diaryOfDay.remember && (
-                      <RememberIcon className="h-5 w-5 fill-current" />
+                      <BookmarkSquareIcon className="size-6" />
                     )}
                     {diaryOfDay.photos?.length > 0 && (
                       <ImageIcon className="h-5 w-5" />

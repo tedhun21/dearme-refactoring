@@ -11,7 +11,7 @@ import SentimentalQuotes from "@/app/ui/diary/Sentimental Quotes";
 import MonthlyDiary from "@/app/ui/diary/MonthlyDiary";
 import DiaryActionButton from "@/app/ui/diary/DiaryActionButton";
 
-import Footer from "@/app/ui/footer";
+import Footer from "@/app/ui/footer/Footer";
 
 import { getDiaryForDay, getMe } from "@/store/api";
 import TodayPicks from "@/app/ui/diary/TodayPicks";

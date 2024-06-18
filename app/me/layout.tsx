@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import axios from "axios";
 
-import Footer from "../ui/footer";
+import Footer from "../ui/footer/Footer";
 import MeNav from "../ui/me/nav/MeNav";
 import MeProfile from "../ui/me/profile/me/MeProfile";
 import { useQuery } from "@tanstack/react-query";
