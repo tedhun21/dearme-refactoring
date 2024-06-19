@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getPostsByGoals } from "@/store/api";
 
-import Header from "@/app/ui/header";
+import Header from "@/app/ui/header/Header";
 import BackButton from "@/app/ui/backbutton";
 import ViewPostModal from "@/app/ui/search/ViewPostModal";
 

@@ -4,7 +4,7 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
-import Header from "@/app/ui/header";
+import Header from "@/app/ui/header/Header";
 import ReadDiary from "@/app/ui/diary/ReadDiary";
 
 import SentimentalQuotes from "@/app/ui/diary/Sentimental Quotes";

@@ -10,7 +10,7 @@ import { Option, Select } from "@mui/joy";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-import Header from "../ui/header";
+import Header from "../ui/header/Header";
 import LeftButton from "@/public/analysis/LeftButton";
 import RightButton from "@/public/analysis/RightButton";
 

@@ -1,9 +1,10 @@
-import NotificationIcon from "@/public/header/NotificationIcon";
-import SettingIcon from "@/public/header/SettingIcon";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
-export default function Header() {
+import HeaderUserModal from "./LogoutUserModal";
+import LoginUserModal from "./LoginUserModal";
+
+export default function Header({ me }: any) {
   return (
     <header className="z-10 flex w-full flex-row items-center justify-between p-5">
       <Link href="/">
@@ -16,10 +17,7 @@ export default function Header() {
           priority
         />
       </Link>
-      <div className="flex flex-row gap-2 p-3">
-        <NotificationIcon className="h-4 w-4" />
-        <SettingIcon className="h-4 w-4" />
-      </div>
+      {me ? <LoginUserModal me={me} /> : <HeaderUserModal />}
     </header>
   );
 }
