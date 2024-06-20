@@ -31,8 +31,7 @@ import PageLevel3 from "@/public/forgotpassword/PageLevel3";
 import PasswordRestSuccessfulTitle from "@/public/forgotpassword/PasswordRestSuccessfulTitle";
 import SuccessfulCheck from "@/public/forgotpassword/SuccessfulCheck";
 import PageLevel4 from "@/public/forgotpassword/PageLevel4";
-import X from "@/public/signup/X";
-import Check from "@/public/signup/Check";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/16/solid";
 
 // Firebase 초기화
 const firebaseConfig = {
@@ -313,7 +312,7 @@ export default function ForgotPassword() {
               />
               {inputValues.emailInput && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-[70px] pt-12 leading-5">
-                  {duplicateCheck.email ? <Check /> : <X />}
+                  {duplicateCheck.email ? <CheckIcon /> : <XMarkIcon />}
                 </div>
               )}
             </section>

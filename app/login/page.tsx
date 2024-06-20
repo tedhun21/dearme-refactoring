@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import LoginInputs from "../ui/login/LoginInputs";
-import BackIcon from "@/public/login/BackIcon";
+import BackIcon from "@/public/common/BackIcon";
 import DearmeLogo from "@/public/login/DearmeLogo";
 
 export default async function Login() {
@@ -24,8 +24,8 @@ export default async function Login() {
           >
             Forgot Password?
           </Link>
-          <div className="flex w-80 justify-between">
-            <h1 className="font-medium text-default-100">
+          <div className="flex w-80 justify-center gap-4">
+            <h1 className="font-medium text-default-600">
               {"Don't have an account?"}
             </h1>
             <Link

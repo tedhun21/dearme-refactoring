@@ -11,7 +11,7 @@ import LoginInput from "./LoginInput";
 import { signIn } from "@/store/api";
 import { setCookie } from "@/util/tokenCookie";
 import GoogleLogo from "@/public/login/GoogleLogo";
-import { CircularProgress, circularProgressClasses } from "@mui/material";
+import Loading from "@/public/common/Loading";
 
 export interface LoginFormValues {
   email: string;
@@ -102,19 +102,7 @@ export default function LoginInputs() {
             className="group flex w-full items-center justify-center rounded-3xl border-2 border-default-800 p-2 hover:bg-default-800 active:bg-default-900"
           >
             {isPending ? (
-              <CircularProgress
-                variant="indeterminate"
-                disableShrink
-                size={20}
-                thickness={5}
-                sx={{
-                  color: "#ffffff",
-                  animationDuration: "550ms",
-                  [`& .${circularProgressClasses.circle}`]: {
-                    strokeLinecap: "round",
-                  },
-                }}
-              />
+              <Loading />
             ) : (
               <span className="text-sm font-semibold text-default-800 group-hover:text-white">
                 Log in

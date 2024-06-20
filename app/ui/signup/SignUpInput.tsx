@@ -4,7 +4,7 @@ import { SignUpFormValues } from "./SignUpInputs";
 
 interface SignUpInputProps {
   label: "Name" | "Email" | "Nickname" | "Password" | "Confirm Password";
-  formName: "name" | "email" | "nickname" | "password" | "confirmPassword";
+  formName: "username" | "email" | "nickname" | "password" | "confirmPassword";
   getValue: string;
   register: UseFormRegister<SignUpFormValues>;
   error?: FieldError;

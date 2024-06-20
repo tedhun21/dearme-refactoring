@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import SignUpInput from "./SignUpInput";
 import clsx from "clsx";
 import { useMutation } from "@tanstack/react-query";
-import { checkEmail, checkNickname } from "@/store/api";
+
+import SignUpInput from "./SignUpInput";
+import { checkEmail, checkNickname, createUser } from "@/store/api";
+import Loading from "@/public/common/Loading";
+import { useRouter } from "next/navigation";
 
 export interface SignUpFormValues {
-  name: string;
+  username: string;
   email: string;
   nickname: string;
   password: string;
@@ -28,7 +28,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // yup을 이용한 유효성검사
 const signUpSchema = yup.object().shape({
-  name: yup
+  username: yup
     .string()
     .min(2, "Name must be at least 2 characters.")
     .required("Please enter your name."),
@@ -63,6 +63,9 @@ const signUpSchema = yup.object().shape({
 type IFormSignupInputs = yup.InferType<typeof signUpSchema>;
 
 export default function SignUpInputs() {
+  const router = useRouter();
+  const [signupErrorMessage, setSignupErrorMessage] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -76,7 +79,7 @@ export default function SignUpInputs() {
     // mode: "onChange", // 실시간 유효성 검사를 위해 onChange 모드 설정
   });
 
-  const { name, email, nickname, password, confirmPassword } = getValues();
+  const { username, email, nickname, password, confirmPassword } = getValues();
   const { email: watchEmail, nickname: watchNickname } = watch();
 
   const { mutate: checkEmailMutate } = useMutation({
@@ -101,33 +104,32 @@ export default function SignUpInputs() {
     },
   });
 
+  const { mutate: createUserMutate, isPending } = useMutation({
+    mutationFn: createUser,
+    onSuccess: (data) => {
+      window.alert(data.message);
+      router.push("/login");
+    },
+    onError: (err) => {
+      setSignupErrorMessage(
+        "Please try again due to an error during registration.",
+      );
+    },
+  });
+
   // 회원가입 처리하는 로직
   const onSubmit = async (data: IFormSignupInputs) => {
-    const { name, email, nickname, password } = data;
+    const { username, email, nickname, password, isChecked } = data;
 
-    console.log(data);
-
-    // try {
-    //   const response = await axios.post(
-    //     `${process.env.NEXT_PUBLIC_API_URL}/auth/local/register`,
-    //     {
-    //       username: name,
-    //       email,
-    //       nickname,
-    //       password,
-    //     },
-    //   );
-
-    //   if (
-    //     response.data.status === 201 ||
-    //     response.data.message === "Successfully create a user."
-    //   ) {
-    //     alert("회원가입이 완료되었습니다");
-    //     router.push("/login");
-    //   }
-    // } catch (error) {
-    //   alert("회원 가입에 실패하였습니다. 다시 시도해 주세요.");
-    // }
+    if (
+      username.length > 1 &&
+      emailRegex.test(email) &&
+      nickname.length > 1 &&
+      password.length > 1 &&
+      isChecked
+    ) {
+      createUserMutate({ username, email, nickname, password });
+    }
   };
 
   // email debounce
@@ -160,10 +162,10 @@ export default function SignUpInputs() {
       >
         <SignUpInput
           label="Name"
-          formName="name"
-          getValue={name}
+          formName="username"
+          getValue={username}
           register={register}
-          error={errors.name}
+          error={errors.username}
         />
 
         <SignUpInput
@@ -216,12 +218,19 @@ export default function SignUpInputs() {
 
         <button
           type="submit"
-          className="w-full rounded-3xl border-2 border-default-800 py-2 font-semibold text-default-800 hover:bg-default-800 hover:text-default-200 active:bg-default-900 active:text-default-800"
+          className="group w-full rounded-3xl border-2 border-default-800 py-2 hover:bg-default-800 active:bg-default-900"
         >
-          Create account
+          {isPending ? (
+            <Loading />
+          ) : (
+            <span className="font-semibold text-default-800 group-hover:text-default-200 group-active:text-default-800">
+              Create account
+            </span>
+          )}
         </button>
+        <span>{signupErrorMessage}</span>
       </form>
-      <section className="flex items-center justify-between gap-2 p-2 text-xs">
+      <section className="flex items-center justify-between gap-2 p-2 text-sm">
         <span className="text-gray-500">Already have an account?</span>
         <Link href="/login" className="text-default-900">
           Login here
@@ -229,129 +238,4 @@ export default function SignUpInputs() {
       </section>
     </section>
   );
-}
-
-{
-  /* <div className="relative flex w-full flex-col gap-1">
-          <label htmlFor="name" className="text-sm text-default-500">
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            {...register("name")}
-            className="rounded-none border-b-2 border-default-400 bg-transparent p-1 hover:border-default-800 focus:border-default-900 focus:outline-none"
-          />
-          <span className="text-sm text-red-500">
-            {errors.name && errors.name.message}
-          </span>
-          <div className="absolute right-2 top-8">
-            {!errors.name && getValues("name")?.length > 1 ? (
-              <CheckIcon className="size-4 text-default-900" />
-            ) : errors.name ? (
-              <XMarkIcon className="size-4 text-red-500" />
-            ) : null}
-          </div>
-        </div> */
-}
-
-{
-  /* <div className="relative flex w-full flex-col gap-1">
-          <label htmlFor="email" className="text-sm text-default-500">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            placeholder="example@domain.com"
-            className="rounded-none border-b-2 border-default-400 bg-transparent p-1 hover:border-default-800 focus:border-default-900 focus:outline-none"
-          />
-          <span className="text-sm text-red-500">
-            {errors.email && errors.email.message}
-          </span>
-          <div className="absolute right-2 top-8">
-            {!errors.email && getValues("email")?.length > 2 ? (
-              <CheckIcon className="size-4 text-default-900" />
-            ) : errors.email && getValues("email") !== "" ? (
-              <XMarkIcon className="size-4 text-red-500" />
-            ) : null}
-          </div>
-        </div> */
-}
-
-{
-  /* <div className="relative flex w-full flex-col gap-1">
-<label htmlFor="nickname" className="text-sm text-default-500">
-  Nickname
-</label>
-<input
-  id="nickname"
-  type="text"
-  {...register("nickname", {
-    onChange: (e) => handleNicknameInputChange(e),
-  })}
-  className="rounded-none border-b-2 border-default-400 bg-transparent p-1 hover:border-default-800 focus:border-default-900 focus:outline-none"
-/>
-<span className="text-sm text-red-500">
-  {errors.nickname && errors.nickname.message}
-</span>
-<div className="absolute right-2 top-8">
-  {!errors.nickname && getValues("nickname")?.length > 2 ? (
-    <CheckIcon className="size-4 text-default-900" />
-  ) : errors.nickname && getValues("nickname") !== "" ? (
-    <XMarkIcon className="size-4 text-red-500" />
-  ) : null}
-</div>
-</div> */
-}
-
-{
-  /* <div className="relative flex w-full flex-col gap-1">
-          <label htmlFor="password" className="text-sm text-default-500">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register("password")}
-            className="rounded-none border-b-2 border-default-400 bg-transparent p-1 hover:border-default-800 focus:border-default-900 focus:outline-none"
-          />
-          <span className="text-sm text-red-500">
-            {errors.password && errors.password.message}
-          </span>
-          <div className="absolute right-2 top-8">
-            {!errors.password && getValues("password")?.length > 2 ? (
-              <CheckIcon className="size-5 text-default-900" />
-            ) : errors.password && getValues("password") !== "" ? (
-              <XMarkIcon className="size-4 text-red-500" />
-            ) : null}
-          </div>
-        </div> */
-}
-
-{
-  /* <div className="relative flex w-full flex-col gap-1">
-          <label htmlFor="confirmPassword" className="text-sm text-default-500">
-            Confirm Password
-          </label>
-          <input
-            id="confirmPassword"
-            type="password"
-            {...register("confirmPassword")}
-            className="rounded-none border-b-2 border-default-400 bg-transparent p-1 hover:border-default-800 focus:border-default-900 focus:outline-none"
-          />
-          <span className="text-sm text-red-500">
-            {errors.confirmPassword && errors.confirmPassword.message}
-          </span>
-          <div className="absolute right-2 top-8">
-            {!errors.confirmPassword &&
-            getValues("confirmPassword")?.length > 2 ? (
-              <CheckIcon className="size-5 text-default-900" />
-            ) : errors.confirmPassword &&
-              getValues("confirmPassword") !== "" ? (
-              <XMarkIcon className="size-4 text-red-500" />
-            ) : null}
-          </div>
-        </div> */
 }
