@@ -4,11 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getMe } from "@/store/api";
 
-import Header from "./ui/header";
-import Footer from "./ui/footer";
-import CustomCalendar from "./ui/home/CustomCalendar";
-import MeGoal from "./ui/me/plans/MeGoal";
-import HomeTodoAndDiary from "./ui/home/HomeTodoAndDiary";
+import Header from "../ui/header/Header";
+import Footer from "../ui/footer/Footer";
+import CustomCalendar from "../ui/home/CustomCalendar";
+import MeGoal from "../ui/me/plans/MeGoal";
+import HomeTodoAndDiary from "../ui/home/HomeTodoAndDiary";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { settingState } from "@/store/atoms";
@@ -32,13 +32,13 @@ export default function Home() {
   return (
     <main className="flex min-h-screen justify-center">
       <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
-        <Header />
+        <Header me={meData} />
         <article className="mx-5 pb-24">
           <CustomCalendar />
           <MeGoal route="/" />
           <HomeTodoAndDiary />
         </article>
-        <Footer me={meData} />
+        <Footer />
       </div>
     </main>
   );

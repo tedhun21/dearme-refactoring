@@ -1,6 +1,6 @@
 "use client";
 
-import Footer from "@/app/ui/footer";
+import Footer from "@/app/ui/footer/Footer";
 import UserInfo from "@/app/ui/me/profile/user/UserInfo";
 import { getMe } from "@/store/api";
 import { useQuery } from "@tanstack/react-query";

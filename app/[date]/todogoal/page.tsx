@@ -19,7 +19,7 @@ import {
   todoListState,
 } from "@/store/atoms";
 import CalendarIcon from "@/public/todogoal/CalendarIcon";
-import Footer from "@/app/ui/footer";
+import Footer from "@/app/ui/footer/Footer";
 import {
   createMyTodo,
   getMe,
@@ -247,7 +247,7 @@ export default function DailyTodoGoal() {
           </section>
         </article>
 
-        <Footer me={meData} />
+        <Footer />
       </div>
     </main>
   );

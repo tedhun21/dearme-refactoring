@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMe } from "@/store/api";
 
 import SearchBar from "../ui/search/SearchBar";
-import Footer from "../ui/footer";
+import Footer from "../ui/footer/Footer";
 
 import BackIcon from "@/public/signup/BackIcon";
 import SearchTitle from "@/public/search/SearchTitle";

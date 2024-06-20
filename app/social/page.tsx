@@ -11,12 +11,12 @@ import { getMe, getPostWithPage } from "@/store/api";
 
 import { CircularProgress } from "@mui/material";
 
-import Header from "../ui/header";
+import Header from "../ui/header/Header";
 import Tabs from "../ui/social/Tabs";
 import SocialPost from "../ui/social/SocialPost";
 import New from "../ui/social/New";
 import CreatePost from "../ui/social/CreatePost";
-import Footer from "../ui/footer";
+import Footer from "../ui/footer/Footer";
 // post type
 export interface Photo {
   id: number;
