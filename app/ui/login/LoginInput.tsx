@@ -13,7 +13,7 @@ interface InputProps {
   error: FieldError | undefined;
 }
 
-export default function EmailInput({
+export default function LoginInput({
   type,
   placeholder,
   register,
@@ -42,7 +42,7 @@ export default function EmailInput({
           {...register(type)}
           placeholder={placeholder || ""}
           className={clsx(
-            "border-b-2 border-default-400 bg-transparent p-2 placeholder:text-default-500 hover:border-default-800 hover:placeholder:text-default-600 focus:border-default-900 focus:outline-none focus:placeholder:text-default-500 placeholder:focus:text-transparent",
+            "border-b-2 border-default-400 bg-transparent p-2 placeholder:text-default-500 hover:border-default-800 hover:placeholder:text-default-600 focus:border-default-900 focus:outline-none focus:placeholder:text-default-500",
             error ? "text-red-600" : "",
           )}
         />

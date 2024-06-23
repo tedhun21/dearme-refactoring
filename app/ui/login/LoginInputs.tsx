@@ -21,7 +21,7 @@ export interface LoginFormValues {
 const regex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 // yup을 이용한 유효성검사
-const loginSchema = yup.object().shape({
+const loginSchema = yup.object({
   email: yup
     .string()
     .email("Invalid email address format.")
