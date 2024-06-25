@@ -10,6 +10,7 @@ import XIcon from "@/public/todo/XIcon";
 import EditIcon from "@/public/me/EditIcon";
 import { deleteMyTodo } from "@/store/api";
 import { todoListState } from "@/store/atoms";
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function TodoMenu({ date, todo, setCanEdit }: any) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -64,24 +65,25 @@ export default function TodoMenu({ date, todo, setCanEdit }: any) {
         }}
         PaperProps={{
           style: {
-            width: "120px",
-            borderRadius: "16px",
+            width: "100px",
+            borderRadius: "8px",
           },
         }}
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1 px-2">
           <button
             onClick={() => setCanEdit(true)}
-            className="flex items-center gap-1 px-3 py-1 hover:bg-default-200 active:bg-default-300"
+            className="flex items-center gap-1 rounded-md p-1 hover:bg-default-200 active:bg-default-300"
           >
-            <EditIcon className="h-5 w-5 fill-current text-default-600" />
+            {/* <EditIcon className="h-5 w-5 fill-current text-default-600" /> */}
+            <PencilSquareIcon className="size-6 stroke-2" />
             <span>Edit</span>
           </button>
           <button
             onClick={() => handleDeleteTodo()}
-            className="flex items-center gap-1 px-3 py-1 hover:bg-default-200 active:bg-default-300"
+            className="flex items-center gap-1 rounded-md p-1 hover:bg-default-200 active:bg-default-300"
           >
-            <XIcon className="h-5 w-5" color="red" />
+            <XMarkIcon className="size-6 stroke-2 text-red-500" />
             <span className="text-red-500">Delete</span>
           </button>
         </div>

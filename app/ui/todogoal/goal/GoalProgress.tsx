@@ -14,7 +14,9 @@ export default function GoalProgress() {
 
   return (
     <div className="flex w-full flex-col rounded-3xl bg-default-900 p-6">
-      <div className="text- font-semibold text-black">COMPLETED</div>
+      <div className="text- font-semibold text-black">
+        Today is the day my goal is due.
+      </div>
       <div className="mb-2 mt-1 h-[1px] bg-white"></div>
       {DdayGoals.map((goal) => (
         <DdayGoalList key={goal.id} goal={goal} />

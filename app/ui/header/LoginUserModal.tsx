@@ -1,7 +1,7 @@
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import UserWithNoImage from "@/public/social/UserWithNoImage";
-import { useEffect, useRef, useState } from "react";
 import ModalList from "./ModalList";
 
 const BUCKET_URL = process.env.NEXT_BUCKET_URL;
@@ -35,7 +35,7 @@ export default function LoginUserModal({ me }: any) {
   }, [openModal]);
 
   return (
-    <button onClick={handleModalOpen} className="relative size-10">
+    <div onClick={handleModalOpen} className="relative size-10">
       {me?.photo?.url ? (
         <Image
           src={`${BUCKET_URL}${me.photo.url}`}
@@ -49,13 +49,13 @@ export default function LoginUserModal({ me }: any) {
       {openModal ? (
         <div
           ref={modalRef}
-          className="absolute right-0 flex w-28 flex-col gap-1 rounded-lg border-2 bg-white px-1 py-2"
+          className="absolute right-0 top-10 flex w-28 flex-col gap-1 rounded-lg border-2 bg-white px-1 py-2"
         >
           {modalList.map((list) => (
             <ModalList key={list.id} label={list.label} href={list.href} />
           ))}
         </div>
       ) : null}
-    </button>
+    </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import clsx from "clsx";
 import dayjs from "dayjs";
 
 import {
@@ -47,12 +46,11 @@ export default function GoalList({ date, route, goal }: any) {
     <div>
       <button
         onClick={handleGoalClick}
-        className={clsx(
-          "flex h-full w-full items-center justify-between rounded-xl px-2 py-1",
+        className={`flex h-full w-full items-center justify-between rounded-xl p-2 ${
           route === "todogoal"
-            ? "cursor-pointer hover:bg-default-300"
-            : "cursor-default",
-        )}
+            ? "cursor-pointer hover:bg-default-100"
+            : "cursor-default"
+        }`}
       >
         <div className="flex flex-col items-start">
           <div className="flex gap-2">
@@ -66,19 +64,19 @@ export default function GoalList({ date, route, goal }: any) {
           <span className="font-bold">&quot;{goal.title}&quot;</span>
           <div className="flex flex-col items-start">
             {route === "todogoal" && (
-              <div className="text-2xs">{`Start Date: ${startMonth}/${startDay}, ${startYear} (${dayOftheWeek(
+              <span className="text-2xs">{`Start Date: ${startMonth}/${startDay}, ${startYear} (${dayOftheWeek(
                 goal.startDate,
-              )})`}</div>
+              )})`}</span>
             )}
-            <div className="text-2xs">{`${
+            <span className="text-2xs">{`${
               route === "todogoal" ? `End Date` : "Goal Date"
             }: ${endMonth}/${endDay}, ${endYear} (${dayOftheWeek(
               goal.endDate,
-            )})`}</div>
+            )})`}</span>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          {route !== "home" && Dday !== "D-Day" ? (
+          {route !== "home" ? (
             <div className="flex gap-1 text-sm">
               <span>Duration:</span>
               <span>
@@ -91,10 +89,9 @@ export default function GoalList({ date, route, goal }: any) {
           ) : null}
           <div className="flex items-center justify-center">
             <span
-              className={clsx(
-                "rounded-lg border-2 border-default-700 px-2 font-semibold",
-                Dday === "D-Day" ? "bg-default-800 text-white" : "",
-              )}
+              className={`rounded-lg border-2 border-default-700 px-2 font-semibold ${
+                Dday === "D-Day" ? "bg-default-800 text-white" : ""
+              }`}
             >
               {Dday}
             </span>
