@@ -1,13 +1,11 @@
 "use client";
 
-import { getDiariesForMonth, getMyTodosWithDate } from "@/store/api";
-import {
-  diaryListState,
-  processState,
-  settingState,
-  todoListState,
-} from "@/store/atoms";
-import { getToday, getWeeksInMonth } from "@/util/date";
+import { useEffect, useState } from "react";
+
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { useQuery } from "@tanstack/react-query";
+
+import dayjs, { Dayjs } from "dayjs";
 import { Badge, Switch } from "@mui/material";
 import {
   DateCalendar,
@@ -17,10 +15,15 @@ import {
   PickersDayProps,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useQuery } from "@tanstack/react-query";
-import dayjs, { Dayjs } from "dayjs";
-import { useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+
+import { getDiariesForMonth, getMyTodosWithDate } from "@/store/api";
+import {
+  diaryListState,
+  processState,
+  settingState,
+  todoListState,
+} from "@/store/atoms";
+import { getToday, getWeeksInMonth } from "@/util/date";
 
 function ServerDay(
   props: PickersDayProps<Dayjs> & {
@@ -37,7 +40,9 @@ function ServerDay(
     <Badge
       key={props.day.toString()}
       overlap="circular"
-      badgeContent={isSelected ? "📘" : undefined}
+      badgeContent={
+        isSelected ? <span className="text-xl">📌</span> : undefined
+      }
     >
       <PickersDay
         {...other}
@@ -243,7 +248,7 @@ export default function CustomCalendar() {
                 },
               },
               "& .Mui-selected": {
-                backgroundColor: "#143422",
+                backgroundColor: isDiary ? "#EDA323 !important" : "#143422",
               },
               "& .MuiMonthCalendar-root": {
                 width: "100%",
@@ -259,7 +264,9 @@ export default function CustomCalendar() {
           onMonthChange={handleMonthChange}
           renderLoading={() => <DayCalendarSkeleton />}
           dayOfWeekFormatter={(_day, weekday) => `${weekday.format("ddd")}`}
-          slots={{ day: ServerDay }}
+          slots={{
+            day: ServerDay,
+          }}
           slotProps={{ day: { highlightedDays } as any }}
         />
       </LocalizationProvider>

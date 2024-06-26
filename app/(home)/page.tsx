@@ -1,16 +1,16 @@
 "use client";
 
+import { useEffect } from "react";
+
+import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 
 import { getMe } from "@/store/api";
-
 import Header from "../ui/header/Header";
 import Footer from "../ui/footer/Footer";
 import CustomCalendar from "../ui/home/CustomCalendar";
 import MeGoal from "../ui/me/plans/MeGoal";
 import HomeTodoAndDiary from "../ui/home/HomeTodoAndDiary";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
 import { settingState } from "@/store/atoms";
 
 export default function Home() {

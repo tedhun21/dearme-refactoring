@@ -20,6 +20,7 @@ export default function HomeDiary() {
   const diaryOfDay = (
     filteredDiaries.length > 0 ? filteredDiaries[0] : null
   ) as IDiary | null;
+
   return (
     <section className="mt-4">
       {isLogin ? (
@@ -62,20 +63,23 @@ export default function HomeDiary() {
                 </div>
               </div>
             ) : (
-              <div className="group flex flex-col">
-                <div>
-                  <span className="text-3xl font-semibold text-default-900 group-hover:text-default-100">
-                    Diary
-                  </span>
-                  <div className="flex justify-center">
-                    <span className="text-xl">Click to write Diary</span>
+              !diaryOfDay && (
+                <div className="group flex flex-col">
+                  <div>
+                    <span className="text-3xl font-semibold text-default-900 group-hover:text-default-100">
+                      Diary
+                    </span>
+                    <div className="flex flex-col items-center justify-center p-2 *:text-xl">
+                      <span>No Written Diary</span>
+                      <span>Click to write Diary</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )}
           </div>
         </Link>
-      ) : (
+      ) : !isLogin ? (
         <Link href="/login">
           <div className="group flex flex-col items-center rounded-xl border-2 border-default-300 bg-default-100 p-5 text-xl text-default-800 shadow-xl transition-colors duration-150 hover:border-default-400 hover:bg-default-900">
             <span className="text-2xl font-semibold group-hover:text-default-100">
@@ -86,7 +90,7 @@ export default function HomeDiary() {
             </span>
           </div>
         </Link>
-      )}
+      ) : null}
     </section>
   );
 }
