@@ -1,13 +1,12 @@
-import { ISetting, settingState } from "@/store/atoms";
-import { Button } from "@mui/material";
-
-import clsx from "clsx";
-import Image from "next/image";
 import Link from "next/link";
 
 import { useRecoilState } from "recoil";
+import { Button } from "@mui/material";
 
-const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
+import { ISetting, settingState } from "@/store/atoms";
+
+import LoginUserModal from "../header/LoginUserModal";
+import LogoutUserModal from "../header/LogoutUserModal";
 
 export default function TodogoalHeader({ me }: any) {
   const [{ todogoalTitle }, setSetting] =
@@ -16,8 +15,8 @@ export default function TodogoalHeader({ me }: any) {
   return (
     <section className="flex w-full items-center justify-between">
       {me && me?.nickname ? (
-        <div className="flex w-32 flex-col">
-          <span className="text-xl font-semibold">Hi</span>
+        <div className="flex flex-col">
+          <span className="font-semibold">Hello</span>
           <span className="truncate whitespace-nowrap text-sm">
             {me?.nickname}
           </span>
@@ -27,17 +26,14 @@ export default function TodogoalHeader({ me }: any) {
           <span>Set Nickname</span>
         </Link>
       ) : (
-        <div className="w-32"></div>
+        <span className="">Login</span>
       )}
       <div className="flex">
         <div className="relative rounded-3xl bg-default-800">
           <div
-            className={clsx(
-              "absolute h-[40px] w-[100px] transform rounded-3xl bg-default-400 transition-all",
-              todogoalTitle === "Todo"
-                ? "translate-x-0"
-                : "translate-x-[100px]",
-            )}
+            className={`absolute h-[40px] w-[100px] transform rounded-3xl bg-default-900 transition-all ${
+              todogoalTitle === "Todo" ? "translate-x-0" : "translate-x-[100px]"
+            }`}
           />
           <Button
             disableRipple
@@ -73,23 +69,8 @@ export default function TodogoalHeader({ me }: any) {
           </Button>
         </div>
       </div>
-      <div className="flex w-32 justify-end">
-        {me && me.photo?.url ? (
-          <div className="relative h-12 w-12 overflow-hidden rounded-full">
-            <Image
-              src={`${BUCKET_URL}${me?.photo?.url}`}
-              alt="user profile"
-              fill
-              className="object-cover object-center"
-            />
-          </div>
-        ) : me ? (
-          <Link href="/me/edit">
-            <div className="h-full w-full bg-default-400"></div>
-          </Link>
-        ) : (
-          <div></div>
-        )}
+      <div className="flex justify-end">
+        {me ? <LoginUserModal me={me} /> : <LogoutUserModal />}
       </div>
     </section>
   );

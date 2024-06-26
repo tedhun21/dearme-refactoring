@@ -2,15 +2,15 @@ import { useRecoilState } from "recoil";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
+import dayjs from "dayjs";
 import { Modal } from "@mui/joy";
 import { Switch } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-
-import dayjs from "dayjs";
-import XIcon from "@/public/todo/XIcon";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { createMyGoal, deleteMyGoal, updateMyGoal } from "@/store/api";
+
 import { goalListState } from "@/store/atoms";
+import { createMyGoal, deleteMyGoal, updateMyGoal } from "@/store/api";
 
 export default function GoalModal({
   type,
@@ -151,7 +151,7 @@ export default function GoalModal({
             onClick={() => setModalOpen(false)}
             className="rounded-full p-2 hover:bg-default-300"
           >
-            <XIcon className="h-5 w-5" />
+            <XMarkIcon className="size-6 stroke-2" />
           </button>
         </div>
 
@@ -314,9 +314,9 @@ export default function GoalModal({
                 <button
                   type="button"
                   onClick={() => handleDeleteGoal()}
-                  className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-2"
+                  className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-2 hover:bg-red-600 active:bg-red-700"
                 >
-                  <XIcon className="h-4 w-4" color="white" />
+                  <XMarkIcon className="size-5 stroke-2 text-white" />
                   <span className="font-semibold text-white">Delete</span>
                 </button>
               )}

@@ -34,7 +34,7 @@ const getListStyle = (isDraggingOver: any) => ({
   gap: 8,
   width: "100%",
 
-  background: isDraggingOver ? "#143422" : "#F5F3EB",
+  background: isDraggingOver ? "#143422" : "#EBE3D5",
 });
 
 // draggable style
@@ -43,7 +43,7 @@ const getTodoStyle = (isDragging: any, draggableStyle: any) => ({
   borderRadius: 12,
 
   boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-  border: isDragging ? "solid #928C7F 2px" : "none",
+  border: isDragging ? "solid #928C7F 1px" : "none",
   background: isDragging ? "#EDA323" : "#FBFAF2",
   ...draggableStyle,
 });

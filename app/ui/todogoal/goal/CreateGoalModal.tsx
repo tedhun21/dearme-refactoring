@@ -7,9 +7,8 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 import XIcon from "@/public/todo/XIcon";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { createMyGoal } from "@/store/api";
-import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { goalListState } from "@/store/atoms";
 
