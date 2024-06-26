@@ -6,14 +6,62 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { FormControl, Input } from "@mui/joy";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+import * as yup from "yup";
 
 import { getMe, updateMe } from "@/store/api";
 import { Switch } from "@mui/material";
 
-import SignOut from "@/app/ui/me/edit/SignOut";
-import Withdrawal from "@/app/ui/me/edit/Withdrawal";
+import EditInput from "./components/EditInput";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Loading from "@/public/common/Loading";
+
+export interface EditFormValues {
+  private: boolean;
+  username: string;
+  email: string;
+  nickname: string;
+  phone: string;
+  body: string;
+}
+
+const editInputList: Array<{
+  id: number;
+  value: keyof Omit<EditFormValues, "private">;
+  label: string;
+}> = [
+  { id: 1, value: "username", label: "Name" },
+  { id: 2, value: "email", label: "Email" },
+  { id: 3, value: "nickname", label: "Nickname" },
+  { id: 4, value: "phone", label: "Phone" },
+  { id: 5, value: "body", label: "Introduce" },
+];
+
+const phoneRegex = /^010\d{8}$/;
+
+const editSchema = yup.object({
+  username: yup
+    .string()
+    .min(2, "Name must be at least 2 characters.")
+    .required("Please enter your name."),
+  email: yup
+    .string()
+    .email("Please enter in email format.")
+    .required("Please enter your email."),
+  nickname: yup
+    .string()
+    .min(2, "Nickname must be at least 2 characters.")
+    .required("Please enter your nickname"),
+  phone: yup
+    .string()
+    .nullable()
+    .transform((value, originalValue) => {
+      return originalValue.trim() === "" ? null : value;
+    })
+    .matches(phoneRegex, "Phone must be 11 characters and start with 010."),
+
+  body: yup.string(),
+  private: yup.boolean().required(),
+});
 
 export default function MeEdit() {
   const router = useRouter();
@@ -33,10 +81,10 @@ export default function MeEdit() {
     setValue,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(editSchema) });
 
   // 유저 프로필 업데이트
-  const { mutate: updateProfileMutate } = useMutation({
+  const { isPending, mutate: updateProfileMutate } = useMutation({
     mutationFn: updateMe,
 
     onMutate: async (data: any) => {
@@ -64,13 +112,12 @@ export default function MeEdit() {
   });
 
   const onSubmit = (updateData: any) => {
-    // 빈 스트링 제거
-    Object.keys(updateData).forEach((key) => {
-      if (updateData[key] === "" || updateData[key] == null) {
-        delete updateData[key];
-      }
-    });
-
+    // // 빈 스트링 제거
+    // Object.keys(updateData).forEach((key) => {
+    //   if (updateData[key] === "" || updateData[key] == null) {
+    //     delete updateData[key];
+    //   }
+    // });
     updateProfileMutate({
       userId: me.id,
       updateData: { ...updateData },
@@ -95,12 +142,10 @@ export default function MeEdit() {
     <section className="mb-20 mt-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-6 p-5"
+        className="flex flex-col gap-4 p-10"
       >
-        <div className="flex items-center gap-4">
-          <label htmlFor="private" className="text-xl font-semibold">
-            Private
-          </label>
+        <div>
+          <label>Private</label>
           <Controller
             name="private"
             control={control}
@@ -147,185 +192,26 @@ export default function MeEdit() {
             )}
           />
         </div>
-        <div>
-          <div className="flex w-full flex-col gap-5">
-            <FormControl>
-              <label
-                htmlFor="username"
-                className="font-small block text-sm leading-4 text-gray-500"
-              >
-                Name
-              </label>
-              <Input
-                id="username"
-                {...register("username")}
-                variant="plain"
-                readOnly
-                sx={{
-                  "--Input-radius": "0px",
-                  borderBottom: "2px solid #DED0B6",
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    borderColor: "neutral.outlinedHoverBorder",
-                  },
-                  "&::before": {
-                    border: "2px solid #000000", // focusedHighlight색상
-                    transform: "scaleX(0)",
-                    left: 0,
-                    right: 0,
-                    bottom: "-2px",
-                    top: "unset",
-                    transition: "transform .15s cubic-bezier(0.1,0.9,0.2,1)",
-                    borderRadius: 0,
-                  },
-                  "&:focus-within::before": {
-                    transform: "scaleX(1)",
-                  },
-                }}
-              />
-            </FormControl>
-            <FormControl>
-              <label
-                htmlFor="email"
-                className="font-small block text-sm leading-4 text-gray-500"
-              >
-                Email
-              </label>
-              <Input
-                id="email"
-                {...register("email")}
-                variant="plain"
-                readOnly
-                sx={{
-                  "--Input-radius": "0px",
-                  borderBottom: "2px solid #DED0B6",
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    borderColor: "neutral.outlinedHoverBorder",
-                  },
-                  "&::before": {
-                    border: "2px solid #000000", // focusedHighlight색상
-                    transform: "scaleX(0)",
-                    left: 0,
-                    right: 0,
-                    bottom: "-2px",
-                    top: "unset",
-                    transition: "transform .15s cubic-bezier(0.1,0.9,0.2,1)",
-                    borderRadius: 0,
-                  },
-                  "&:focus-within::before": {
-                    transform: "scaleX(1)",
-                  },
-                }}
-              />
-            </FormControl>
-            <FormControl>
-              <label
-                htmlFor="nickname"
-                className="font-small block text-sm leading-4 text-gray-500"
-              >
-                Nickname
-              </label>
-              <Input
-                id="nickname"
-                {...register("nickname")}
-                variant="plain"
-                defaultValue={me?.nickname}
-                sx={{
-                  "--Input-radius": "0px",
-                  borderBottom: "2px solid #DED0B6",
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    borderColor: "neutral.outlinedHoverBorder",
-                  },
-                  "&::before": {
-                    border: "2px solid #000000", // focusedHighlight색상
-                    transform: "scaleX(0)",
-                    left: 0,
-                    right: 0,
-                    bottom: "-2px",
-                    top: "unset",
-                    transition: "transform .15s cubic-bezier(0.1,0.9,0.2,1)",
-                    borderRadius: 0,
-                  },
-                  "&:focus-within::before": {
-                    transform: "scaleX(1)",
-                  },
-                }}
-              />
-              {errors.nickname && (
-                <p className="text-red-500">
-                  {(errors as any).nickname.message}
-                </p>
-              )}
-            </FormControl>
-            <FormControl>
-              <label
-                htmlFor="phone"
-                className="font-small block text-sm leading-4 text-gray-500"
-              >
-                Phone
-              </label>
-              <Input
-                id="phone"
-                {...register("phone")}
-                variant="plain"
-                defaultValue={me?.phone}
-                sx={{
-                  "--Input-radius": "0px",
-                  borderBottom: "2px solid #DED0B6",
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    borderColor: "neutral.outlinedHoverBorder",
-                  },
-                  "&::before": {
-                    border: "2px solid #000000", // focusedHighlight색상
-                    transform: "scaleX(0)",
-                    left: 0,
-                    right: 0,
-                    bottom: "-2px",
-                    top: "unset",
-                    transition: "transform .15s cubic-bezier(0.1,0.9,0.2,1)",
-                    borderRadius: 0,
-                  },
-                  "&:focus-within::before": {
-                    transform: "scaleX(1)",
-                  },
-                }}
-              />
-              {errors.phone && (
-                <p className="text-red-500">{(errors as any).phone.message}</p>
-              )}
-            </FormControl>
-            <FormControl>
-              <label
-                htmlFor="body"
-                className="font-small block text-sm leading-4 text-gray-500"
-              >
-                Introduce
-              </label>
-              <TextareaAutosize
-                id="body"
-                {...register("body")}
-                minRows={3}
-                maxRows={6}
-                className="rounded-md border border-solid hover:border-default-800 focus:border-default-900 focus:shadow-lg focus-visible:outline-0"
-              />
-            </FormControl>
-            <div className="mx-8 flex flex-col items-center justify-center gap-4">
-              <button
-                className="w-full rounded-3xl border-2 border-default-800 bg-default-300 py-3 font-bold hover:bg-default-400 active:bg-default-800 active:text-default-900"
-                type="submit"
-              >
-                Edit Profile
-              </button>
-              <div className="flex w-full justify-between">
-                <SignOut />
-                <Withdrawal me={me} />
-              </div>
-            </div>
-          </div>
-        </div>
+        {editInputList.map((list) => (
+          <EditInput
+            key={list.id}
+            value={list.value}
+            label={list.label}
+            register={register}
+          />
+        ))}
+        <button
+          type="submit"
+          className="group w-full rounded-3xl border-2 border-default-800 py-2 hover:bg-default-800 active:bg-default-900"
+        >
+          {isPending ? (
+            <Loading />
+          ) : (
+            <span className="font-semibold text-default-800 group-hover:text-default-200 group-active:text-default-800">
+              Edit Profile
+            </span>
+          )}
+        </button>
       </form>
     </section>
   );
