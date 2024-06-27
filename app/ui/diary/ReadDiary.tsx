@@ -11,13 +11,13 @@ import "swiper/css/scrollbar";
 import "swiper/css/effect-cards";
 
 import Yellow from "@/public/diary/Yellow";
-import RememberIcon from "@/public/me/RememberIcon";
 import Remembered from "@/public/diary/Remembered";
 
 import { getDiaryDate } from "@/util/date";
 import WeatherIcons from "./WeatherIcons";
 import { updateDiaryRemember } from "@/store/api";
 import TagSection from "./TagSection";
+import { BookmarkIcon } from "@heroicons/react/24/outline";
 
 export default function ReadDiary({ date, diaryData }: any) {
   const queryClient = useQueryClient();
@@ -99,15 +99,17 @@ export default function ReadDiary({ date, diaryData }: any) {
           <div className="mb-3 mt-4 flex items-center">
             {/* 일기의 Remember */}
             {diaryData.remember ? (
-              <Remembered
-                className="mr-2 h-5 w-5 cursor-pointer fill-current"
-                onClick={() => handleRemember()}
-              />
+              // <Remembered
+              //   className="mr-2 h-5 w-5 cursor-pointer fill-current"
+              //   onClick={() => handleRemember()}
+              // />
+              <div>hi</div>
             ) : (
-              <RememberIcon
-                className="mr-2 h-5 w-5 cursor-pointer fill-current"
-                onClick={() => handleRemember()}
-              />
+              // <RememberIcon
+              //   className="mr-2 h-5 w-5 cursor-pointer fill-current"
+              //   onClick={() => handleRemember()}
+              // />
+              <BookmarkIcon className="size-5" />
             )}
             {/* 일기의 날짜 */}
             <h1 className="text-md font-semibold">{getDiaryDate(date)}</h1>

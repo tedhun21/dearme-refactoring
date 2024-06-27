@@ -1,22 +1,19 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
+import { PlusCircleIcon, TicketIcon } from "@heroicons/react/24/outline";
+
+import { getDiaryForDay, getMe } from "@/store/api";
 import Header from "@/app/ui/header/Header";
 import ReadDiary from "@/app/ui/diary/ReadDiary";
-
 import SentimentalQuotes from "@/app/ui/diary/Sentimental Quotes";
 import MonthlyDiary from "@/app/ui/diary/MonthlyDiary";
 import DiaryActionButton from "@/app/ui/diary/DiaryActionButton";
-
 import Footer from "@/app/ui/footer/Footer";
-
-import { getDiaryForDay, getMe } from "@/store/api";
 import TodayPicks from "@/app/ui/diary/TodayPicks";
-import CirclePlus from "@/public/diary/CirclePlus";
-import { useRouter } from "next/navigation";
 
 export default function Diary() {
   const { date } = useParams();
@@ -33,16 +30,11 @@ export default function Diary() {
     queryFn: () => getDiaryForDay({ date }),
   });
 
-  const handleClick = () => {
-    if (date) {
-      router.push(`/${date}/diary/create`);
-    }
-  };
-
   return (
-    <main className="relative flex min-h-screen justify-center">
-      <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
-        <Header />
+    <main className="flex min-h-screen justify-center">
+      <div className="relative flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
+        <Header me={meData} />
+        {/* // 일기가 있을때 */}
         {diaryData ? (
           <div className="flex h-full flex-col">
             {/* 일기 데이터가 있을 경우 렌더링 */}
@@ -69,31 +61,35 @@ export default function Diary() {
             <section className="relative right-20 flex justify-end">
               <MonthlyDiary />
             </section>
-            <Footer me={meData} />
           </div>
         ) : (
-          // 일기 데이터가 없을 경우 렌더링
-          <>
-            <article className="absolute flex flex-col">
-              <SentimentalQuotes />
-              <section className="relative top-[-120px]">
-                <div className="p-4">
-                  <button
-                    onClick={() => handleClick()}
-                    className="flex h-full w-full flex-col items-center gap-2 rounded bg-default-100 p-24 shadow-xl hover:bg-gray-300"
-                  >
-                    <CirclePlus className="h-6 w-6 fill-current text-black" />
-                    <span>Write your precious a Diary</span>
-                  </button>
-                </div>
+          // 일기가 없을 때
+          <article className="absolute flex w-full flex-col">
+            <SentimentalQuotes date={date} />
+            <div className="absolute inset-x-0 top-[380px] xxs:top-[460px] xs:top-[550px] s:top-[680px]">
+              <section className="w-full">
+                <Link
+                  href={`/${date}/diary/create`}
+                  className="mx-10 flex flex-col items-center gap-2 rounded bg-default-100 p-12 shadow-xl hover:bg-default-800 *:hover:text-white active:bg-default-900"
+                >
+                  <PlusCircleIcon className="size-8" />
+                  <span className="text-center">
+                    Write your precious a Diary
+                  </span>
+                </Link>
               </section>
-              <section className="relative right-20 flex justify-end">
-                <MonthlyDiary />
-              </section>
-            </article>
-            <Footer me={meData} />
-          </>
+            </div>
+            <div className="fixed bottom-36 w-full max-w-[600px]">
+              <div className="absolute right-4 rounded-full bg-default-300 p-3 shadow-lg hover:bg-default-400 active:bg-default-900">
+                <Link href={`/diary/${date}`}>
+                  <TicketIcon className="size-10" />
+                </Link>
+              </div>
+            </div>
+          </article>
         )}
+
+        <Footer />
       </div>
     </main>
   );
