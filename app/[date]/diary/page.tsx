@@ -65,7 +65,7 @@ export default function Diary() {
         ) : (
           // 일기가 없을 때
           <article className="absolute flex w-full flex-col">
-            <SentimentalQuotes date={date} />
+            <SentimentalQuotes />
             <div className="absolute inset-x-0 top-[380px] xxs:top-[460px] xs:top-[550px] s:top-[680px]">
               <section className="w-full">
                 <Link

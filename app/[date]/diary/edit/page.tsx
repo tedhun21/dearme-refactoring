@@ -17,7 +17,6 @@ import DiaryModal from "@/app/ui/diary/DiaryModal";
 import UploadPhoto from "@/app/ui/diary/UploadPhoto";
 import UploadTodayPick from "@/app/ui/diary/UploadTodayPick";
 import { CircularProgress } from "@mui/material";
-import Exit from "@/public/diary/Exit";
 
 interface Pick {
   title: string;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function SentimentalQuotes({ date }: any) {
+export default function SentimentalQuotes() {
   const [imageSrc, setImageSrc] = useState("");
 
   useEffect(() => {
@@ -23,14 +23,18 @@ export default function SentimentalQuotes({ date }: any) {
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
   return (
-    <Image
-      src={imageSrc}
-      width={600}
-      height={200}
-      alt="SentimentalQuotes"
-      quality={80}
-      priority
-      className="object-cover"
-    />
+    <>
+      {imageSrc && (
+        <Image
+          src={imageSrc}
+          width={600}
+          height={200}
+          alt="SentimentalQuotes"
+          quality={80}
+          priority
+          className="object-cover"
+        />
+      )}
+    </>
   );
 }

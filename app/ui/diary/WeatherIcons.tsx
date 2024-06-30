@@ -6,14 +6,6 @@ import SnowWeather from "@/public/diary/SnowWeather";
 import ThunderstormWeather from "@/public/diary/ThunderstormWeather";
 import FogWeather from "@/public/diary/FogWeather";
 
-{
-  /* 사용
-   <WeatherIcons
-  weatherId={diary.weatherId}
-  className="h-4 w-4 fill-current text-white"
-/>; */
-}
-
 export default function WeatherIcons({
   weatherId,
   className,
@@ -21,6 +13,7 @@ export default function WeatherIcons({
   weatherId: any;
   className?: string;
 }) {
+  console.log(weatherId);
   // 날씨 ID 범위에 따른 아이콘 반환 함수
   const getWeatherIcon = (weatherId: any) => {
     if (weatherId >= 200 && weatherId < 300) {
@@ -45,5 +38,5 @@ export default function WeatherIcons({
 
   const Icon = getWeatherIcon(weatherId) || CloudsWeather;
 
-  return <div>{Icon || <div>Weather icon not available</div>}</div>;
+  return <div>{Icon || "Weather icon not available"}</div>;
 }

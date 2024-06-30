@@ -1,11 +1,14 @@
-import { ChangeEvent, useRef } from "react";
-
-import PhotoIcon from "@/public/diary/PhotoIcon";
+import { ChangeEvent, useRef, useState } from "react";
 import Image from "next/image";
+
 import { useMutation } from "@tanstack/react-query";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+
 import { deleteImage } from "@/store/api";
+import PhotoIcon from "@/public/diary/PhotoIcon";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
+
 export default function UploadPhoto({
   selectedPhotos,
   setSelectedPhotos,
@@ -19,6 +22,8 @@ export default function UploadPhoto({
       fileInputRef.current.click();
     }
   };
+
+  const [totalImages, setTotalImages] = useState<File[]>([]);
 
   const { mutate: deleteImageMutate } = useMutation({
     mutationKey: ["deleteImage"],
@@ -36,8 +41,16 @@ export default function UploadPhoto({
 
     if (files) {
       const filesArray = Array.from(files) as File[];
+      console.log(filesArray);
+      const checkLength = totalImages.length + filesArray.length;
 
-      setSelectedPhotos((prev: any) => [...prev, ...filesArray]);
+      if (checkLength <= 3) {
+        setSelectedPhotos((prev: any) => [...prev, ...filesArray]);
+        setTotalImages((prev: any) => [...prev, ...filesArray]);
+      } else {
+        window.alert("You can attach a maximum of 3 photos.");
+      }
+
       // onPhotosChange(updatedFiles);
     }
   };
@@ -47,7 +60,11 @@ export default function UploadPhoto({
       (_: any, i: number) => i !== index,
     );
 
+    const updatedImages = totalImages.filter((_, i) => i !== index);
+
     setSelectedPhotos(updatedFiles);
+    setTotalImages(updatedImages);
+
     // onPhotosChange(updatedFiles);
   };
 
@@ -56,7 +73,8 @@ export default function UploadPhoto({
   };
 
   return (
-    <div className="flex justify-center gap-2 px-4 py-6">
+    <div className="flex gap-2 px-1 py-6">
+      {/* 사진 하나 없을때 */}
       {selectedPhotos?.length === 0 && previewUrls?.length === 0 ? (
         <button
           type="button"
@@ -78,9 +96,14 @@ export default function UploadPhoto({
           />
         </button>
       ) : selectedPhotos?.length > 0 || previewUrls?.length > 0 ? (
-        <div className="flex w-full flex-wrap justify-center gap-2">
+        // 사진 가지고 있을 때
+        <div className="flex w-full items-center justify-center gap-2">
+          {/* 브라우저에 잠깐 올린 사진 */}
           {selectedPhotos.map((file: File, index: number) => (
-            <div key={index} className="relative h-[128px] w-[128px]">
+            <div
+              key={index}
+              className="relative aspect-square w-full max-w-[200px]"
+            >
               <Image
                 src={URL.createObjectURL(file)}
                 alt={`Preview ${index}`}
@@ -90,20 +113,19 @@ export default function UploadPhoto({
               <button
                 type="button"
                 onClick={() => handleDeleteSelectedImage(index)}
-                className="absolute right-[-8px] top-[-8px] flex h-5 w-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px] text-white hover:bg-red-600"
+                className="absolute right-[-8px] top-[-8px] flex size-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px] text-white hover:bg-red-600"
               >
                 &times;
               </button>
             </div>
           ))}
+          {/* 서버에서 가져온 이미지 */}
           {previewUrls.map((image: any) => (
-            <div key={image.id} className="relative h-[128px] w-[128px]">
+            <div key={image.id} className="relative h-[100px] w-[100px]">
               <Image
                 src={`${BUCKET_URL}${image.url}`}
                 alt={`Preview ${image.id}`}
                 className="rounded-md object-cover"
-                width={128}
-                height={128}
                 fill
               />
               <button
@@ -115,6 +137,24 @@ export default function UploadPhoto({
               </button>
             </div>
           ))}
+          {/* 사진이 3개 미만일때, 사진 추가 버튼 */}
+          {totalImages.length < 3 && totalImages.length > 0 && (
+            <button
+              type="button"
+              onClick={openFileInput}
+              className="ml-8 rounded-full p-1 hover:bg-default-300"
+            >
+              <PlusCircleIcon className="size-8" />
+              <input
+                type="file"
+                multiple
+                accept="image/jpeg, image/png"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                hidden
+              />
+            </button>
+          )}
         </div>
       ) : null}
     </div>

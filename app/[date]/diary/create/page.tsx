@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
 import { CircularProgress } from "@mui/material";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
 import ChooseMood from "@/app/ui/diary/ChooseMood";
 import ChooseEmotionTags from "@/app/ui/diary/ChooseEmotionTags";
@@ -15,10 +15,8 @@ import ChooseCompanions from "@/app/ui/diary/ChooseCompanions";
 import UploadPhoto from "@/app/ui/diary/UploadPhoto";
 import UploadTodayPick from "@/app/ui/diary/UploadTodayPick";
 import DiaryModal from "@/app/ui/diary/DiaryModal";
-import Exit from "@/public/diary/Exit";
-
 import { createDiary, createTodayPick } from "@/store/api";
-import { getDiaryDate, getToday } from "@/util/date";
+import { getDiaryDate } from "@/util/date";
 
 function removeAllEmptyStrings(obj: any) {
   for (const key in obj) {
@@ -56,19 +54,21 @@ export default function Create() {
 
   const [selectedPicks, setSelectedPicks] = useState<Pick[]>([]);
 
-  const { register, watch, getValues, setValue, handleSubmit } = useForm({
-    defaultValues: {
-      mood: "",
-      feelings: "",
-      companions: "",
-      title: "",
-      body: "",
-      todayPickId: "",
-      todayPickTitle: "",
-      todayPickDate: "",
-      todayPickContributors: "",
+  const { register, watch, getValues, setValue, handleSubmit, reset } = useForm(
+    {
+      defaultValues: {
+        mood: "",
+        feelings: "",
+        companions: "",
+        title: "",
+        body: "",
+        todayPickId: "",
+        todayPickTitle: "",
+        todayPickDate: "",
+        todayPickContributors: "",
+      },
     },
-  });
+  );
 
   // 다이어리 생성
   const { mutate: createDiaryMutate } = useMutation({
@@ -125,11 +125,7 @@ export default function Create() {
     }
   };
 
-  useEffect(() => {
-    if (date) {
-      setFormattedDate(getDiaryDate(date));
-    }
-  }, [date]);
+  console.log(watch());
 
   return (
     <main className="flex min-h-screen justify-center">
@@ -140,28 +136,28 @@ export default function Create() {
         >
           <div>
             <section className="flex items-center justify-between bg-default-100 px-8 py-4 text-center text-xl font-medium text-gray-400">
-              {formattedDate}
-              <div>
-                <Exit />
-              </div>
+              {getDiaryDate(date)}
+              <button type="button" onClick={() => router.back()}>
+                <ArrowUturnLeftIcon className="size-6 stroke-2" />
+              </button>
             </section>
             <section className="flex flex-col gap-4 bg-default-200">
-              <h2 className="flex px-8 py-4 text-lg font-medium text-gray-400">
+              <label className="flex px-8 py-4 text-lg font-medium text-default-500">
                 Mood
-              </h2>
+              </label>
               <ChooseMood
                 selectedMood={selectedMood}
                 setSelectedMood={setSelectedMood}
                 onMoodSelect={(mood: any) => setValue("mood", mood)}
               />
-              <h3 className="flex justify-center text-sm font-medium text-gray-400">
+              <h3 className="flex justify-center text-sm font-medium text-default-500">
                 How are you today?
               </h3>
             </section>
             <section className="flex flex-col bg-default-200">
-              <h2 className="flex px-8 py-4 text-lg font-medium text-gray-400">
+              <label className="flex px-8 py-4 text-lg font-medium text-default-500">
                 Feelings
-              </h2>
+              </label>
               <ChooseEmotionTags
                 selectedTags={selectedTags}
                 setSelectedTags={setSelectedTags}
@@ -169,7 +165,9 @@ export default function Create() {
               />
             </section>
             <section className="flex flex-col bg-default-300 px-8 py-4">
-              <h2 className="flex text-lg font-medium text-gray-400">With</h2>
+              <label className="flex text-lg font-medium text-default-500">
+                With
+              </label>
               <ChooseCompanions
                 selectedCompanions={selectedCompanions}
                 setSelectedCompanions={setSelectedCompanions}
@@ -178,17 +176,18 @@ export default function Create() {
                 }
               />
             </section>
-            <section className="relative my-4 flex flex-col rounded bg-default-100 shadow-xl hover:bg-gray-300">
+            <section className="my-4 flex flex-col">
               <DiaryModal
                 type="create"
+                register={register}
                 getValues={getValues}
                 setValue={setValue}
               />
             </section>
             <section className="flex flex-col bg-default-400 px-5 py-4">
-              <h2 className="flex  text-lg font-medium text-gray-400">
+              <label className="flex  text-lg font-medium text-default-500">
                 Today&#39;s PICTURE
-              </h2>
+              </label>
               <UploadPhoto
                 selectedPhotos={selectedPhotos}
                 setSelectedPhotos={setSelectedPhotos}
@@ -197,9 +196,9 @@ export default function Create() {
               />
             </section>
             <section className="flex flex-col gap-2 bg-default-800 px-5 pb-8 pt-4">
-              <h2 className="flex text-lg font-medium text-default-100">
+              <label className="flex text-lg font-medium text-default-100">
                 Today&#39;s PICK
-              </h2>
+              </label>
               <UploadTodayPick
                 selectedPicks={selectedPicks}
                 setSelectedPicks={setSelectedPicks}

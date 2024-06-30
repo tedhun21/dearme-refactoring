@@ -23,29 +23,38 @@ export default function ChooseMood({
   };
 
   return (
-    <div className="transition duration-300 ease-in-out group-hover:bg-blue-500">
-      <span className="flex items-center justify-between px-20">
+    <div className="flex items-center justify-between px-16">
+      <button type="button" onClick={() => handleMoodClick("JOYFUL")}>
         <JoyfulEmoji
-          onClick={() => handleMoodClick("JOYFUL")}
           selected={selectedMood === "JOYFUL"}
+          className="hover:shadow-rad size-8 rounded-full"
         />
+      </button>
+
+      <button type="button" onClick={() => handleMoodClick("HAPPY")}>
         <HappyEmoji
-          onClick={() => handleMoodClick("HAPPY")}
           selected={selectedMood === "HAPPY"}
+          className="hover:shadow-rad size-8 rounded-full"
         />
+      </button>
+      <button type="button" onClick={() => handleMoodClick("NEUTRAL")}>
         <NeutralEmoji
-          onClick={() => handleMoodClick("NEUTRAL")}
           selected={selectedMood === "NEUTRAL"}
+          className="hover:shadow-rad size-8 rounded-full"
         />
+      </button>
+      <button type="button" onClick={() => handleMoodClick("UNHAPPY")}>
         <UnhappyEmoji
-          onClick={() => handleMoodClick("UNHAPPY")}
           selected={selectedMood === "UNHAPPY"}
+          className="hover:shadow-rad size-8 rounded-full"
         />
+      </button>
+      <button type="button" onClick={() => handleMoodClick("SAD")}>
         <SadEmoji
-          onClick={() => handleMoodClick("SAD")}
           selected={selectedMood === "SAD"}
+          className="hover:shadow-rad size-8 rounded-full"
         />
-      </span>
+      </button>
     </div>
   );
 }
