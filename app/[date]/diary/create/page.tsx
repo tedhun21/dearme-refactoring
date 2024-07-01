@@ -52,8 +52,8 @@ export default function Create() {
 
   const [selectedPicks, setSelectedPicks] = useState<Pick[]>([]);
 
-  const { register, watch, getValues, setValue, handleSubmit, reset } = useForm(
-    {
+  const { register, watch, getValues, setValue, handleSubmit, control, reset } =
+    useForm({
       defaultValues: {
         mood: "",
         feelings: "",
@@ -62,8 +62,7 @@ export default function Create() {
         body: "",
         todayPicks: [{ title: "", contributor: "", date: "" }],
       },
-    },
-  );
+    });
 
   // 다이어리 생성
   const { isPending: isCreadtDiaryPending, mutate: createDiaryMutate } =
@@ -149,6 +148,10 @@ export default function Create() {
                 selectedTags={selectedTags}
                 setSelectedTags={setSelectedTags}
                 onTagSelect={(tags: any) => setValue("feelings", tags)}
+                register={register}
+                getValues={getValues}
+                setValue={setValue}
+                control={control}
               />
             </section>
             <section className="flex flex-col bg-default-300 px-8 py-4">
