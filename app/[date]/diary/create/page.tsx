@@ -10,13 +10,14 @@ import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
 import ChooseMood from "@/app/ui/diary/ChooseMood";
 import ChooseEmotionTags from "@/app/ui/diary/ChooseEmotionTags";
-import ChooseCompanions from "@/app/ui/diary/ChooseCompanions";
+
 import UploadPhoto from "@/app/ui/diary/UploadPhoto";
 import UploadTodayPick from "@/app/ui/diary/UploadTodayPick";
 import DiaryModal from "@/app/ui/diary/DiaryModal";
 import { createDiary, createTodayPick } from "@/store/api";
 import { getDiaryDate } from "@/util/date";
 import Loading from "@/public/common/Loading";
+import ChooseCompanions from "@/app/ui/diary/ChooseCompanions";
 
 function removeAllEmptyStrings(obj: any) {
   for (const key in obj) {
@@ -131,39 +132,33 @@ export default function Create() {
                 <ArrowUturnLeftIcon className="size-6 stroke-2" />
               </button>
             </section>
-            <section className="flex flex-col gap-4 bg-default-200">
-              <label className="flex px-8 py-4 text-lg font-medium text-default-500">
+            <section className="flex flex-col gap-4 bg-default-200 px-8 py-4">
+              <label className="flex text-lg font-medium text-default-500">
                 Mood
               </label>
-              <ChooseMood register={register} getValues={getValues} />
+              <ChooseMood register={register} getValue={getValues().mood} />
               <h3 className="flex justify-center text-sm font-medium text-default-500">
                 How are you today?
               </h3>
             </section>
-            <section className="flex flex-col bg-default-200">
-              <label className="flex px-8 py-4 text-lg font-medium text-default-500">
+            <section className="flex flex-col gap-4 bg-default-200 px-8 py-4">
+              <label className="flex text-lg font-medium text-default-500">
                 Feelings
               </label>
               <ChooseEmotionTags
-                selectedTags={selectedTags}
-                setSelectedTags={setSelectedTags}
-                onTagSelect={(tags: any) => setValue("feelings", tags)}
                 register={register}
-                getValues={getValues}
+                getValue={getValues().feelings}
                 setValue={setValue}
                 control={control}
               />
             </section>
-            <section className="flex flex-col bg-default-300 px-8 py-4">
+            <section className="flex flex-col gap-4 bg-default-300 px-8 py-4">
               <label className="flex text-lg font-medium text-default-500">
                 With
               </label>
               <ChooseCompanions
-                selectedCompanions={selectedCompanions}
-                setSelectedCompanions={setSelectedCompanions}
-                onSelectCompanion={(companions: any) =>
-                  setValue("companions", companions)
-                }
+                register={register}
+                getValue={getValues().companions}
               />
             </section>
             <section className="my-4 flex flex-col">

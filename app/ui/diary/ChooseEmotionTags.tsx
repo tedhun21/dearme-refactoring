@@ -42,11 +42,11 @@ export default function ChooseEmotionTags({
   };
 
   return (
-    <div className="flex flex-wrap gap-2 px-6 pb-4">
+    <div className="flex flex-wrap">
       {tags.map((tag) => {
         const isChecked = selectedFeelings.includes(tag);
         return (
-          <div key={tag}>
+          <div key={tag} className="px-1 py-2">
             <input
               type="checkbox"
               id={tag}

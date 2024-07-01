@@ -1,27 +1,25 @@
-import React from "react";
+export default function Companions({ label, register, getValue }: any) {
+  const isSelected = label === getValue;
 
-interface CompanionsProps {
-  text: string;
-  selected: boolean; // selected 속성 추가
-  onClick: () => void; // onClick 타입 정의
-}
-
-export default function Companions({
-  text,
-  selected,
-  onClick,
-}: CompanionsProps) {
   return (
-    <button
-      type="button"
-      onClick={() => onClick()}
-      className={`rounded-lg border-2 border-default-400 bg-default-100 px-2 py-1 font-semibold ${
-        selected
-          ? "border-default-800 bg-default-800 text-default-100 hover:bg-default-700"
-          : "text-default-800 hover:border-default-600 hover:bg-default-400"
-      }`}
-    >
-      {text}
-    </button>
+    <div>
+      <label
+        htmlFor={label}
+        className={`cursor-pointer rounded-lg border-2 border-default-400 bg-default-100 px-2 py-1 font-semibold ${
+          isSelected
+            ? "border-default-800 bg-default-800 text-default-100 hover:bg-default-700"
+            : "text-default-800 hover:border-default-600 hover:bg-default-400"
+        }`}
+      >
+        {label}
+      </label>
+      <input
+        type="radio"
+        id={label}
+        value={label}
+        {...register("companions")}
+        hidden
+      />
+    </div>
   );
 }

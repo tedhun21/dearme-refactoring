@@ -2,14 +2,14 @@ export default function MoodEmoji({
   mood,
   icon: Icon,
   register,
-  getValues,
+  getValue,
 }: any) {
   return (
     <div>
       <label htmlFor={mood}>
         <Icon
-          selected={getValues().mood === mood}
-          className="size-8 rounded-full hover:shadow-rad"
+          selected={getValue === mood}
+          className="size-8 cursor-pointer rounded-full hover:shadow-rad"
         />
       </label>
       <input

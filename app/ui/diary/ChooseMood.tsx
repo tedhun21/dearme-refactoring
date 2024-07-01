@@ -13,7 +13,7 @@ const moodEmojis = [
   { mood: "SAD", icon: SadEmoji },
 ];
 
-export default function ChooseMood({ register, getValues }: any) {
+export default function ChooseMood({ register, getValue }: any) {
   return (
     <div className="flex items-center justify-between px-16">
       {moodEmojis.map((emoji) => (
@@ -22,7 +22,7 @@ export default function ChooseMood({ register, getValues }: any) {
           mood={emoji.mood}
           icon={emoji.icon}
           register={register}
-          getValues={getValues}
+          getValue={getValue}
         />
       ))}
     </div>
