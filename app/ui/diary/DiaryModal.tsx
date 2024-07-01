@@ -92,7 +92,7 @@ export default function DiaryModal({ type, getValues, setValue }: any) {
         <button
           type="button"
           onClick={() => setModalOpen(true)}
-          className="rounded-lg bg-default-100 px-20 py-8 hover:bg-default-300"
+          className="rounded-lg bg-default-100 px-20 py-8 hover:bg-default-200"
         >
           <div className="flex flex-col items-center justify-center gap-4">
             <PlusCircleIcon className="size-8" />

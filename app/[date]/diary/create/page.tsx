@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
-import { CircularProgress } from "@mui/material";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
 import ChooseMood from "@/app/ui/diary/ChooseMood";
@@ -17,6 +16,7 @@ import UploadTodayPick from "@/app/ui/diary/UploadTodayPick";
 import DiaryModal from "@/app/ui/diary/DiaryModal";
 import { createDiary, createTodayPick } from "@/store/api";
 import { getDiaryDate } from "@/util/date";
+import Loading from "@/public/common/Loading";
 
 function removeAllEmptyStrings(obj: any) {
   for (const key in obj) {
@@ -40,8 +40,6 @@ interface Pick {
 export default function Create() {
   const router = useRouter();
   const { date } = useParams<{ date: string }>();
-  const [formattedDate, setFormattedDate] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedMood, setSelectedMood] = useState<any>(null);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -62,41 +60,34 @@ export default function Create() {
         companions: "",
         title: "",
         body: "",
-        todayPickId: "",
-        todayPickTitle: "",
-        todayPickDate: "",
-        todayPickContributors: "",
+        todayPicks: [{ title: "", contributor: "", date: "" }],
       },
     },
   );
 
   // 다이어리 생성
-  const { mutate: createDiaryMutate } = useMutation({
-    mutationKey: ["createDiary"],
-    mutationFn: createDiary,
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSuccess: async ({ diaryId }: any) => {
-      if (selectedPicks.length > 0) {
-        for (let i = 0; i < selectedPicks.length; i++) {
-          const { image, ...createData } = selectedPicks[i];
-          await createTodayPickMutate({
-            createData,
-            diaryId,
-            image,
-          });
+  const { isPending: isCreadtDiaryPending, mutate: createDiaryMutate } =
+    useMutation({
+      mutationKey: ["createDiary"],
+      mutationFn: createDiary,
+
+      onSuccess: async ({ diaryId }: any) => {
+        if (selectedPicks.length > 0) {
+          for (let i = 0; i < selectedPicks.length; i++) {
+            const { image, ...createData } = selectedPicks[i];
+            await createTodayPickMutate({
+              createData,
+              diaryId,
+              image,
+            });
+          }
         }
-      }
-      router.replace(`/${date}/diary`);
-    },
-    onError: ({ response }: any) => {
-      window.alert(response.data.error.message);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-  });
+        router.replace(`/${date}/diary`);
+      },
+      onError: ({ response }: any) => {
+        window.alert(response.data.error.message);
+      },
+    });
 
   // today pick 생성
   const { mutate: createTodayPickMutate } = useMutation({
@@ -105,24 +96,24 @@ export default function Create() {
   });
 
   const onSubmit = (data: any) => {
-    const { mood, feelings, companions, title, body } = data;
-    if (
-      mood !== "" &&
-      feelings !== "" &&
-      companions !== "" &&
-      title !== "" &&
-      body !== ""
-    ) {
-      const modifiedData = removeAllEmptyStrings(data);
-
-      createDiaryMutate({
-        date,
-        createData: modifiedData,
-        photos: selectedPhotos,
-      });
-    } else {
-      window.alert("Mood, Feelings, With, Diary are required");
-    }
+    console.log(data);
+    // const { mood, feelings, companions, title, body } = data;
+    // if (
+    //   mood !== "" &&
+    //   feelings !== "" &&
+    //   companions !== "" &&
+    //   title !== "" &&
+    //   body !== ""
+    // ) {
+    //   const modifiedData = removeAllEmptyStrings(data);
+    //   createDiaryMutate({
+    //     date,
+    //     createData: modifiedData,
+    //     photos: selectedPhotos,
+    //   });
+    // } else {
+    //   window.alert("Mood, Feelings, With, Diary are required");
+    // }
   };
 
   console.log(watch());
@@ -145,11 +136,7 @@ export default function Create() {
               <label className="flex px-8 py-4 text-lg font-medium text-default-500">
                 Mood
               </label>
-              <ChooseMood
-                selectedMood={selectedMood}
-                setSelectedMood={setSelectedMood}
-                onMoodSelect={(mood: any) => setValue("mood", mood)}
-              />
+              <ChooseMood register={register} getValues={getValues} />
               <h3 className="flex justify-center text-sm font-medium text-default-500">
                 How are you today?
               </h3>
@@ -210,7 +197,7 @@ export default function Create() {
               type="submit"
               className="rounded-3xl border-2 border-default-800 px-32 py-2 text-sm font-semibold text-default-800 hover:bg-default-300 active:bg-default-800 active:text-white"
             >
-              {isLoading ? <CircularProgress /> : <span>Create Diary</span>}
+              {isCreadtDiaryPending ? <Loading /> : <span>Create Diary</span>}
             </button>
           </section>
         </form>

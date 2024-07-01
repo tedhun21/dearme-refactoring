@@ -44,7 +44,7 @@ export default function UploadPhoto({
       console.log(filesArray);
       const checkLength = totalImages.length + filesArray.length;
 
-      if (checkLength <= 3) {
+      if (checkLength <= 5) {
         setSelectedPhotos((prev: any) => [...prev, ...filesArray]);
         setTotalImages((prev: any) => [...prev, ...filesArray]);
       } else {
@@ -73,19 +73,19 @@ export default function UploadPhoto({
   };
 
   return (
-    <div className="flex gap-2 px-1 py-6">
+    <div className="flex gap-2 overflow-x-auto px-2 py-6">
       {/* 사진 하나 없을때 */}
       {selectedPhotos?.length === 0 && previewUrls?.length === 0 ? (
         <button
           type="button"
           onClick={openFileInput}
-          className="flex w-full cursor-pointer flex-col items-center rounded-lg bg-default-100 py-16 text-base font-semibold text-gray-400 hover:bg-gray-300"
+          className="flex w-full cursor-pointer flex-col items-center rounded-lg bg-default-100 py-16 text-base font-semibold text-default-500 hover:bg-default-200"
         >
           <span className="mb-2 flex justify-center">
             <PhotoIcon />
           </span>
           <label>Attach Pictures</label>
-          <h3 className="text-xs font-medium text-gray-400">(Max 3pics)</h3>
+          <h3 className="text-xs font-medium text-gray-400">(Max 5pics)</h3>
           <input
             type="file"
             multiple
@@ -97,17 +97,17 @@ export default function UploadPhoto({
         </button>
       ) : selectedPhotos?.length > 0 || previewUrls?.length > 0 ? (
         // 사진 가지고 있을 때
-        <div className="flex w-full items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
           {/* 브라우저에 잠깐 올린 사진 */}
           {selectedPhotos.map((file: File, index: number) => (
             <div
               key={index}
-              className="relative aspect-square w-full max-w-[200px]"
+              className="relative size-[140px] xxs:size-[160px] xs:size-[180px] s:size-[200px]"
             >
               <Image
                 src={URL.createObjectURL(file)}
                 alt={`Preview ${index}`}
-                className="rounded-md object-cover"
+                className="rounded-lg object-cover"
                 fill
               />
               <button
@@ -121,7 +121,10 @@ export default function UploadPhoto({
           ))}
           {/* 서버에서 가져온 이미지 */}
           {previewUrls.map((image: any) => (
-            <div key={image.id} className="relative h-[100px] w-[100px]">
+            <div
+              key={image.id}
+              className="relative size-[140px] xxs:size-[160px] xs:size-[180px] s:size-[200px]"
+            >
               <Image
                 src={`${BUCKET_URL}${image.url}`}
                 alt={`Preview ${image.id}`}
@@ -131,18 +134,18 @@ export default function UploadPhoto({
               <button
                 type="button"
                 onClick={() => handleDeleteFetchedImage(image.id)}
-                className="absolute right-[-8px] top-[-8px] flex h-5 w-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px] text-white hover:bg-red-600"
+                className="absolute right-[-8px] top-[-8px] flex size-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px] text-white hover:bg-red-600"
               >
                 &times;
               </button>
             </div>
           ))}
-          {/* 사진이 3개 미만일때, 사진 추가 버튼 */}
-          {totalImages.length < 3 && totalImages.length > 0 && (
+          {/* 사진이 5개 미만일때, 사진 추가 버튼 */}
+          {totalImages.length < 5 && totalImages.length > 0 && (
             <button
               type="button"
               onClick={openFileInput}
-              className="ml-8 rounded-full p-1 hover:bg-default-300"
+              className="ml-4 rounded-full p-1 hover:bg-default-300"
             >
               <PlusCircleIcon className="size-8" />
               <input
@@ -160,39 +163,3 @@ export default function UploadPhoto({
     </div>
   );
 }
-
-// {previewUrls.length > 0 ? (
-//   <div className="flex w-full flex-wrap justify-center gap-2">
-//     {previewUrls.map((url, index) => (
-//       <div key={index} className="relative">
-//         <Image
-//           src={url}
-//           alt={`Preview ${index}`}
-//           className="h-32 w-32 rounded-md object-cover"
-//         />
-//         <button
-//           onClick={() => handleDeleteImage(index)}
-//           className="absolute right-0 top-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px] text-white hover:bg-red-600"
-//           style={{ cursor: "pointer" }}
-//         >
-//           &times; {/* 이 부분은 삭제 아이콘을 나타냅니다. */}
-//         </button>
-//       </div>
-//     ))}
-//   </div>
-// ) : (
-//   <label className="flex w-full cursor-pointer flex-col items-center rounded-lg bg-default-100 py-16 py-6 text-base font-semibold text-gray-400 hover:bg-gray-300">
-//     <input
-//       type="file"
-//       multiple
-//       accept="image/jpeg, image/png"
-//       onChange={handleFileChange}
-//       style={{ display: "none" }}
-//     />
-//     <span className="mb-2 flex justify-center">
-//       <PhotoIcon />
-//     </span>
-//     사진을 등록해주세요
-//     <h3 className="text-xs font-medium text-gray-400">(최대 3장)</h3>
-//   </label>
-// )}

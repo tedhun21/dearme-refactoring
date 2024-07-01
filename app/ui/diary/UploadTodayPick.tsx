@@ -3,12 +3,10 @@ import { ChangeEvent, useRef, useState } from "react";
 import Image from "next/image";
 
 import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
 
 import PickCard from "./PickCard";
-import BlackPlus from "@/public/diary/BlackPlus";
 import AddPhoto from "@/public/diary/AddPhoto";
-import CirclePlus from "@/public/diary/CirclePlus";
+import { PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 export default function UploadTodayPick({
   picks,
@@ -101,12 +99,8 @@ export default function UploadTodayPick({
               setSelectedPicks={setSelectedPicks}
             />
           ))}
-          <button
-            type="button"
-            className="group m-10"
-            onClick={() => setOpen(true)}
-          >
-            <CirclePlus className="h-10 w-10 fill-current text-white group-hover:text-default-900" />
+          <button type="button" className="m-10 " onClick={() => setOpen(true)}>
+            <PlusCircleIcon className="size-10 text-white hover:text-default-900" />
           </button>
         </div>
       ) : (
@@ -120,23 +114,20 @@ export default function UploadTodayPick({
             className="flex w-full flex-col items-center rounded-lg border-2 border-dashed border-black bg-default-800 py-24 text-base font-medium text-gray-400 hover:bg-gray-300"
           >
             <span className="mb-2 flex justify-center">
-              <BlackPlus />
+              <PlusIcon className="size-8 stroke-2" />
             </span>
             <span>Cature your</span>
             <span>relaxed cultural adventures of the day.</span>
           </button>
         </div>
       )}
-      <Modal keepMounted open={open} onClose={() => setOpen(false)}>
-        <ModalDialog
-          sx={{
-            width: "400px",
-            maxWidth: "400px",
-            borderRadius: 10,
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
+      <Modal
+        keepMounted
+        open={open}
+        onClose={() => setOpen(false)}
+        className="flex items-center justify-center"
+      >
+        <div className="flex w-[340px] flex-col  gap-4 rounded-xl bg-default-100 p-8 xxs:w-[380px] xs:w-[440px] s:w-[520px]">
           <span className="text-center text-lg font-semibold">
             Add Today&#39;s Cultural Activity
           </span>
@@ -174,18 +165,21 @@ export default function UploadTodayPick({
 
           <div className="flex flex-col gap-4">
             <input
+              type="text"
               value={pickTitle}
               onChange={(e) => setPickTitle(e.target.value)}
               placeholder="Title (30 characters or less)"
               className="rounded-md border-2 border-default-300 px-3 py-1 outline-none hover:border-default-400 hover:bg-default-100 focus:border-default-900 focus:bg-default-200"
             />
             <input
+              type="text"
               value={pickDate}
               onChange={(e) => setPickDate(e.target.value)}
               placeholder="Date (YYYY-MM-DD)"
               className="rounded-md border-2 border-default-300 px-3 py-1 outline-none hover:border-default-400 hover:bg-default-100 focus:border-default-900 focus:bg-default-200"
             />
             <input
+              type="text"
               value={pickContributors}
               onChange={(e) => setPickContributors(e.target.value)}
               placeholder="Contributors (Production Company, Cast, Author, etc)"
@@ -206,7 +200,7 @@ export default function UploadTodayPick({
           >
             Submit
           </button>
-        </ModalDialog>
+        </div>
       </Modal>
     </section>
   );

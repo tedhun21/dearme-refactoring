@@ -13,7 +13,6 @@ export default function WeatherIcons({
   weatherId: any;
   className?: string;
 }) {
-  console.log(weatherId);
   // 날씨 ID 범위에 따른 아이콘 반환 함수
   const getWeatherIcon = (weatherId: any) => {
     if (weatherId >= 200 && weatherId < 300) {

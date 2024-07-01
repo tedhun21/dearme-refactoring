@@ -1,4 +1,4 @@
-import Tags from "@/public/diary/Tags";
+import Tags from "@/app/ui/diary/Tags";
 
 export default function ChooseEmotionTags({
   selectedTags,
@@ -22,6 +22,10 @@ export default function ChooseEmotionTags({
     "#GLOOMY",
     "#EXCITED",
     "#PRESSURE",
+    "#SAD",
+    "#DISGUSTING",
+    "#AFRAID",
+    "#BORED",
   ];
 
   const handleTagClick = (tag: string) => {
