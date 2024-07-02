@@ -7,7 +7,6 @@ const tags = [
   "#MOTIVATED",
   "#ANNOYING",
   "#LONELY",
-  "#EXCITING",
   "#PROUD",
   "#ANXIETY",
   "#DEPRESSED",
@@ -59,7 +58,7 @@ export default function ChooseEmotionTags({
             />
             <label
               htmlFor={tag}
-              className={`cursor-pointer rounded-lg border-2 border-default-400 bg-default-300 px-2 py-1 font-semibold ${
+              className={`cursor-pointer rounded-lg border-2 border-default-400 bg-default-300 px-2 py-1 text-sm font-semibold xs:text-base ${
                 isChecked
                   ? "border-default-800 bg-default-800 text-default-100 hover:bg-default-700"
                   : "text-default-800 hover:border-default-600 hover:bg-default-400"

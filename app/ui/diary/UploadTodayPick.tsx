@@ -7,12 +7,14 @@ import Modal from "@mui/joy/Modal";
 import PickCard from "./PickCard";
 import AddPhoto from "@/public/diary/AddPhoto";
 import { PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useFieldArray } from "react-hook-form";
 
 export default function UploadTodayPick({
   picks,
   setPicks,
   selectedPicks,
   setSelectedPicks,
+  register,
 }: any) {
   const [open, setOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -80,7 +82,7 @@ export default function UploadTodayPick({
   };
 
   return (
-    <section>
+    <section className="pb-8">
       {(picks?.length ?? 0) > 0 || (selectedPicks?.length ?? 0) > 0 ? (
         <div className="flex w-full items-center gap-4 overflow-x-auto p-3">
           {picks?.map((pick: any) => (
@@ -99,7 +101,7 @@ export default function UploadTodayPick({
               setSelectedPicks={setSelectedPicks}
             />
           ))}
-          <button type="button" className="m-10 " onClick={() => setOpen(true)}>
+          <button type="button" className="m-10" onClick={() => setOpen(true)}>
             <PlusCircleIcon className="size-10 text-white hover:text-default-900" />
           </button>
         </div>
@@ -107,11 +109,8 @@ export default function UploadTodayPick({
         <div className="flex justify-center gap-2 px-6">
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpen(true);
-            }}
-            className="flex w-full flex-col items-center rounded-lg border-2 border-dashed border-black bg-default-800 py-24 text-base font-medium text-gray-400 hover:bg-gray-300"
+            onClick={() => setOpen(true)}
+            className="flex w-full flex-col items-center rounded-lg border-2 border-dashed border-black bg-default-800 py-24 text-base font-medium text-gray-400 hover:bg-default-700"
           >
             <span className="mb-2 flex justify-center">
               <PlusIcon className="size-8 stroke-2" />
@@ -127,7 +126,7 @@ export default function UploadTodayPick({
         onClose={() => setOpen(false)}
         className="flex items-center justify-center"
       >
-        <div className="flex w-[340px] flex-col  gap-4 rounded-xl bg-default-100 p-8 xxs:w-[380px] xs:w-[440px] s:w-[520px]">
+        <div className="flex w-[340px] flex-col gap-4 rounded-xl bg-default-100 p-8 xxs:w-[380px] xs:w-[440px] s:w-[520px]">
           <span className="text-center text-lg font-semibold">
             Add Today&#39;s Cultural Activity
           </span>

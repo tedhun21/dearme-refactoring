@@ -41,7 +41,7 @@ export default function UploadPhoto({
 
     if (files) {
       const filesArray = Array.from(files) as File[];
-      console.log(filesArray);
+
       const checkLength = totalImages.length + filesArray.length;
 
       if (checkLength <= 5) {
@@ -73,31 +73,33 @@ export default function UploadPhoto({
   };
 
   return (
-    <div className="flex gap-2 overflow-x-auto px-2 py-6">
+    <div className="flex gap-2 overflow-x-auto">
       {/* 사진 하나 없을때 */}
       {selectedPhotos?.length === 0 && previewUrls?.length === 0 ? (
-        <button
-          type="button"
-          onClick={openFileInput}
-          className="flex w-full cursor-pointer flex-col items-center rounded-lg bg-default-100 py-16 text-base font-semibold text-default-500 hover:bg-default-200"
-        >
-          <span className="mb-2 flex justify-center">
-            <PhotoIcon />
-          </span>
-          <label>Attach Pictures</label>
-          <h3 className="text-xs font-medium text-gray-400">(Max 5pics)</h3>
-          <input
-            type="file"
-            multiple
-            accept="image/jpeg, image/png"
-            onChange={handleFileChange}
-            ref={fileInputRef}
-            hidden
-          />
-        </button>
+        <div className="w-full px-8 py-6">
+          <button
+            type="button"
+            onClick={openFileInput}
+            className="flex w-full cursor-pointer flex-col items-center rounded-lg bg-default-100 py-16 text-base font-semibold text-default-500 hover:bg-default-200"
+          >
+            <span className="mb-2 flex justify-center">
+              <PhotoIcon />
+            </span>
+            <label>Attach Pictures</label>
+            <h3 className="text-xs font-medium text-gray-400">(Max 5pics)</h3>
+            <input
+              type="file"
+              multiple
+              accept="image/jpeg, image/png"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+              hidden
+            />
+          </button>
+        </div>
       ) : selectedPhotos?.length > 0 || previewUrls?.length > 0 ? (
         // 사진 가지고 있을 때
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4 p-6">
           {/* 브라우저에 잠깐 올린 사진 */}
           {selectedPhotos.map((file: File, index: number) => (
             <div

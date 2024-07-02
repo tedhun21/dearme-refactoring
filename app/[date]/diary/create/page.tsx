@@ -42,12 +42,6 @@ export default function Create() {
   const router = useRouter();
   const { date } = useParams<{ date: string }>();
 
-  const [selectedMood, setSelectedMood] = useState<any>(null);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedCompanions, setSelectedCompanions] = useState<string | null>(
-    null,
-  );
-
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
@@ -61,17 +55,17 @@ export default function Create() {
         companions: "",
         title: "",
         body: "",
-        todayPicks: [{ title: "", contributor: "", date: "" }],
       },
     });
 
   // 다이어리 생성
-  const { isPending: isCreadtDiaryPending, mutate: createDiaryMutate } =
+  const { isPending: isCreateDiaryPending, mutate: createDiaryMutate } =
     useMutation({
       mutationKey: ["createDiary"],
       mutationFn: createDiary,
 
       onSuccess: async ({ diaryId }: any) => {
+        console.log(diaryId);
         if (selectedPicks.length > 0) {
           for (let i = 0; i < selectedPicks.length; i++) {
             const { image, ...createData } = selectedPicks[i];
@@ -96,27 +90,24 @@ export default function Create() {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    // const { mood, feelings, companions, title, body } = data;
-    // if (
-    //   mood !== "" &&
-    //   feelings !== "" &&
-    //   companions !== "" &&
-    //   title !== "" &&
-    //   body !== ""
-    // ) {
-    //   const modifiedData = removeAllEmptyStrings(data);
-    //   createDiaryMutate({
-    //     date,
-    //     createData: modifiedData,
-    //     photos: selectedPhotos,
-    //   });
-    // } else {
-    //   window.alert("Mood, Feelings, With, Diary are required");
-    // }
+    const { mood, feelings, companions, title, body } = data;
+    if (
+      mood !== "" &&
+      feelings !== "" &&
+      companions !== "" &&
+      title !== "" &&
+      body !== ""
+    ) {
+      const modifiedData = removeAllEmptyStrings(data);
+      createDiaryMutate({
+        date,
+        createData: modifiedData,
+        photos: selectedPhotos,
+      });
+    } else {
+      window.alert("Mood, Feelings, With, Diary are required");
+    }
   };
-
-  console.log(watch());
 
   return (
     <main className="flex min-h-screen justify-center">
@@ -132,16 +123,16 @@ export default function Create() {
                 <ArrowUturnLeftIcon className="size-6 stroke-2" />
               </button>
             </section>
-            <section className="flex flex-col gap-4 bg-default-200 px-8 py-4">
+            <section className="flex flex-col gap-2 bg-default-200 p-4">
               <label className="flex text-lg font-medium text-default-500">
                 Mood
               </label>
-              <ChooseMood register={register} getValue={getValues().mood} />
+              <ChooseMood register={register} control={control} />
               <h3 className="flex justify-center text-sm font-medium text-default-500">
                 How are you today?
               </h3>
             </section>
-            <section className="flex flex-col gap-4 bg-default-200 px-8 py-4">
+            <section className="flex flex-col gap-4 bg-default-200 p-4">
               <label className="flex text-lg font-medium text-default-500">
                 Feelings
               </label>
@@ -152,14 +143,11 @@ export default function Create() {
                 control={control}
               />
             </section>
-            <section className="flex flex-col gap-4 bg-default-300 px-8 py-4">
+            <section className="flex flex-col gap-4 bg-default-300 p-4">
               <label className="flex text-lg font-medium text-default-500">
                 With
               </label>
-              <ChooseCompanions
-                register={register}
-                getValue={getValues().companions}
-              />
+              <ChooseCompanions register={register} control={control} />
             </section>
             <section className="my-4 flex flex-col">
               <DiaryModal
@@ -169,8 +157,8 @@ export default function Create() {
                 setValue={setValue}
               />
             </section>
-            <section className="flex flex-col bg-default-400 px-5 py-4">
-              <label className="flex  text-lg font-medium text-default-500">
+            <section className="flex flex-col bg-default-400">
+              <label className="flex px-6 pt-4 text-lg font-medium text-default-500">
                 Today&#39;s PICTURE
               </label>
               <UploadPhoto
@@ -180,7 +168,7 @@ export default function Create() {
                 setPreviewUrls={setPreviewUrls}
               />
             </section>
-            <section className="flex flex-col gap-2 bg-default-800 px-5 pb-8 pt-4">
+            <section className="flex flex-col gap-4 bg-default-800 p-4">
               <label className="flex text-lg font-medium text-default-100">
                 Today&#39;s PICK
               </label>
@@ -190,12 +178,13 @@ export default function Create() {
               />
             </section>
           </div>
-          <section className="m-4 flex items-center justify-center">
+          <section className="flex items-center justify-center p-4">
             <button
               type="submit"
               className="rounded-3xl border-2 border-default-800 px-32 py-2 text-sm font-semibold text-default-800 hover:bg-default-300 active:bg-default-800 active:text-white"
+              disabled={isCreateDiaryPending}
             >
-              {isCreadtDiaryPending ? <Loading /> : <span>Create Diary</span>}
+              {isCreateDiaryPending ? <Loading /> : <span>Create Diary</span>}
             </button>
           </section>
         </form>

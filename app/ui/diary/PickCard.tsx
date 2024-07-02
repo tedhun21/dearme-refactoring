@@ -56,7 +56,7 @@ export default function PickCard({
           <DearmeLogo />
         </div>
       )}
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-1">
         <span className="text-sm font-bold">{pick.title}</span>
         <span className="text-xs">{pick.contributors}</span>
         <span className="text-2xs">{pick.date}</span>
@@ -65,7 +65,7 @@ export default function PickCard({
       <button
         type="button"
         onClick={() => handleRemovePick(pick.id)}
-        className="absolute right-[-8px] top-[-8px] flex h-5 w-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px]"
+        className="absolute right-[-8px] top-[-8px] flex size-5 items-center justify-center rounded-full bg-red-500 pb-[1.8px]"
       >
         <span>&times;</span>
       </button>

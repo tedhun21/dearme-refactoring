@@ -2,23 +2,17 @@ export default function MoodEmoji({
   mood,
   icon: Icon,
   register,
-  getValue,
+  watchValue,
 }: any) {
   return (
     <div>
       <label htmlFor={mood}>
         <Icon
-          selected={getValue === mood}
+          selected={watchValue === mood}
           className="size-8 cursor-pointer rounded-full hover:shadow-rad"
         />
       </label>
-      <input
-        type="radio"
-        id={mood}
-        value={mood}
-        {...register("mood")}
-        className="hidden"
-      />
+      <input type="radio" id={mood} value={mood} {...register("mood")} hidden />
     </div>
   );
 }
