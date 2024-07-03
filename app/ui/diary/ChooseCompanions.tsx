@@ -1,5 +1,5 @@
-import Companions from "@/public/diary/Companions";
 import { useWatch } from "react-hook-form";
+import Companions from "./Companions";
 
 const companions = ["FAMILY", "LOVER", "FRIEND", "ACQUAINTANCE", "ALONE"];
 

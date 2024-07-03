@@ -1,26 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+
 import { useQuery } from "@tanstack/react-query";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
-import { PlusCircleIcon, TicketIcon } from "@heroicons/react/24/outline";
-
-import { getDiaryForDay, getMe } from "@/store/api";
 import Header from "@/app/ui/header/Header";
-import ReadDiary from "@/app/ui/diary/ReadDiary";
-import SentimentalQuotes from "@/app/ui/diary/Sentimental Quotes";
-import MonthlyDiary from "@/app/ui/diary/MonthlyDiary";
-import DiaryActionButton from "@/app/ui/diary/DiaryActionButton";
 import Footer from "@/app/ui/footer/Footer";
-import TodayPicks from "@/app/ui/diary/TodayPicks";
+import { getDiaryForDay, getMe } from "@/store/api";
+import ReadDiary from "@/app/ui/diary/ReadDiary";
+import ReadTodayPick from "@/app/ui/diary/ReadTodayPick";
+import MonthlyDiaryLink from "@/app/ui/diary/MonthlyDiaryLink";
+import DiaryActionButton from "@/app/ui/diary/DiaryActionButton";
+import SentimentalQuotes from "@/app/ui/diary/Sentimental Quotes";
 
 export default function Diary() {
   const { date } = useParams();
-  const router = useRouter();
 
   // 내 정보 가져오기
-  const { isSuccess, data: meData } = useQuery({
+  const { data: meData } = useQuery({
     queryKey: ["getMe"],
     queryFn: () => getMe(),
   });
@@ -36,14 +35,12 @@ export default function Diary() {
         <Header me={meData} />
         {/* // 일기가 있을때 */}
         {diaryData ? (
-          <div className="flex h-full flex-col">
+          <div className="flex h-full flex-col gap-8">
             {/* 일기 데이터가 있을 경우 렌더링 */}
-            <div>
-              <ReadDiary date={date} diaryData={diaryData} />
-              {diaryData?.today_picks?.length > 0 ? (
-                <TodayPicks picks={diaryData?.today_picks} />
-              ) : null}
-            </div>
+            <ReadDiary date={date} diaryData={diaryData} />
+            {diaryData.today_picks?.length > 0 && (
+              <ReadTodayPick picks={diaryData.today_picks} />
+            )}
             <section className="mb-52 p-5">
               <div className="flex justify-end gap-2">
                 <DiaryActionButton
@@ -57,9 +54,6 @@ export default function Diary() {
                   actionType="Delete"
                 />
               </div>
-            </section>
-            <section className="relative right-20 flex justify-end">
-              <MonthlyDiary />
             </section>
           </div>
         ) : (
@@ -79,16 +73,9 @@ export default function Diary() {
                 </Link>
               </section>
             </div>
-            <div className="fixed bottom-36 w-full max-w-[600px]">
-              <div className="absolute right-4 rounded-full bg-default-300 p-3 shadow-lg hover:bg-default-400 active:bg-default-900">
-                <Link href={`/diary/${date}`}>
-                  <TicketIcon className="size-10" />
-                </Link>
-              </div>
-            </div>
           </article>
         )}
-
+        <MonthlyDiaryLink date={date} />
         <Footer />
       </div>
     </main>

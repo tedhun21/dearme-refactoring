@@ -1,24 +1,23 @@
-/* eslint-disable @next/next/no-img-element */
+import ReadTodayPick from "./ReadTodayPick";
+import UploadTodayPick from "./UploadTodayPick";
 
-import TodayPick from "./TodayPick";
-
-export default function TodayPicks({ picks }: any) {
+export default function TodayPicks({
+  type,
+  selectedPicks,
+  setSelectedPicks,
+}: any) {
   return (
-    <div>
-      <article className="mb-3 rounded bg-default-800">
-        <section className="p-5">
-          <h1 className="mb-3 text-lg font-semibold text-white">
-            Today&#39;s PICK
-          </h1>
-          {picks.length > 0 && (
-            <div className="flex gap-4 overflow-x-scroll whitespace-nowrap scrollbar-hide">
-              {picks.map((pick: any) => (
-                <TodayPick key={pick.id} pick={pick} />
-              ))}
-            </div>
-          )}
-        </section>
-      </article>
-    </div>
+    <>
+      {type === "create" ? (
+        <UploadTodayPick
+          selectedPicks={selectedPicks}
+          setSelectedPicks={setSelectedPicks}
+        />
+      ) : type === "read" ? (
+        <ReadTodayPick selectedPicks={selectedPicks} />
+      ) : (
+        type === "edit" && <div>hi</div>
+      )}
+    </>
   );
 }

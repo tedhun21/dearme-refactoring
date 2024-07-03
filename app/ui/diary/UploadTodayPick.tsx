@@ -7,14 +7,12 @@ import Modal from "@mui/joy/Modal";
 import PickCard from "./PickCard";
 import AddPhoto from "@/public/diary/AddPhoto";
 import { PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { useFieldArray } from "react-hook-form";
 
 export default function UploadTodayPick({
   picks,
   setPicks,
   selectedPicks,
   setSelectedPicks,
-  register,
 }: any) {
   const [open, setOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -82,13 +80,14 @@ export default function UploadTodayPick({
   };
 
   return (
-    <section className="pb-8">
+    <div className="pb-8">
       {(picks?.length ?? 0) > 0 || (selectedPicks?.length ?? 0) > 0 ? (
         <div className="flex w-full items-center gap-4 overflow-x-auto p-3">
           {picks?.map((pick: any) => (
             <PickCard
               key={pick.id}
-              type="url"
+              type="create"
+              imageType="url"
               pick={pick}
               setPicks={setPicks}
             />
@@ -96,7 +95,8 @@ export default function UploadTodayPick({
           {selectedPicks?.map((selectedPick: any, index: number) => (
             <PickCard
               key={index}
-              type="blob"
+              type="create"
+              imageType="blob"
               pick={selectedPick}
               setSelectedPicks={setSelectedPicks}
             />
@@ -201,65 +201,6 @@ export default function UploadTodayPick({
           </button>
         </div>
       </Modal>
-    </section>
+    </div>
   );
-}
-
-{
-  /* <div className="overflow-x-auto">
-        <div className="flex flex-row items-start">
-          {picks.length > 0 &&
-            picks.map((pick, index) => (
-              <article key={pick.id} className="flex flex-col">
-                <section
-                  className="relative flex max-h-[200px] min-h-[200px] min-w-[200px] max-w-[200px]"
-                  onMouseEnter={() => handleMouseEnter(pick.id)}
-                  onMouseLeave={() => handleMouseLeave(pick.id)}
-                >
-                  {pick.image ? (
-                    <img
-                      src={pick.image}
-                      alt="Uploaded"
-                      className="ml-8 flex h-44 w-44 object-cover"
-                    />
-                  ) : (
-                    <div className="ml-8 flex h-44 w-44 flex-col items-center justify-center bg-default-600">
-                      <DearmeLogo />
-                    </div>
-                  )}
-                  <Button
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      right: "20%",
-                      visibility: hovered[pick.id] ? "visible" : "hidden",
-                      opacity: hovered[pick.id] ? 1 : 0,
-                      transform: "translateY(-50%)",
-                      transition: "visibility 0.3s, opacity 0.3s ease",
-                    }}
-                    onClick={() => handleRemove(pick.id)}
-                  >
-                    Remove
-                  </Button>
-                  {index === picks.length - 1 && (
-                    <span
-                      onClick={handleOpen}
-                      style={{ cursor: "pointer" }}
-                      className="ml-16 mt-24 flex justify-end"
-                    >
-                      <CirclePlus />
-                    </span>
-                  )}
-                </section>
-                <section className="mb-6 ml-8 mt-[-16px] flex flex-col">
-                  <h3 className="text-base text-default-100">{pick.title}</h3>
-                  <p className="text-xs text-default-100">{pick.date}</p>
-                  <p className="text-xs text-default-100">
-                    {pick.contributors}
-                  </p>
-                </section>
-              </article>
-            ))}
-        </div>
-      </div> */
 }

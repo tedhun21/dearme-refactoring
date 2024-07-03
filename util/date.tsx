@@ -119,3 +119,8 @@ export const returnDate = (date: Dayjs) => {
 export const dayOftheWeek = (date: Dayjs) => {
   return dayjs(date).format("dddd").slice(0, 3);
 };
+
+// YYYY-MM 으로 변경
+export const convertYearMonth = (date: Dayjs) => {
+  return dayjs(date).format("YYYY-MM");
+};
