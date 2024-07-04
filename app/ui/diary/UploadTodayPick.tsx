@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 
@@ -9,13 +9,14 @@ import AddPhoto from "@/public/diary/AddPhoto";
 import { PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 export default function UploadTodayPick({
-  picks,
-  setPicks,
   selectedPicks,
   setSelectedPicks,
+  serverData,
 }: any) {
   const [open, setOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [picks, setPicks] = useState([]);
 
   const [pickTitle, setPickTitle] = useState("");
   const [pickDate, setPickDate] = useState("");
@@ -61,16 +62,6 @@ export default function UploadTodayPick({
     setOpen(false);
   };
 
-  // // 마우스가 이미지 위로 이동했을 때 호출될 핸들러입니다.
-  // const handleMouseEnter = (id: number) => {
-  //   setHovered((prev) => ({ ...prev, [id]: true }));
-  // };
-
-  // // 마우스가 이미지에서 벗어났을 때 호출될 핸들러입니다.
-  // const handleMouseLeave = (id: number) => {
-  //   setHovered((prev) => ({ ...prev, [id]: false }));
-  // };
-
   const handlePickImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
     if (selectedFiles && selectedFiles.length > 0) {
@@ -78,6 +69,12 @@ export default function UploadTodayPick({
       setPickImage(selectedFile);
     }
   };
+
+  useEffect(() => {
+    if (serverData) {
+      setPicks(serverData);
+    }
+  }, [serverData]);
 
   return (
     <div className="pb-8">

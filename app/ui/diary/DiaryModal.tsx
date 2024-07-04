@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import Modal from "@mui/joy/Modal";
@@ -8,7 +8,12 @@ import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import WeatherIcons from "@/app/ui/diary/WeatherIcons";
 
-export default function DiaryModal({ type, getValues, setValue }: any) {
+export default function DiaryModal({
+  type,
+  getValues,
+  setValue,
+  serverData,
+}: any) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [title, setTitle] = useState("");
@@ -50,7 +55,9 @@ export default function DiaryModal({ type, getValues, setValue }: any) {
   const handleComplete = async () => {
     setValue("title", title);
     setValue("body", body);
-    await getWeather();
+    if (type === "create") {
+      await getWeather();
+    }
 
     setModalOpen(false);
   };
@@ -63,6 +70,13 @@ export default function DiaryModal({ type, getValues, setValue }: any) {
 
     setModalOpen(false);
   };
+
+  useEffect(() => {
+    if (serverData) {
+      setTitle(serverData.title || "");
+      setBody(serverData.body || "");
+    }
+  }, [serverData]);
 
   return (
     <>

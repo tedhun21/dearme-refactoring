@@ -24,7 +24,7 @@ export default function Diary() {
     queryFn: () => getMe(),
   });
 
-  const { data: diaryData } = useQuery({
+  const { isSuccess: isSuccessDiary, data: diaryData } = useQuery({
     queryKey: ["getDiaryForDay"],
     queryFn: () => getDiaryForDay({ date }),
   });
@@ -56,7 +56,7 @@ export default function Diary() {
               </div>
             </section>
           </div>
-        ) : (
+        ) : isSuccessDiary ? (
           // 일기가 없을 때
           <article className="absolute flex w-full flex-col">
             <SentimentalQuotes />
@@ -74,7 +74,7 @@ export default function Diary() {
               </section>
             </div>
           </article>
-        )}
+        ) : null}
         <MonthlyDiaryLink date={date} />
         <Footer />
       </div>

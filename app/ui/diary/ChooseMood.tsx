@@ -8,10 +8,10 @@ import { useWatch } from "react-hook-form";
 
 const moodEmojis = [
   { mood: "JOYFUL", icon: JoyfulEmoji },
-  { mood: "HAPPY", icon: HappyEmoji },
+  { mood: "HAPPINESS", icon: HappyEmoji },
   { mood: "NEUTRAL", icon: NeutralEmoji },
   { mood: "UNHAPPY", icon: UnhappyEmoji },
-  { mood: "SAD", icon: SadEmoji },
+  { mood: "SADNESS", icon: SadEmoji },
 ];
 
 export default function ChooseMood({ register, control }: any) {

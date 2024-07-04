@@ -1,25 +1,35 @@
 import { useWatch } from "react-hook-form";
 
 const tags = [
-  "#FRESH",
-  "#TIRED",
-  "#HAPPY",
-  "#MOTIVATED",
-  "#ANNOYING",
-  "#LONELY",
-  "#PROUD",
-  "#ANXIETY",
-  "#DEPRESSED",
-  "#PIT-A-PAT",
-  "#COZY",
-  "#ANGRY",
-  "#GLOOMY",
-  "#EXCITED",
-  "#PRESSURE",
-  "#SAD",
-  "#DISGUSTING",
-  "#AFRAID",
-  "#BORED",
+  "FRESH",
+  "TIRED",
+  "HAPPY",
+  "MOTIVATED",
+  "ANNOYED",
+  "LONELY",
+  "PROUD",
+  "ANXIOUS",
+  "DEPRESSED",
+  "COZY",
+  "ANGRY",
+  "GLOOMY",
+  "EXCITED",
+  "STRESSED",
+  "SAD",
+  "DISGUSTED",
+  "AFRAID",
+  "BORED",
+  "CONTENT",
+  "RELIEVED",
+  "FRUSTRATED",
+  "OVERWHELMED",
+  "HOPEFUL",
+  "SURPRISED",
+  "LOVE",
+  "CONFUSED",
+  "GRATEFUL",
+  "CALM",
+  "LONGING",
 ];
 
 export default function ChooseEmotionTags({
@@ -64,7 +74,7 @@ export default function ChooseEmotionTags({
                   : "text-default-800 hover:border-default-600 hover:bg-default-400"
               }`}
             >
-              {tag}
+              #{tag}
             </label>
           </div>
         );

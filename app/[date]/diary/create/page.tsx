@@ -55,6 +55,8 @@ export default function Create() {
         companions: "",
         title: "",
         body: "",
+        weather: "",
+        weatherId: "",
       },
     });
 
@@ -65,7 +67,6 @@ export default function Create() {
       mutationFn: createDiary,
 
       onSuccess: async ({ diaryId }: any) => {
-        console.log(diaryId);
         if (selectedPicks.length > 0) {
           for (let i = 0; i < selectedPicks.length; i++) {
             const { image, ...createData } = selectedPicks[i];
@@ -112,39 +113,38 @@ export default function Create() {
   return (
     <main className="flex min-h-screen justify-center">
       <article className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
+        <section className="flex items-center justify-between bg-default-100 px-8 py-4 text-center text-xl font-medium text-gray-400">
+          {getDiaryDate(date)}
+          <button type="button" onClick={() => router.back()}>
+            <ArrowUturnLeftIcon className="size-6 stroke-2" />
+          </button>
+        </section>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex h-full flex-col justify-between"
         >
           <div>
-            <section className="flex items-center justify-between bg-default-100 px-8 py-4 text-center text-xl font-medium text-gray-400">
-              {getDiaryDate(date)}
-              <button type="button" onClick={() => router.back()}>
-                <ArrowUturnLeftIcon className="size-6 stroke-2" />
-              </button>
-            </section>
             <section className="flex flex-col gap-2 bg-default-200 p-4">
-              <label className="flex text-lg font-medium text-default-500">
+              <label className="text-lg font-medium text-default-500">
                 Mood
               </label>
               <ChooseMood register={register} control={control} />
-              <h3 className="flex justify-center text-sm font-medium text-default-500">
+              <h3 className="text-center text-sm font-medium text-default-500">
                 How are you today?
               </h3>
             </section>
             <section className="flex flex-col gap-4 bg-default-200 p-4">
-              <label className="flex text-lg font-medium text-default-500">
+              <label className="text-lg font-medium text-default-500">
                 Feelings
               </label>
               <ChooseEmotionTags
                 register={register}
-                getValue={getValues().feelings}
                 setValue={setValue}
                 control={control}
               />
             </section>
             <section className="flex flex-col gap-4 bg-default-300 p-4">
-              <label className="flex text-lg font-medium text-default-500">
+              <label className="text-lg font-medium text-default-500">
                 With
               </label>
               <ChooseCompanions register={register} control={control} />
@@ -158,18 +158,17 @@ export default function Create() {
               />
             </section>
             <section className="flex flex-col bg-default-400">
-              <label className="flex px-6 pt-4 text-lg font-medium text-default-500">
+              <label className="px-6 pt-4 text-lg font-medium text-default-500">
                 Today&#39;s PICTURE
               </label>
               <UploadPhoto
                 selectedPhotos={selectedPhotos}
                 setSelectedPhotos={setSelectedPhotos}
                 previewUrls={previewUrls}
-                setPreviewUrls={setPreviewUrls}
               />
             </section>
             <section className="flex flex-col gap-4 bg-default-800 p-4">
-              <label className="flex text-lg font-medium text-default-100">
+              <label className="text-lg font-medium text-default-100">
                 Today&#39;s PICK
               </label>
               <UploadTodayPick
