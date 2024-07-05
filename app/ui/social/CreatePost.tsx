@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import { useQuery } from "@tanstack/react-query";
@@ -25,11 +24,15 @@ import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import MenuItem from "@mui/material/MenuItem";
 
 import Close from "@/public/social/Close";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { getToday, monthNameDayYear } from "@/util/date";
+import dayjs from "dayjs";
+import Loading from "@/public/common/Loading";
 
 interface IForm {
   goalId: number;
   isPrivate: boolean;
-  postText: string;
+  body: string;
   commentSettings: string;
 }
 
@@ -43,53 +46,79 @@ export default function CreatePost({
   // CreatePost modal
   const [openCreatePost, setOpenCreatePost] = useState(false);
 
-  // react-hook-form
-  const { register, setValue, handleSubmit, reset, watch, control } =
-    useForm<IForm>({
-      defaultValues: {
-        goalId: 0,
-        isPrivate: false,
-        postText: "",
-      },
-    });
-
-  const isPrivate = watch("isPrivate");
-
-  // goals
-  const { data: goalsData } = useQuery({
-    queryKey: ["getGoals"],
-    queryFn: getGoals,
-    enabled: openCreatePost,
-  });
-  const goals = goalsData?.data;
-
-  useEffect(() => {
-    if (openCreatePost && goalsData?.data && goalsData.data.length === 0) {
-      setOpenCreatePost(false);
-      window.alert(
-        "You have no goals. Please register a goal before creating a post.",
-      );
-    }
-  }, [goalsData, openCreatePost]);
-
   // 게시물 사진
   const [imageFile, setImageFile] = useState<File | null>(null);
   const handleImageFileChange = (file: File) => {
     setImageFile(file);
   };
 
-  // Date
-  const date = new Date();
-  const formattedDate = date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
   // commentSettings
   const [commentSettingsOptions, setCommentSettingsOptions] = useState<
     string[]
   >([]);
+
+  // react-hook-form
+  const { register, setValue, handleSubmit, reset, watch, control } =
+    useForm<IForm>({
+      defaultValues: {
+        goalId: 0,
+        isPrivate: false,
+        body: "",
+        commentSettings: "",
+      },
+    });
+
+  const isPrivate = watch("isPrivate");
+
+  // goals
+  const { data: goalData } = useQuery({
+    queryKey: ["getGoals"],
+    queryFn: () => getGoals(getToday()),
+    enabled: openCreatePost,
+  });
+
+  // Post Request
+  const { isPending: isCreatePostPending, mutate: createPostMutation } =
+    useMutation({
+      mutationKey: ["createPost"],
+      mutationFn: createPost,
+      onSuccess: () => {
+        setOpenCreatePost(false);
+        window.alert(" Uploaded!");
+        setPostUploaded(true);
+
+        reset();
+      },
+      onError: () => {
+        window.alert(" Failed to upload your post.");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["getPostsWithPage"],
+        });
+      },
+    });
+
+  const onSubmit = (data: any) => {
+    if (data.goalId === 0) {
+      window.alert("Please select your goal.");
+      return;
+    } else if (!imageFile) {
+      window.alert("Please select a photo.");
+      return;
+    }
+
+    createPostMutation({ createData: data, imageFile });
+  };
+
+  useEffect(() => {
+    if (openCreatePost && goalData && goalData.length === 0) {
+      setOpenCreatePost(false);
+      window.alert(
+        "You have no goals. Please register a goal before creating a post.",
+      );
+    }
+  }, [goalData, openCreatePost]);
 
   useEffect(() => {
     const newCommentSettingsOptions = isPrivate
@@ -101,303 +130,163 @@ export default function CreatePost({
     setValue("commentSettings", newCommentSettings);
   }, [isPrivate, setValue]);
 
-  // Post Request
-  const { mutate: addPostMutation } = useMutation({
-    mutationKey: ["createPost"],
-    mutationFn: createPost,
-    onSuccess: () => {
-      setOpenCreatePost(false);
-      window.alert(" Uploaded!");
-      setPostUploaded(true);
-    },
-    onError: () => {
-      window.alert(" Failed to upload your post.");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["getPostsWithPage"],
-      });
-    },
-  });
-
-  const onSubmit = (data: any) => {
-    if (data.goalId === 0) {
-      window.alert("Please select your goal.");
-      return;
-    } else if (!imageFile) {
-      window.alert("Please select a photo.");
-      return;
-    } else if (data.postText === "") {
-      window.alert("Please write your post content.");
-      return;
-    } else if (!data.commentSettings) {
-      window.alert("Please select comment setting.");
-      return;
-    }
-
-    addPostMutation({ createData: data, imageFile });
-
-    setOpenCreatePost(false);
-    reset();
-  };
-
   return (
     <>
       <button
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-default-800 hover:bg-opacity-75"
+        className="flex size-10 items-center justify-center rounded-full bg-default-800 hover:bg-opacity-75"
         onClick={() => setOpenCreatePost(true)}
       >
-        <AddIcon sx={{ color: "white" }} />
+        <PlusIcon className="size-6 stroke-2 text-white" />
       </button>
 
       {/* CreatePostModal */}
-      <Modal open={openCreatePost} onClose={() => setOpenCreatePost(false)}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            backgroundColor: "#F5F3EB",
-            borderRadius: "16px",
-            p: 4,
-          }}
-        >
-          {/* 로고 & x 버튼 */}
-          <div className="mb-4 flex items-center justify-between">
-            <Link href="/">
-              <Image
-                src="/header/logo.png"
-                width={77}
-                height={20}
-                alt="logo"
-                quality={80}
-                priority
-              />
-            </Link>
-
+      <Modal
+        open={openCreatePost}
+        onClose={() => setOpenCreatePost(false)}
+        className="flex items-center justify-center"
+      >
+        <div className="flex h-[700px] flex-col justify-between rounded-2xl bg-default-200 p-6 xxs:w-[360px] xs:w-[500px]">
+          <div className="flex items-center justify-between">
+            <label className="flex-grow text-center text-lg font-semibold">
+              Create Post
+            </label>
             <button
-              className="border-none"
               onClick={() => setOpenCreatePost(false)}
+              className="ml-auto"
             >
-              <Close className="h-3 w-3 cursor-pointer fill-current text-default-600" />
+              <XMarkIcon className="size-6" />
             </button>
           </div>
-
-          {/* 포스트 작성 폼 */}
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex h-full flex-col justify-between"
-          >
-            <div className="mb-4 flex items-center justify-between">
-              {/* 목표 선택 */}
-              <div className="flex items-center">
-                <span className="text-base font-semibold text-default-500">
-                  In
-                </span>
-                <Select
-                  defaultValue={0}
-                  {...register("goalId")}
-                  sx={{
-                    marginLeft: 1,
-                    "&.MuiOutlinedInput-root": {
-                      borderRadius: "20px",
-                      width: "160px",
-                      height: "24px",
-                      fontSize: "14px",
-                      color: "black",
-                      "& fieldset": {
-                        borderColor: "#DED0B6",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#DED0B6",
-                      },
-                    },
-                  }}
-                  IconComponent={({ ...rest }) => (
-                    <MoreHorizIcon
-                      {...rest}
-                      sx={{
-                        color: "#2D2422",
-                        marginLeft: 1,
-                        fontSize: "medium",
-                      }}
-                    />
-                  )}
-                >
-                  <MenuItem sx={{ fontSize: "14px" }} value={0}>
-                    None
-                  </MenuItem>
-                  {Array.isArray(goals) &&
-                    goals.length > 0 &&
-                    goals.map((goal) => (
-                      <MenuItem
-                        key={goal.id}
-                        sx={{ fontSize: "14px" }}
-                        value={goal.id || ""}
-                      >
-                        {`# ${goal.title}`}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </div>
-
-              {/* Private 토글 */}
-              <div className="flex items-center">
-                <span className="text-sm font-medium text-default-700">
-                  Private
-                </span>
-                <Controller
-                  control={control}
-                  name="isPrivate"
-                  render={({ field: { onChange, value } }) => (
-                    <Switch
-                      // defaultChecked={false}
-                      checked={value || false}
-                      onChange={onChange}
-                      sx={{
-                        /// switch 기본 박스 크기
-                        marginLeft: 1,
-                        padding: 0,
-                        width: "32px",
-                        height: "20px",
-                        "& .MuiSwitch-switchBase": {
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-4">
+              <section className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="goalId"
+                    className="font-semibold text-default-500"
+                  >
+                    In
+                  </label>
+                  <select
+                    {...register("goalId", { required: true })}
+                    className="w-52 rounded-2xl border-2 border-default-400 bg-transparent px-2 py-1 focus:outline-none"
+                  >
+                    <option value={0} className="text-sm">
+                      None
+                    </option>
+                    {Array.isArray(goalData) &&
+                      goalData.length > 0 &&
+                      goalData.map((goal) => (
+                        <option
+                          key={goal.id}
+                          value={goal.id}
+                          className="text-sm"
+                        >
+                          #{goal.title}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <div className="flex items-center gap-1">
+                  <label className="text-sm font-medium text-default-700">
+                    Private
+                  </label>
+                  <Controller
+                    control={control}
+                    name="isPrivate"
+                    render={({ field: { value } }) => (
+                      <Switch
+                        {...register("isPrivate")}
+                        sx={{
+                          /// switch 기본 박스 크기
+                          marginLeft: 1,
                           padding: 0,
-                          margin: "2px",
-                          transitionDuration: "300ms",
-                          // 체크될 때
-                          "&.Mui-checked": {
-                            transform: "translateX(12px)",
-                            color: "#fff",
-                            "& + .MuiSwitch-track": {
-                              backgroundColor: "#143422",
-                              opacity: 1,
-                              border: 0,
-                            },
-                            "&.Mui-disabled + .MuiSwitch-track": {
-                              opacity: 0.5,
+                          width: "32px",
+                          height: "20px",
+                          "& .MuiSwitch-switchBase": {
+                            padding: 0,
+                            margin: "2px",
+                            transitionDuration: "300ms",
+                            // 체크될 때
+                            "&.Mui-checked": {
+                              transform: "translateX(12px)",
+                              color: "#fff",
+                              "& + .MuiSwitch-track": {
+                                backgroundColor: "#143422",
+                                opacity: 1,
+                                border: 0,
+                              },
+                              "&.Mui-disabled + .MuiSwitch-track": {
+                                opacity: 0.5,
+                              },
                             },
                           },
-                        },
-                        "& .MuiSwitch-thumb": {
-                          boxSizing: "border-box",
-                          width: 16,
-                          height: 16,
-                        },
-                        "& .MuiSwitch-track": {
-                          borderRadius: 26 / 2,
-                          backgroundColor: "#b6b6c0",
-                          opacity: 1,
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* 사진 업로드 */}
-            <UploadPostImg setImageFile={handleImageFileChange} />
-
-            {/* 날짜 */}
-            <div className="my-2 flex items-center">
-              <span className="text-sm font-medium text-default-700">
-                {formattedDate}
-              </span>
-              <ArrowDropDownRoundedIcon sx={{ color: "#EDA323" }} />
-            </div>
-
-            {/* Post Body */}
-            <TextField
-              {...register("postText")}
-              fullWidth
-              multiline
-              rows={4}
-              placeholder="Please write a caption."
-              sx={{
-                backgroundColor: "#F5F3EB",
-                "& .MuiOutlinedInput-input": {
-                  fontSize: "14px",
-                },
-                "& .MuiOutlinedInput-root": {
-                  py: "4px",
-                  px: "8px",
-                  "& fieldset": {
-                    borderColor: "#EBE3D5",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#EBE3D5",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#EBE3D5",
-                  },
-                },
-                marginBottom: 3,
-              }}
-            />
-            {/* Comments Settings */}
-            {/* 친구 공개 게시물: FRIENDS / OFF */}
-            {/* 전체 공개 게시물: ALL / OFF */}
-            <div className="mb-4 flex items-center">
-              <span className="mr-2 text-sm font-medium text-default-700">
-                Comments
-              </span>
-
-              <Controller
-                control={control}
-                name="commentSettings"
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    defaultValue=""
-                    value={value || ""}
-                    onChange={onChange}
-                    sx={{
-                      marginLeft: 1,
-                      "&.MuiOutlinedInput-root": {
-                        borderRadius: "20px",
-                        width: "120px",
-                        height: "25px",
-                        fontSize: "14px",
-                        color: "black",
-                        "& fieldset": {
-                          borderColor: "#DED0B6",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#DED0B6",
-                        },
-                      },
-                    }}
-                    IconComponent={({ ...rest }) => (
-                      <ArrowDropDownRoundedIcon
-                        {...rest}
-                        sx={{ fill: "#EDA323" }}
+                          "& .MuiSwitch-thumb": {
+                            boxSizing: "border-box",
+                            width: 16,
+                            height: 16,
+                          },
+                          "& .MuiSwitch-track": {
+                            borderRadius: 26 / 2,
+                            backgroundColor: "#b6b6c0",
+                            opacity: 1,
+                          },
+                        }}
                       />
                     )}
+                  />
+                </div>
+              </section>
+              <section>
+                <UploadPostImg setImageFile={setImageFile} />
+              </section>
+              <section>
+                <span className="text-defulat-700 text-sm font-medium">
+                  {monthNameDayYear(dayjs())}
+                </span>
+              </section>
+              <section>
+                <textarea
+                  {...register("body", { required: true })}
+                  rows={6}
+                  placeholder="Please write a caption."
+                  className="w-full rounded-xl border-2 border-default-400 bg-transparent px-2 py-1 text-sm hover:border-default-800 focus:border-default-900 focus:outline-none"
+                />
+              </section>
+              <section className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="body"
+                    className="text-sm font-medium text-default-700"
+                  >
+                    Comments
+                  </label>
+                  <select
+                    {...register("commentSettings")}
+                    className="w- rounded-2xl border-2 border-default-400 bg-transparent px-2 py-1 focus:outline-none"
                   >
                     {commentSettingsOptions.map((option) => (
-                      <MenuItem
-                        key={option}
-                        sx={{ fontSize: "14px" }}
-                        value={option}
-                      >
+                      <option key={option} value={option} className="text-sm">
                         {option}
-                      </MenuItem>
+                      </option>
                     ))}
-                  </Select>
-                )}
-              />
-            </div>
-            <div className="flex items-center justify-end">
-              <button
-                type="submit"
-                className="w-20 rounded bg-default-800 p-1 text-sm font-medium text-white"
-              >
-                Post
-              </button>
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  className="flex items-center justify-center rounded-lg bg-default-800 px-3 py-1 hover:bg-opacity-80 active:bg-default-900"
+                  disabled={isCreatePostPending}
+                >
+                  {isCreatePostPending ? (
+                    <Loading />
+                  ) : (
+                    <span className="font-medium text-white">Post</span>
+                  )}
+                </button>
+              </section>
             </div>
           </form>
-        </Box>
+        </div>
       </Modal>
     </>
   );

@@ -245,7 +245,7 @@ export default function SocialPost({ post }: SocialPostProps) {
               {post.body}
             </span>
             <span>
-              {!isExpanded && post.body.length > maxChars && (
+              {!isExpanded && post.body?.length > maxChars && (
                 <button
                   className="flex-1 text-xs"
                   onClick={() => setIsExpanded(true)}
@@ -253,7 +253,7 @@ export default function SocialPost({ post }: SocialPostProps) {
                   more
                 </button>
               )}
-              {isExpanded && post.body.length > maxChars && (
+              {isExpanded && post.body?.length > maxChars && (
                 <button
                   className="flex-1  text-xs"
                   onClick={() => setIsExpanded(false)}

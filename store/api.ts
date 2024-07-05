@@ -603,11 +603,14 @@ export const getPostWithPage = async ({ tab, pageParam }: any) => {
 };
 
 // Create _ post
-export const getGoals = async () => {
-  const date = getToday();
+export const getGoals = async (date: any) => {
   const access_token = getCookie("access_token");
-  const headers = { Authorization: `Bearer ${access_token}` };
-  return await axios.get(`${API_URL}/goals?date=${date}`, { headers });
+  if (access_token) {
+    const { data } = await axios.get(`${API_URL}/goals?date=${date}`, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+    return data;
+  }
 };
 
 export const createPost = async ({

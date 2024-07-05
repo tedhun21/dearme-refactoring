@@ -1,9 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+
 import SelectPhotos from "@/public/social/SelectPhotos";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
 export default function UploadPostImg({ setImageFile, currentImageUrl }: any) {
   // 이미지 미리보기 (게시물 수정)
@@ -13,7 +14,7 @@ export default function UploadPostImg({ setImageFile, currentImageUrl }: any) {
 
   const [isImageOnServer, setImageOnServer] = useState<boolean>(false);
 
-  const fileInputRef = React.createRef<HTMLInputElement>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -23,15 +24,11 @@ export default function UploadPostImg({ setImageFile, currentImageUrl }: any) {
     }
   };
 
-  const handleClickUploadArea = () => {
+  const handleImageInputClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
-
-  // api
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
   useEffect(() => {
     if (currentImageUrl) {
@@ -44,7 +41,38 @@ export default function UploadPostImg({ setImageFile, currentImageUrl }: any) {
   }, [currentImageUrl]);
 
   return (
-    <div
+    <div className="relative h-[300px] w-full">
+      {previewImage ? (
+        <Image
+          src={previewImage}
+          alt="image selected"
+          className="object-cover"
+          fill
+        />
+      ) : (
+        <div className="w-ful flex h-full">
+          <button
+            type="button"
+            onClick={handleImageInputClick}
+            className="flex h-full w-full items-center justify-center rounded-xl border-2 border-dotted border-default-400 transition-all hover:border-solid hover:border-default-800"
+          >
+            <SelectPhotos className="size-10" />
+          </button>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+            hidden
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+{
+  /* <div
       className="h-100 flex items-center justify-center"
       onClick={handleClickUploadArea}
     >
@@ -65,6 +93,5 @@ export default function UploadPostImg({ setImageFile, currentImageUrl }: any) {
       ) : (
         <SelectPhotos className="m-10 h-7 w-7 cursor-pointer" />
       )}
-    </div>
-  );
+    </div> */
 }

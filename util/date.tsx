@@ -3,9 +3,9 @@ import dayjs, { Dayjs } from "dayjs";
 // 오늘 날짜 구하기 ("YYYY-MM-DD")
 export const getToday = () => {
   const date = new Date();
-  const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
+  const year = dayjs(date).format("YYYY");
+  const month = dayjs(date).format("MM");
+  const day = dayjs(date).format("DD");
   const today = `${year}-${month}-${day}`;
 
   return today;
@@ -118,4 +118,12 @@ export const returnDate = (date: Dayjs) => {
 // 요일 구하기
 export const dayOftheWeek = (date: Dayjs) => {
   return dayjs(date).format("dddd").slice(0, 3);
+};
+
+// month name day, year
+export const monthNameDayYear = (date: Dayjs) => {
+  const monthName = dayjs(date).format("MMM");
+  const day = dayjs(date).format("D");
+  const year = dayjs(date).format("YYYY");
+  return `${monthName} ${day}, ${year}`;
 };

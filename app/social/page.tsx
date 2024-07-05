@@ -17,6 +17,7 @@ import SocialPost from "../ui/social/SocialPost";
 import New from "../ui/social/New";
 import CreatePost from "../ui/social/CreatePost";
 import Footer from "../ui/footer/Footer";
+import Loading from "@/public/common/Loading";
 // post type
 export interface Photo {
   id: number;
@@ -57,7 +58,7 @@ export default function Social() {
   const router = useRouter();
 
   // me
-  const { isSuccess, data: me } = useQuery({
+  const { isSuccess, data: meData } = useQuery({
     queryKey: ["getMe"],
     queryFn: getMe,
   });
@@ -66,11 +67,11 @@ export default function Social() {
   const [selectedTab, setSelectedTab] = useState<string>("all");
 
   useEffect(() => {
-    if (!me && selectedTab === "friends") {
+    if (!meData && selectedTab === "friends") {
       window.alert("Please log in first.");
       router.replace("/login");
     }
-  }, [me, selectedTab]);
+  }, [meData, selectedTab]);
 
   // infinite scroll
   const [ref, inView] = useInView();
@@ -104,7 +105,7 @@ export default function Social() {
   return (
     <main className="flex min-h-screen w-full justify-center">
       <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
-        <Header />
+        <Header me={meData} />
 
         <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
@@ -141,14 +142,14 @@ export default function Social() {
 
         {hasNextPage && (
           <div ref={ref}>
-            <CircularProgress />
+            <Loading />
           </div>
         )}
 
         {/* 게시물 작성 버튼 */}
         <div className="fixed bottom-0 w-full max-w-[600px]">
           <div className="absolute bottom-24 right-5 flex">
-            {me && <CreatePost setPostUploaded={setPostUploaded} />}
+            {meData && <CreatePost setPostUploaded={setPostUploaded} />}
           </div>
         </div>
 
@@ -161,7 +162,7 @@ export default function Social() {
           </div>
         )}
 
-        <Footer me={me} />
+        <Footer />
       </div>
     </main>
   );
