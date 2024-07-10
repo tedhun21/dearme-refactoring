@@ -5,7 +5,7 @@ import clsx from "clsx";
 import GoalList from "../GoalList";
 import { getToday } from "@/util/date";
 import { useQuery } from "@tanstack/react-query";
-import { getMyGoals } from "@/store/api";
+import { getMyGoals } from "@/api/goal/api";
 
 export default function MeGoal({ route }: any) {
   const { data: goalData } = useQuery({

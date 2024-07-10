@@ -14,7 +14,7 @@ import { useInView } from "react-intersection-observer";
 import Comment from "./Comment";
 import Loading from "@/public/common/Loading";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
-import { getCommentsWithPage, createComment, updateComment } from "@/store/api";
+import { createComment, getCommentsWithPage } from "@/api/comment/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 

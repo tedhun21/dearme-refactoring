@@ -1,4 +1,4 @@
-import { followCancelFriedship } from "@/store/api";
+import { followCancelFriedship } from "@/api/friendship/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function CancelFollowButton({ userId }: any) {

@@ -3,11 +3,12 @@
 import TodoRate from "./plans/TodoRate";
 import DragTodo from "../../ui/todo/DragTodo";
 import { getToday } from "@/util/date";
-import { getMyTodosWithDate } from "@/store/api";
+
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { todoListState } from "@/store/atoms";
+import { getMyTodosWithDate } from "@/api/todo/api";
 
 export default function MeTodo() {
   const [isDrop, setIsDrop] = useState(false);

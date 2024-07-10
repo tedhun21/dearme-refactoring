@@ -1,7 +1,9 @@
-import { followUser } from "@/store/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import AskModal from "../../../../me/(component)/AskModal";
 import { useState } from "react";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import AskModal from "../../../../me/(component)/AskModal";
+import { followUser } from "@/api/friendship/api";
 
 export default function FollowButton({ userId }: any) {
   const queryClient = useQueryClient();

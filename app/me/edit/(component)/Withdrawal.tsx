@@ -1,8 +1,10 @@
-import AskModal from "../../(component)/AskModal";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { deleteMe } from "@/store/api";
 import { useRouter } from "next/navigation";
+
+import { useMutation } from "@tanstack/react-query";
+
+import { deleteMe } from "@/api/user/api";
+import AskModal from "../../(component)/AskModal";
 import { deleteCookie } from "@/util/tokenCookie";
 
 export default function Withdrawal({ me }: any) {

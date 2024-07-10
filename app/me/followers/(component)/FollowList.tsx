@@ -5,10 +5,9 @@ import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { blockFriend, unblockFriend } from "@/store/api";
-
 import AskModal from "../../(component)/AskModal";
 import AcceptFollowButton from "./AcceptFollowButton";
+import { blockFriend, unblockFriend } from "@/api/friendship/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 export default function FollowList({ user, isRequest }: any) {

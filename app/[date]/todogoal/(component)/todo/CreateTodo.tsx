@@ -1,17 +1,25 @@
-import { useSetRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
-import TodoCheckFalseIcon from "@/public/me/TodoCheckFalseIcon";
+import { createMyTodo } from "@/api/todo/api";
 import SendIcon from "@/public/todogoal/SendIcon";
-import { todoListState } from "@/store/atoms";
+import TodoCheckFalseIcon from "@/public/me/TodoCheckFalseIcon";
+import { ISetting, settingState, todoListState } from "@/store/atoms";
 
-export default function TodogoalCreateTodo({
-  date,
-  createInput,
-  setCreateInput,
-  createTodoMutate,
-}: any) {
+export default function TodogoalCreateTodo({ date }: any) {
+  const [createInput, setCreateInput] = useState<boolean>(false);
+  const { todogoalTitle } = useRecoilValue<ISetting>(settingState);
+
+  const { mutate: createTodoMutate } = useMutation({
+    mutationKey: ["createMyTodo"],
+    mutationFn: createMyTodo,
+  });
+
   const setTodos = useSetRecoilState(todoListState);
 
   const {
@@ -37,6 +45,10 @@ export default function TodogoalCreateTodo({
       );
     }
   };
+
+  useEffect(() => {
+    setCreateInput(false);
+  }, [todogoalTitle]);
   return (
     <div className="flex w-full flex-col items-center gap-4">
       {createInput && (

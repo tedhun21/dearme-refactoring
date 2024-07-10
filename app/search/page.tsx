@@ -1,13 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "@/store/api";
 
 import Footer from "../ui/footer/Footer";
 
 import SearchTitle from "@/public/search/SearchTitle";
 import BackIcon from "@/public/common/BackIcon";
 import SearchBar from "./(component)/SearchBar";
+import { getMe } from "@/api/user/api";
 
 export default function Search() {
   // me

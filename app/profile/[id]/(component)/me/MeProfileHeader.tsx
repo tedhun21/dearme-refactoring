@@ -6,10 +6,12 @@ import clsx from "clsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import BackButton from "../../../../ui/backbutton";
-import { deleteImage, updateUserPhoto } from "@/store/api";
+
 import PencilIcon from "@/public/me/PencilIcon";
 import MeProfileHeaderMeatball from "./MeProfileHeaderMeatball";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
+import { updateUserPhoto } from "@/api/user/api";
+import { deleteImage } from "@/api/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 

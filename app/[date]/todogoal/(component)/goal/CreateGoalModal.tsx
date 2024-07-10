@@ -8,9 +8,10 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import XIcon from "@/public/todo/XIcon";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useMutation } from "@tanstack/react-query";
-import { createMyGoal } from "@/store/api";
+
 import { useRecoilState, useRecoilValue } from "recoil";
 import { goalListState } from "@/store/atoms";
+import { createMyGoal } from "@/api/goal/api";
 
 export default function CreateGoalModal({
   date,

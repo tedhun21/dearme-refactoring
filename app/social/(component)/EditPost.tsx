@@ -1,13 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Post } from "@/app/social/page";
-
-import { getGoals, updatePost } from "@/store/api";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -22,6 +17,8 @@ import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import MenuItem from "@mui/material/MenuItem";
 
 import Close from "@/public/social/Close";
+import { getGoals } from "@/api/goal/api";
+import { updatePost } from "@/api/post/api";
 
 interface EditPostProps {
   postId: number;

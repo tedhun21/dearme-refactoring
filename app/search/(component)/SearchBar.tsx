@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getSearchUsers, getSearchGoals } from "@/store/api";
 
 import RecentSearches from "../../search/[tag]/(component)/RecentSearches";
 
@@ -12,6 +11,8 @@ import Delete from "@/public/search/Delete";
 import GoalTag from "@/public/search/GoalTag";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
 import Link from "next/link";
+import { getSearchUsers } from "@/api/user/api";
+import { getSearchGoals } from "@/api/goal/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 

@@ -10,9 +10,10 @@ import clsx from "clsx";
 import { useMutation } from "@tanstack/react-query";
 
 import SignUpInput from "./SignUpInput";
-import { checkEmail, checkNickname, createUser } from "@/store/api";
+
 import Loading from "@/public/common/Loading";
 import { useRouter } from "next/navigation";
+import { checkEmail, checkNickname, createUser } from "@/api/user/api";
 
 export interface SignUpFormValues {
   username: string;

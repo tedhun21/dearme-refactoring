@@ -13,8 +13,10 @@ import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import UploadPostImg from "./UploadPostImg";
 import Loading from "@/public/common/Loading";
-import { getGoals, createPost } from "@/store/api";
+
 import { getToday, monthNameDayYear } from "@/util/date";
+import { getGoals } from "@/api/goal/api";
+import { createPost } from "@/api/post/api";
 
 interface IForm {
   goalId: number;

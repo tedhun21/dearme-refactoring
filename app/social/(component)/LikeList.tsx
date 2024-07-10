@@ -1,9 +1,10 @@
 import Image from "next/image";
-import UserWithNoImage from "@/public/social/UserWithNoImage";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateFriendship } from "@/store/api";
-import { MouseEventHandler } from "react";
+
 import Loading from "@/public/common/Loading";
+import UserWithNoImage from "@/public/social/UserWithNoImage";
+import { updateFriendship } from "@/api/friendship/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
@@ -54,7 +55,7 @@ export default function LikeList({ like }: any) {
     }
   };
   return (
-    <div className="flex justify-between overflow-y-scroll px-3 py-1 scrollbar-hide">
+    <div className="scrollbar-hide flex justify-between overflow-y-scroll px-3 py-1">
       <div className="flex items-center gap-2">
         <div className="size-8 rounded-full">
           {like.userPhoto ? (

@@ -10,7 +10,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { goalListState } from "@/store/atoms";
-import { createMyGoal, deleteMyGoal, updateMyGoal } from "@/store/api";
+import { createMyGoal, deleteMyGoal, updateMyGoal } from "@/api/goal/api";
 
 export default function GoalModal({
   type,

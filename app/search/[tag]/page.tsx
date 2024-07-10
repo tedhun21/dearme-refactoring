@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { useQuery } from "@tanstack/react-query";
-import { getPostsByGoals } from "@/store/api";
 
 import Header from "@/app/ui/header/Header";
 import BackButton from "@/app/ui/backbutton";
@@ -14,6 +13,7 @@ import { Divider } from "@mui/material";
 
 import GoalTag from "@/public/search/GoalTag";
 import ViewPostModal from "./(component)/ViewPostModal";
+import { getPostsByGoals } from "@/api/post/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 

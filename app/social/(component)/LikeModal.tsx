@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import Modal from "@mui/material/Modal";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
-import { getLikeship, getMe } from "@/store/api";
 import LikeList from "./LikeList";
+import { getMe } from "@/api/user/api";
+import { getLikeship } from "@/api/friendship/api";
 
 interface LikeModalProps {
   open: boolean;

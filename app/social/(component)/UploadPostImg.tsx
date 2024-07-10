@@ -3,7 +3,6 @@ import Image from "next/image";
 
 import SelectPhotos from "@/public/social/SelectPhotos";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
 export default function UploadPostImg({ setImageFile, currentImageUrl }: any) {

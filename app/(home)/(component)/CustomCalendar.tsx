@@ -16,7 +16,6 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import { getDiariesForMonth, getMyTodosWithDate } from "@/store/api";
 import {
   diaryListState,
   processState,
@@ -24,6 +23,8 @@ import {
   todoListState,
 } from "@/store/atoms";
 import { getToday, getWeeksInMonth } from "@/util/date";
+import { getDiariesForMonth } from "@/api/diary/api";
+import { getMyTodosWithDate } from "@/api/todo/api";
 
 function ServerDay(
   props: PickersDayProps<Dayjs> & {

@@ -1,7 +1,7 @@
-import { acceptRequest } from "@/store/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import AskModal from "../../../../me/(component)/AskModal";
 import { useState } from "react";
+import { acceptRequest } from "@/api/friendship/api";
 
 export default function AcceptButton({ userId }: any) {
   const queryClient = useQueryClient();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AskModal from "../../../../me/(component)/AskModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { blockFriend } from "@/store/api";
+import { blockFriend } from "@/api/friendship/api";
 
 export default function BlockFriendButton({ meId, userId }: any) {
   const queryClient = useQueryClient();

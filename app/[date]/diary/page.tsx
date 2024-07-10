@@ -8,12 +8,14 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 import Header from "@/app/ui/header/Header";
 import Footer from "@/app/ui/footer/Footer";
-import { getDiaryForDay, getMe } from "@/store/api";
+
 import ReadDiary from "@/app/[date]/diary/(component)/ReadDiary";
 import ReadTodayPick from "@/app/[date]/diary/(component)/ReadTodayPick";
 import MonthlyDiaryLink from "@/app/[date]/diary/(component)/MonthlyDiaryLink";
 import DiaryActionButton from "@/app/[date]/diary/(component)/DiaryActionButton";
 import SentimentalQuotes from "@/app/[date]/diary/(component)/Sentimental Quotes";
+import { getMe } from "@/api/user/api";
+import { getDiaryForDay } from "@/api/diary/api";
 
 export default function Diary() {
   const { date } = useParams();
@@ -21,7 +23,7 @@ export default function Diary() {
   // 내 정보 가져오기
   const { data: meData } = useQuery({
     queryKey: ["getMe"],
-    queryFn: () => getMe(),
+    queryFn: getMe,
   });
 
   const { isSuccess: isSuccessDiary, data: diaryData } = useQuery({

@@ -11,8 +11,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-
-import { deleteComment } from "@/store/api";
+import { deleteComment } from "@/api/comment/api";
 
 interface CommentSettingsProps {
   me: any;

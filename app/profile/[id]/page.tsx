@@ -2,11 +2,12 @@
 
 import Footer from "@/app/ui/footer/Footer";
 import UserInfo from "@/app/profile/[id]/(component)/user/UserInfo";
-import { getMe } from "@/store/api";
+
 import { useQuery } from "@tanstack/react-query";
 
 import axios from "axios";
 import { cookies } from "next/headers";
+import { getMe } from "@/api/user/api";
 
 // const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,7 +23,7 @@ export default function Profile() {
 
   const { data: meData } = useQuery({
     queryKey: ["getMe"],
-    queryFn: () => getMe(),
+    queryFn: getMe,
   });
 
   return (

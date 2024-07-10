@@ -1,14 +1,10 @@
 "use client";
 
-import "../globals.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useInView } from "react-intersection-observer";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { getMe, getPostWithPage } from "@/store/api";
-
-import { CircularProgress } from "@mui/material";
 
 import Header from "../ui/header/Header";
 import Tabs from "./(component)/Tabs";
@@ -17,6 +13,8 @@ import New from "./(component)/New";
 import CreatePost from "./(component)/CreatePost";
 import Footer from "../ui/footer/Footer";
 import Loading from "@/public/common/Loading";
+import { getMe } from "@/api/user/api";
+import { getPostWithPage } from "@/api/post/api";
 // post type
 export interface Photo {
   id: number;

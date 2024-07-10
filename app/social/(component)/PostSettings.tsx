@@ -2,14 +2,11 @@ import { MouseEvent, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Post } from "@/app/social/page";
-import { deletePost } from "@/store/api";
+
 import EditPost from "./EditPost";
 
 import Menu from "@mui/material/Menu";
 
-import User from "@/public/social/User";
-
-import Report from "@/public/social/Report";
 import {
   EllipsisHorizontalIcon,
   ExclamationCircleIcon,
@@ -17,6 +14,7 @@ import {
   TrashIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { deletePost } from "@/api/post/api";
 
 // 나의 게시물 / 친구 게시물 : isMyPost(boolean)
 interface PostSettingsProps {

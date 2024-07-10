@@ -14,10 +14,12 @@ import ChooseEmotionTags from "@/app/[date]/diary/(component)/ChooseEmotionTags"
 import UploadPhoto from "@/app/[date]/diary/(component)/UploadPhoto";
 import UploadTodayPick from "@/app/[date]/diary/(component)/UploadTodayPick";
 import DiaryModal from "@/app/[date]/diary/(component)/DiaryModal";
-import { createDiary, createTodayPick } from "@/store/api";
+
 import { getDiaryDate } from "@/util/date";
 import Loading from "@/public/common/Loading";
 import ChooseCompanions from "@/app/[date]/diary/(component)/ChooseCompanions";
+import { createDiary } from "@/api/diary/api";
+import { createTodayPick } from "@/api/today-pick/api";
 
 function removeAllEmptyStrings(obj: any) {
   for (const key in obj) {

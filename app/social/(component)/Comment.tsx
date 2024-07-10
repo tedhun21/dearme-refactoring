@@ -6,9 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 
 import { timeAgo } from "@/util/date";
-import { updateComment } from "@/store/api";
+
 import CommentSettings from "./CommentSettings";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
+import { updateComment } from "@/api/comment/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 export default function Comment({ me, post, comment }: any) {

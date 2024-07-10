@@ -1,5 +1,3 @@
-"use client";
-
 interface TabsProps {
   selectedTab: string;
   setSelectedTab: (selectedTab: string) => void;
@@ -21,7 +19,7 @@ export default function Tabs({ selectedTab, setSelectedTab }: TabsProps) {
         </div>
       </div>
       <div
-        className={` cursor-pointer  ${
+        className={`cursor-pointer  ${
           selectedTab === "friends"
             ? "border-b-4 border-default-900"
             : "text-default-500"

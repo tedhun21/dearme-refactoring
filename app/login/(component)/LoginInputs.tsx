@@ -8,10 +8,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 
 import LoginInput from "./LoginInput";
-import { signIn } from "@/store/api";
+
 import { setCookie } from "@/util/tokenCookie";
 import GoogleLogo from "@/public/login/GoogleLogo";
 import Loading from "@/public/common/Loading";
+import { signIn } from "@/api/user/api";
 
 export interface LoginFormValues {
   email: string;

@@ -1,10 +1,10 @@
 "use client";
 
-import { getUserGoalsWithDate } from "@/store/api";
 import { getToday } from "@/util/date";
 import { useQuery } from "@tanstack/react-query";
 
 import GoalList from "../../../../me/(component)/GoalList";
+import { getUserGoalsWithDate } from "@/api/goal/api";
 
 export default function UserGoal({ user }: any) {
   const { data: goalData } = useQuery({

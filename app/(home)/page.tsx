@@ -5,20 +5,20 @@ import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 
-import { getMe } from "@/store/api";
 import Header from "../ui/header/Header";
 import Footer from "../ui/footer/Footer";
 import CustomCalendar from "./(component)/CustomCalendar";
 import MeGoal from "../me/(component)/plans/MeGoal";
 import HomeTodoAndDiary from "./(component)/HomeTodoAndDiary";
 import { settingState } from "@/store/atoms";
+import { getMe } from "@/api/user/api";
 
 export default function Home() {
   const [{ isLogin }, setSetting] = useRecoilState(settingState);
   // 내 정보 가져오기
   const { isSuccess, data: meData } = useQuery({
     queryKey: ["getMe"],
-    queryFn: () => getMe(),
+    queryFn: getMe,
   });
 
   useEffect(() => {

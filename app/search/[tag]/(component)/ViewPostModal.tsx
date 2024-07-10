@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getPost } from "@/store/api";
-
 import SocialPost from "../../../social/(component)/SocialPost";
 
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { getPost } from "@/api/post/api";
 
 interface ViewPostModalProps {
   open: boolean;

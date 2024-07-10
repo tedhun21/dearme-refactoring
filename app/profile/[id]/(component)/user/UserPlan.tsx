@@ -1,10 +1,9 @@
 "use client";
 
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 
 import { getToday } from "@/util/date";
-import { getUserTodosWithDate } from "@/store/api";
 
 import UserGoal from "./UserGoal";
 import { todoListState } from "@/store/atoms";
@@ -14,6 +13,7 @@ import TodoRate from "../../../../me/(component)/plans/TodoRate";
 import Blur from "./Blur";
 import LockIcon from "@/public/me/LockIcon";
 import UserTodos from "./UserTodos";
+import { getUserTodosWithDate } from "@/api/todo/api";
 
 export default function UserPlan({ me, user, friendshipData }: any) {
   const [isDrop, setIsDrop] = useState(false);

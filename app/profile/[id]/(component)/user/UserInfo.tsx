@@ -4,8 +4,10 @@ import { useParams } from "next/navigation";
 
 import UserProfile from "./UserProfile";
 import { useQuery } from "@tanstack/react-query";
-import { findFriendship, getUser } from "@/store/api";
+
 import UserPlan from "./UserPlan";
+import { getUser } from "@/api/user/api";
+import { findFriendship } from "@/api/friendship/api";
 
 export default function UserInfo({ me }: any) {
   // middleware 사용해서 server component로 만들기

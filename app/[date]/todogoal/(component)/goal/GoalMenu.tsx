@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import XIcon from "@/public/todo/XIcon";
 import EditIcon from "@/public/me/EditIcon";
 import { useMutation } from "@tanstack/react-query";
-import { deleteMyGoal } from "@/store/api";
+
 import { useSetRecoilState } from "recoil";
 import { goalListState } from "@/store/atoms";
 import GoalModal from "./GoalModal";
+import { deleteMyGoal } from "@/api/goal/api";
 
 export default function GoalMenu({ goal, setModalCreateGoalOpen }: any) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

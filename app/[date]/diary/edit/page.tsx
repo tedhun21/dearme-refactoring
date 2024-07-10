@@ -9,12 +9,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { getDiaryDate } from "@/util/date";
 
-import {
-  createTodayPick,
-  deleteImage,
-  getDiaryForDay,
-  updateDiary,
-} from "@/store/api";
 import ChooseMood from "@/app/[date]/diary/(component)/ChooseMood";
 import ChooseEmotionTags from "@/app/[date]/diary/(component)/ChooseEmotionTags";
 import ChooseCompanions from "@/app/[date]/diary/(component)/ChooseCompanions";
@@ -24,6 +18,8 @@ import UploadTodayPick from "@/app/[date]/diary/(component)/UploadTodayPick";
 import { CircularProgress } from "@mui/material";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import Loading from "@/public/common/Loading";
+import { getDiaryForDay, updateDiary } from "@/api/diary/api";
+import { createTodayPick } from "@/api/today-pick/api";
 
 interface Pick {
   title: string;

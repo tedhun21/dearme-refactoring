@@ -7,7 +7,7 @@ import Footer from "../ui/footer/Footer";
 import MeNav from "./(component)/nav/MeNav";
 import MeProfile from "../profile/[id]/(component)/me/MeProfile";
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "@/store/api";
+import { getMe } from "@/api/user/api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -32,7 +32,7 @@ export default function RootLayout({
 
   const { data: meData } = useQuery({
     queryKey: ["getMe"],
-    queryFn: () => getMe(),
+    queryFn: getMe,
   });
 
   return (

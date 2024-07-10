@@ -14,16 +14,16 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMe, likePost } from "@/store/api";
 
 import { Post } from "@/app/social/page";
 import LikeModal from "./LikeModal";
 import CommentsSection from "./CommentsSection";
 import PostSettings from "./PostSettings";
 
-import Comments from "@/public/social/Comments";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
 import { timeAgo } from "@/util/date";
+import { likePost } from "@/api/post/api";
+import { getMe } from "@/api/user/api";
 
 interface SocialPostProps {
   post: Post;

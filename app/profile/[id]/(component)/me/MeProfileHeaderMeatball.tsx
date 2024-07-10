@@ -6,7 +6,8 @@ import BackGroundIcon from "@/public/me/BackGroundIcon";
 import EditIcon from "@/public/me/EditIcon";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteImage, updateBackGroundPhoto } from "@/store/api";
+import { deleteImage } from "@/api/api";
+import { updateBackGroundPhoto } from "@/api/user/api";
 
 export default function MeProfileHeaderMeatball({ me, route }: any) {
   const queryClient = useQueryClient();

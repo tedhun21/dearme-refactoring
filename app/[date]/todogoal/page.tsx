@@ -16,7 +16,6 @@ import {
 } from "@/store/atoms";
 
 import Footer from "@/app/ui/footer/Footer";
-import { getMe, getMyGoals, getMyTodosWithDate } from "@/store/api";
 
 import TodogoalHeader from "@/app/[date]/todogoal/(component)/TodogoalHeader";
 import TodogoalDragTodo from "@/app/[date]/todogoal/(component)/todo/TodogoalDragTodo";
@@ -26,11 +25,14 @@ import TodogoalPropgress from "@/app/[date]/todogoal/(component)/todo/TodoProgre
 import CalendarSelect from "@/app/[date]/todogoal/(component)/todo/CalendarSelect";
 import CreateTodoGoal from "@/app/[date]/todogoal/(component)/CreateTodoGoal";
 import GoalProgress from "./(component)/goal/GoalProgress";
+import { getMyTodosWithDate } from "@/api/todo/api";
+import { getMyGoals } from "@/api/goal/api";
+import { getMe } from "@/api/user/api";
 
 export default function DailyTodoGoal() {
   const { data: meData } = useQuery({
     queryKey: ["getMe"],
-    queryFn: () => getMe(),
+    queryFn: getMe,
   });
 
   // url에 적힌 date
