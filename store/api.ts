@@ -602,11 +602,14 @@ export const getPostWithPage = async ({ tab, pageParam }: any) => {
 };
 
 // Create _ post
-export const getGoals = async () => {
-  const date = getToday();
+export const getGoals = async (date: any) => {
   const access_token = getCookie("access_token");
-  const headers = { Authorization: `Bearer ${access_token}` };
-  return await axios.get(`${API_URL}/goals?date=${date}`, { headers });
+  if (access_token) {
+    const { data } = await axios.get(`${API_URL}/goals?date=${date}`, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+    return data;
+  }
 };
 
 export const createPost = async ({
@@ -709,25 +712,26 @@ export const createComment = async ({
   comment: string;
 }) => {
   const access_token = getCookie("access_token");
-  const headers = { Authorization: `Bearer ${access_token}` };
+
   if (access_token) {
+    const headers = { Authorization: `Bearer ${access_token}` };
     const { data } = await axios.post(
       `${API_URL}/comments?postId=${postId}`,
       { body: comment },
       { headers },
     );
+
     return data;
-  } else {
-    window.alert("Failed to upload your comment.");
   }
 };
 
 // Read _ comment
-export const readCommentsWithPage = async ({ postId, pageParam }: any) => {
-  const response = await axios.get(
-    `${API_URL}/comments?page=${pageParam}&size=5&postId=${postId}`,
+export const getCommentsWithPage = async ({ postId, pageParam }: any) => {
+  const { data } = await axios.get(
+    `${API_URL}/comments?page=${pageParam}&size=10&postId=${postId}`,
   );
-  return response.data.results;
+
+  return data.results;
 };
 
 // Update _ comment

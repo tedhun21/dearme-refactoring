@@ -1,54 +1,48 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
+
 import {
-  useQuery,
   useMutation,
   useQueryClient,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import {
-  getMe,
-  readCommentsWithPage,
-  createComment,
-  updateComment,
-} from "@/store/api";
+import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
+import { useInView } from "react-intersection-observer";
 
-import CommentSettings from "./CommentSettings";
-import { timeSince } from "./SocialPost";
-
-import InputBase from "@mui/material/InputBase";
-
-import Send from "@/public/social/Send";
+import Comment from "./Comment";
+import Loading from "@/public/common/Loading";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
-import Link from "next/link";
+import { getCommentsWithPage, createComment, updateComment } from "@/store/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
 export default function CommentsSection({
-  postId,
+  me,
+  post,
   commentSettings,
 }: {
-  postId: number;
+  me: any;
+  post: any;
   commentSettings: string;
 }) {
   const queryClient = useQueryClient();
+  const [ref, inView] = useInView();
 
-  // me
-  const { data: me } = useQuery({
-    queryKey: ["getMe"],
-    queryFn: getMe,
-  });
+  // Create _ comment
+  const [comment, setComment] = useState<string>("");
 
   // Read _ comments
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<any[], Error>({
-    queryKey: ["readCommentsWithPage"],
-    queryFn: ({ pageParam }) => readCommentsWithPage({ postId, pageParam }),
+  const {
+    isPending: isCommentPending,
+    data: commentData,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<any[], Error>({
+    queryKey: ["getCommentsWithPage", post.id],
+    queryFn: ({ pageParam }) =>
+      getCommentsWithPage({ postId: post.id, pageParam }),
     getNextPageParam: (lastPage, allPages: any) => {
       const maxPage = lastPage.length / 5;
       const nextPage = allPages.length + 1;
@@ -58,197 +52,130 @@ export default function CommentsSection({
     initialPageParam: 1,
   });
 
-  const handleLoadMoreComments = () => {
-    fetchNextPage();
-  };
+  const { isPending: isCreateCommentPending, mutate: createCommentMutate } =
+    useMutation({
+      mutationFn: createComment,
+      onMutate: async ({ postId, comment }) => {
+        await queryClient.cancelQueries({
+          queryKey: ["getCommentsWithPage", post.id],
+        });
 
-  // Create _ comment
-  const [comment, setComment] = useState<string>("");
+        const previousComments = queryClient.getQueryData([
+          "getCommentsWithPage",
+          post.id,
+        ]);
+
+        queryClient.setQueryData(
+          ["getCommentsWithPage", post.id],
+          (old: any) => {
+            const newComment = {
+              id: new Date().getTime(),
+              body: comment,
+              createdAt: new Date().toISOString(),
+              user: {
+                id: me.id,
+                nickname: me.nickname,
+                photo: me.photo,
+              },
+            };
+
+            return {
+              ...old,
+              pages: [[newComment, ...old.pages[0]], ...old.pages.slice(1)],
+            };
+          },
+        );
+
+        return { previousComments };
+      },
+      onSuccess: () => {
+        setComment("");
+      },
+      onError: (err: any, { postId, comment }: any, context: any) => {
+        queryClient.setQueryData(
+          ["getCommentsWithPage", postId],
+          context.previousComments,
+        );
+
+        window.alert(err.response.data.error.message);
+      },
+    });
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    createCommentMutate({ postId: post.id, comment });
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
 
-  const { mutateAsync: addCommentMutation } = useMutation({
-    mutationFn: createComment,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["readCommentsWithPage"] });
-    },
-  });
-
-  const handleSubmit = async () => {
-    try {
-      await addCommentMutation({ postId, comment });
-    } catch (e) {
-      console.error(e);
+  useEffect(() => {
+    if (!inView) {
+      return;
     }
-    setComment("");
-  };
-
-  // Update _ comment
-  const [editingComment, setEditingComment] = useState<string>("");
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
-  const { mutateAsync: updateCommentMutation } = useMutation({
-    mutationFn: updateComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-      window.alert("Updated your comment successfully!");
-      setIsEditing(false);
-      setEditingComment("");
-      setEditingCommentId(null);
-    },
-  });
-
-  const handleEdit = async () => {
-    try {
-      await updateCommentMutation({
-        postId,
-        commentId: editingCommentId,
-        comment: editingComment,
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    fetchNextPage();
+  }, [inView]);
 
   return (
     <>
-      {data?.pages[0].length !== 0 && (
-        <section className="mt-4 max-h-[240px] overflow-y-scroll scrollbar-hide">
-          {data?.pages.map((comments: any) =>
-            comments.map((comment: any) => (
-              <div key={comment.id} className="mb-3 flex  w-full gap-2 px-5">
-                <div className="flex w-full flex-col justify-center">
-                  {/* 작성자 & 댓글 */}
-                  <div className="flex gap-2">
-                    <Link
-                      key={comment.user.id}
-                      href={`/profile/${comment.user.id}`}
-                      className="flex cursor-pointer gap-2"
-                    >
-                      {/* 이미지*/}
-                      {(comment.user as any).photo ? (
-                        <div className="relative h-8 w-8  overflow-hidden rounded-full px-2">
-                          <Image
-                            src={`${BUCKET_URL}${
-                              (comment.user as any).photo.url
-                            }`}
-                            alt="User Image"
-                            fill
-                            sizes="24px"
-                          />
-                        </div>
-                      ) : (
-                        <UserWithNoImage className="h-8 w-8 " />
-                      )}
-                      <span className="text-sm font-semibold">
-                        {comment.user.nickname}
-                      </span>
-                    </Link>
-                    <span className="w-full flex-auto whitespace-normal break-all text-sm  font-normal text-default-700">
-                      {isEditing && editingCommentId === comment.id ? (
-                        <InputBase
-                          multiline
-                          sx={{
-                            fontSize: "12px",
-                            fontWeight: 400,
-                            width: "100%",
-                            overflowWrap: "break-word",
-                          }}
-                          value={editingComment}
-                          onChange={(e) => setEditingComment(e.target.value)}
-                          autoFocus
-                        />
-                      ) : (
-                        comment.body
-                      )}
-                    </span>
-                  </div>
-
-                  {/* 작성 시간 & 댓글 설정 */}
-                  <div className="flex items-center justify-end">
-                    <div className="text-2xs  text-default-500">
-                      {timeSince(comment.createdAt)}
-                    </div>
-                    {me && comment.user.id === me.id ? (
-                      isEditing ? (
-                        editingCommentId === comment.id && (
-                          <div
-                            className="ml-2 cursor-pointer text-xs font-normal text-default-600 hover:text-default-700"
-                            onClick={handleEdit}
-                          >
-                            Edit
-                          </div>
-                        )
-                      ) : (
-                        <div>
-                          <CommentSettings
-                            postId={postId}
-                            commentId={comment.id}
-                            onEditClick={() => {
-                              setIsEditing(true);
-                              setEditingCommentId(comment.id);
-                              setEditingComment(comment.body);
-                            }}
-                          />
-                        </div>
-                      )
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            )),
+      {!isCommentPending && commentData?.pages[0].length !== 0 ? (
+        <section className="flex max-h-[240px] flex-col gap-2 overflow-y-scroll">
+          {commentData?.pages.map(
+            (page: any) =>
+              page?.map((comment: any) => (
+                <Comment
+                  key={comment.id}
+                  me={me}
+                  post={post}
+                  comment={comment}
+                />
+              )),
           )}
           {/* TODO 댓글 5개  */}
           {hasNextPage && (
-            <button
-              onClick={handleLoadMoreComments}
-              className="flex w-full cursor-pointer justify-center text-xs font-medium text-default-600"
-            >
-              Show more comments
-            </button>
+            <div ref={ref} className="text-center">
+              <Loading className="text-black" />
+            </div>
           )}
         </section>
-      )}
+      ) : isCommentPending ? (
+        <div className="text-center">
+          <Loading className="text-black" />
+        </div>
+      ) : null}
 
       {/* 댓글 작성 */}
       {me && commentSettings !== "OFF" && (
-        <section className="mb-2 mt-5 flex items-center px-5">
-          {(me as any).photo ? (
-            <div className="relative h-8 w-8  overflow-hidden rounded-full px-2">
+        <section className="flex items-center gap-2 px-3">
+          <div className="relative size-9 overflow-hidden rounded-full">
+            {(me as any).photo ? (
               <Image
                 src={`${BUCKET_URL}${(me as any).photo.url}`}
-                alt="User Image"
+                alt="user image"
                 fill
-                sizes="24px"
               />
-            </div>
-          ) : (
-            <UserWithNoImage className="h-8 w-8 " />
-          )}
+            ) : (
+              <UserWithNoImage className="h-full w-full" />
+            )}
+          </div>
 
-          <div className="w-full flex-col pl-3">
-            <div className="flex h-8 items-center rounded-full border-2 border-default-400 p-0.5 ">
-              <InputBase
-                sx={{
-                  ml: 2,
-                  flex: 1,
-                  color: "#928c7f",
-                  fontSize: 14,
-                  fontWeight: 500,
-                }}
-                placeholder="Add a comment..."
-                onChange={handleInputChange}
-                value={comment}
-              />
-              {comment && (
-                <div onClick={handleSubmit}>
-                  <Send className="mr-1 h-5 w-5 fill-current text-default-600" />
-                </div>
-              )}
-            </div>
+          <div className="relative flex w-full items-center">
+            <input
+              value={comment}
+              onChange={handleInputChange}
+              className="w-full flex-grow rounded-full border-2 border-default-400 bg-transparent px-3 py-2 text-sm font-medium transition placeholder:font-normal placeholder:text-default-400 hover:border-default-800 focus:border-default-900 focus:outline-none"
+              placeholder="Add a comment..."
+            />
+            {comment && (
+              <button
+                type="submit"
+                onClick={(e) => handleSubmit(e)}
+                disabled={isCreateCommentPending}
+              >
+                <ArrowUpCircleIcon className="absolute right-2 top-1 size-8 text-default-800 hover:text-default-600 active:text-default-900" />
+              </button>
+            )}
           </div>
         </section>
       )}

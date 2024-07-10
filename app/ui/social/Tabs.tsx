@@ -1,17 +1,15 @@
 "use client";
 
-import React from "react";
-
 interface TabsProps {
   selectedTab: string;
   setSelectedTab: (selectedTab: string) => void;
 }
 
-const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
+export default function Tabs({ selectedTab, setSelectedTab }: TabsProps) {
   return (
-    <section className="mb-5 flex w-full justify-center">
+    <section className="mb-3 flex w-full justify-center">
       <div
-        className={` cursor-pointer  ${
+        className={`cursor-pointer  ${
           selectedTab === "all"
             ? "border-b-4 border-default-900"
             : "text-default-500"
@@ -36,6 +34,4 @@ const Tabs: React.FC<TabsProps> = ({ selectedTab, setSelectedTab }) => {
       </div>
     </section>
   );
-};
-
-export default Tabs;
+}

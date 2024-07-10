@@ -1,9 +1,17 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import clsx from "clsx";
+import Link from "next/link";
+
+import {
+  ChatBubbleLeftEllipsisIcon as OutlineComment,
+  HeartIcon as EmptyHeart,
+} from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftEllipsisIcon as SolidComment,
+  HeartIcon as FullHeart,
+} from "@heroicons/react/24/solid";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMe, likePost } from "@/store/api";
@@ -13,40 +21,12 @@ import LikeModal from "./LikeModal";
 import CommentsSection from "./CommentsSection";
 import PostSettings from "./PostSettings";
 
-import Divider from "@mui/material/Divider";
-
-import EmptyHeart from "@/public/social/EmptyHeart";
-import FullHeart from "@/public/social/FullHeart";
 import Comments from "@/public/social/Comments";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
-import Link from "next/link";
+import { timeAgo } from "@/util/date";
 
 interface SocialPostProps {
   post: Post;
-}
-
-// 게시물 작성 시간
-export function timeSince(date: string): string {
-  const now = new Date();
-  const postDate = new Date(date);
-  const secondsPast = Math.floor((now.getTime() - postDate.getTime()) / 1000);
-
-  if (secondsPast < 60) {
-    return "just now";
-  }
-  if (secondsPast < 3600) {
-    return `${Math.floor(secondsPast / 60)} minutes ago`;
-  }
-  if (secondsPast <= 86400) {
-    return `${Math.floor(secondsPast / 3600)} hours ago`;
-  }
-  if (secondsPast <= 2629800) {
-    return `${Math.floor(secondsPast / 86400)} days ago`;
-  }
-  if (secondsPast <= 31557600) {
-    return `${Math.floor(secondsPast / 2629800)} months ago`;
-  }
-  return `${Math.floor(secondsPast / 31557600)} years ago`;
 }
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
@@ -54,19 +34,26 @@ const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 export default function SocialPost({ post }: SocialPostProps) {
   const queryClient = useQueryClient();
 
+  // 좋아요 목록 (LikeModal)
+  const [isLikeModalOpen, setIsLikedModalOpen] = useState(false);
+  const openLikeModal = () => setIsLikedModalOpen(true);
+  const closeLikeModal = () => setIsLikedModalOpen(false);
+
+  // 포스트 body 더보기 (more)
+  const maxChars = 70;
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // 댓글 보기 상태
+  const [showComments, setShowComments] = useState(false);
+
+  const [isMe, setIsMe] = useState(false);
+  const [liked, setLiked] = useState(false);
+
   // me
-  const { data: me } = useQuery({
+  const { data: meData } = useQuery({
     queryKey: ["getMe"],
     queryFn: getMe,
   });
-
-  // 유저의 게시물 (boolean -> PostSettings)
-  const isMe = me?.id === post.user.id;
-
-  // 유저의 게시물 좋아요 상태
-  const [liked, setLiked] = useState(
-    post.likes.length >= 1 && post.likes.some((like) => like.id === me?.id),
-  );
 
   // like 업데이트
   const { mutate: likeMutate } = useMutation({
@@ -82,127 +69,119 @@ export default function SocialPost({ post }: SocialPostProps) {
     likeMutate({ postId: post.id });
   };
 
-  // 좋아요 목록 (LikeModal)
-  const [isLikeModalOpen, setIsLikedModalOpen] = useState(false);
-  const openLikeModal = () => setIsLikedModalOpen(true);
-  const closeLikeModal = () => setIsLikedModalOpen(false);
-
-  // 포스트 body 더보기 (more)
-  const maxChars = 70;
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  // 댓글 보기 상태
-  const [showComments, setShowComments] = useState(false);
   const toggleComments = () => {
-    setShowComments((prevShowComments) => !prevShowComments);
+    setShowComments((prev) => !prev);
   };
 
+  // 사용자가 게시물 작성자인지 확인
+  useEffect(() => {
+    const isUser = meData?.id === post.user.id;
+    setIsMe(isUser);
+  }, [meData]);
+
+  // 사용자가 게시물을 좋아하는지 확인
+  useEffect(() => {
+    const likedByMe = post.likes.some((like) => like.id === meData?.id);
+    setLiked(likedByMe);
+  }, [meData, post.likes]);
+
   return (
-    <>
-      <section className="mb-5 flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 ">
-        {/* 유저 프로필 & 목표 & 설정 */}
-        <div className="relative mb-2 flex  items-center px-5">
-          <Link
-            key={post.user.id}
-            href={`/profile/${post.user.id}`}
-            className="flex cursor-pointer"
-          >
-            <div className="h-10 w-10 rounded-full">
-              {post.user?.photo?.url ? (
-                <img
-                  src={`${BUCKET_URL}${post?.user?.photo?.url}`}
-                  alt="User Image"
-                  className="h-10  w-10 rounded-full object-cover"
-                  width={10}
-                  height={10}
-                />
-              ) : (
-                <UserWithNoImage className="mr-4 h-10 w-10 " />
-              )}
-            </div>
-
-            <div className="flex-col pl-3">
-              <div className=" text-base font-bold text-default-700">
-                {post.user?.nickname || "Unknown User"}
-              </div>
-              <div
-                className="text-xs font-semibold text-default-500"
-                style={{ marginTop: "-4px" }}
-              >
-                {post.goal ? `#${post.goal.title}` : ""}
-              </div>
-            </div>
-          </Link>
-
-          <div className="ml-auto ">
-            <PostSettings isMyPost={isMe} postId={post.id} postData={post} />
+    <article className="flex w-full flex-col gap-2 border-b-2 border-default-400 bg-default-200 p-4">
+      {/* 유저 프로필 & 목표 & 설정 */}
+      <section className="relative flex items-center justify-between">
+        <Link
+          key={post.user.id}
+          href={`/profile/${post.user.id}`}
+          className="flex gap-2"
+        >
+          <div className="relative size-10 rounded-full">
+            {post.user?.photo?.url ? (
+              <Image
+                src={`${BUCKET_URL}${post?.user?.photo?.url}`}
+                alt="user image"
+                className="object-cover"
+                fill
+              />
+            ) : (
+              <UserWithNoImage className="size-10" />
+            )}
           </div>
-        </div>
+          <div className="flex flex-col">
+            <span className="text-base font-bold text-default-700">
+              {post.user?.nickname || "Unknown User"}
+            </span>
+            <span className="text-xs font-semibold text-default-500">
+              {post.goal ? `#${post.goal.title}` : ""}
+            </span>
+          </div>
+        </Link>
 
-        {/* 게시물 사진 */}
-        <div className="relative mt-1  px-5">
-          {post.photo?.url && (
-            <Image
-              src={`${BUCKET_URL}${post.photo?.url}`}
-              alt="Post Image"
-              priority
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{
-                width: "100%",
-                height: "auto",
-                maxHeight: "680px",
-                borderRadius: "4px",
-              }}
-            />
-          )}
-        </div>
+        <PostSettings isMyPost={isMe} postId={post.id} postData={post} />
+      </section>
 
-        <div className="my-2 flex items-center justify-between px-5">
-          {/* 좋아요 & 댓글 아이콘 */}
-          {me && (
-            <div className="flex">
-              <div
-                className={`mr-2 flex transform cursor-pointer items-center transition-all duration-500 ${
-                  liked
-                    ? "scale-105 text-red-500"
-                    : "scale-100 text-default-600"
-                }`}
-                onClick={toggleLike}
-              >
-                {liked ? (
-                  <FullHeart className="h-6 w-5 fill-current text-red-500" />
-                ) : (
-                  <EmptyHeart className="h-6 w-5 fill-current text-default-600" />
-                )}
-              </div>
-              {post.commentSettings !== "OFF" && (
-                <div className="flex items-center" onClick={toggleComments}>
-                  <Comments className="ml-1 h-6 w-5 cursor-pointer fill-current text-default-600" />
-                </div>
+      {/* 게시물 사진 */}
+      <section className="relative h-[240px] w-full overflow-hidden rounded-sm xxs:h-[280px] xs:h-[340px] s:h-[380px]">
+        {post.photo?.url && (
+          <Image
+            src={`${BUCKET_URL}${post.photo?.url}`}
+            alt="Post Image"
+            priority
+            fill
+            className="object-cover"
+          />
+        )}
+      </section>
+
+      {/* 좋아요 & 댓글 아이콘 */}
+      <section className="flex items-center justify-between">
+        {meData && (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className={`flex transform items-center transition-all duration-500 ${
+                liked ? "scale-110 text-red-500" : "scale-100 text-default-600"
+              }`}
+              onClick={toggleLike}
+            >
+              {liked ? (
+                <FullHeart className="size-6 text-red-500" />
+              ) : (
+                <EmptyHeart className="size-6 stroke-2 text-default-600" />
               )}
-            </div>
-          )}
-        </div>
+            </button>
+            {post.commentSettings !== "OFF" && (
+              <button
+                type="button"
+                className="flex items-center"
+                onClick={toggleComments}
+              >
+                {showComments ? (
+                  <SolidComment className="size-6 stroke-2 text-default-600" />
+                ) : (
+                  <OutlineComment className="size-6 stroke-2 text-default-600" />
+                )}
+              </button>
+            )}
+          </div>
+        )}
+      </section>
 
-        {/* Likes 목록 */}
-        <div className="items-centers  flex px-5">
-          <div className="flex">
+      {/* Likes 목록 */}
+      {Array.isArray(post.likes) && post.likes.length > 0 ? (
+        <section className="flex items-center gap-1">
+          <div className="group flex">
             {post.likes.slice(0, 3).map((like, index) => (
               <div
                 key={like.id}
-                className={clsx(
-                  "relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border-2 border-solid border-default-200",
-                  index > 0 ? "-ml-4" : "",
-                )}
+                className={`relative flex size-7 items-center justify-center overflow-hidden rounded-full border-2 border-solid border-default-200 transition-all duration-300 ${
+                  index > 0 && !showComments ? "-ml-4 group-hover:ml-0" : ""
+                } ${showComments ? "ml-0" : ""}`}
               >
                 {like.photo?.url ? (
                   <Image
                     src={`${BUCKET_URL}${like.photo?.url}`}
+                    alt={`${like.id}`}
                     fill
-                    sizes="24px"
-                    alt={`{like.id}`}
                     className="object-cover"
                   />
                 ) : (
@@ -212,88 +191,87 @@ export default function SocialPost({ post }: SocialPostProps) {
             ))}
           </div>
 
-          <div
-            className="ml-2 flex cursor-pointer items-center text-xs font-medium text-default-900"
+          <button
+            type="button"
+            className="flex items-center text-xs font-medium text-default-900"
             onClick={openLikeModal}
           >
-            {post.likes.length === 0
-              ? ""
-              : post.likes.length === 1
-                ? `${post.likes.length} Like`
-                : `${post.likes.length} Likes`}
-          </div>
-        </div>
+            {post.likes.length === 1
+              ? `${post.likes.length} Like`
+              : `${post.likes.length} Likes`}
+          </button>
+        </section>
+      ) : null}
 
-        {/* Like Modal */}
-        <LikeModal
-          open={isLikeModalOpen}
-          handleClose={closeLikeModal}
-          postId={post.id}
-        />
+      {/* Like Modal */}
+      <LikeModal
+        open={isLikeModalOpen}
+        handleClose={closeLikeModal}
+        postId={post.id}
+      />
 
-        {/* 게시물 body */}
-        <div className="flex w-full items-start gap-2 px-5 py-2 text-sm font-medium text-default-700">
-          <div className="text-sm font-semibold">{post.user?.nickname}</div>
+      {/* 게시물 body */}
+      <section className="flex w-full items-start gap-2 text-sm font-medium text-default-700">
+        <div className="text-sm font-semibold">{post.user?.nickname}</div>
 
-          <div className="flex">
-            <span
-              className={clsx(
-                "flex-auto text-sm font-normal",
-                isExpanded ? "break-words" : "line-clamp-2",
-              )}
-            >
-              {post.body}
-            </span>
-            <span>
-              {!isExpanded && post.body.length > maxChars && (
-                <button
-                  className="flex-1 text-xs"
-                  onClick={() => setIsExpanded(true)}
-                >
-                  more
-                </button>
-              )}
-              {isExpanded && post.body.length > maxChars && (
-                <button
-                  className="flex-1  text-xs"
-                  onClick={() => setIsExpanded(false)}
-                >
-                  hide
-                </button>
-              )}
-            </span>
-          </div>
-        </div>
-
-        {/* 게시글 작성시간 */}
-        <div className="flex w-full justify-end pr-5  text-xs  text-default-500">
-          {timeSince(post.createdAt)}
-        </div>
-
-        {/* View n Comments */}
-        {post.commentSettings !== "OFF" && (
-          <div
-            className="cursor-pointer px-5 text-xs font-medium text-default-500"
-            onClick={toggleComments}
+        <div className="flex">
+          <span
+            className={`flex-auto text-sm font-normal ${
+              isExpanded ? "break-words" : "line-clamp-2"
+            }`}
           >
-            {!showComments &&
-              (post.comments === 0
-                ? ""
-                : post.comments === 1
-                  ? "View 1 comment"
-                  : `View all ${post.comments} comments`)}
-          </div>
-        )}
-
-        {/* 댓글 보기 */}
-        {showComments && (
-          <CommentsSection
-            postId={post.id}
-            commentSettings={post.commentSettings}
-          />
-        )}
-        <Divider sx={{ border: "1px solid #EBE3D5", marginTop: "20px" }} />
+            {post.body}
+          </span>
+          <span>
+            {!isExpanded && post.body?.length > maxChars && (
+              <button
+                type="button"
+                className="flex-1 text-xs"
+                onClick={() => setIsExpanded(true)}
+              >
+                more
+              </button>
+            )}
+            {isExpanded && post.body?.length > maxChars && (
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                className="flex-1 text-xs"
+              >
+                hide
+              </button>
+            )}
+          </span>
+        </div>
       </section>
-    </>
+
+      {/* View n Comments */}
+      {post.commentSettings !== "OFF" && post.comments > 0 && !showComments && (
+        <div>
+          <button
+            type="button"
+            onClick={toggleComments}
+            className="text-xs font-medium text-default-500"
+          >
+            {post.comments === 1
+              ? "View 1 comment"
+              : `View all ${post.comments} comments`}
+          </button>
+        </div>
+      )}
+
+      {/* 댓글 보기 */}
+      {showComments && (
+        <CommentsSection
+          me={meData}
+          post={post}
+          commentSettings={post.commentSettings}
+        />
+      )}
+      {/* 게시글 작성시간 */}
+      <span className="flex text-xs font-light text-default-500">
+        {timeAgo(post.createdAt)}
+      </span>
+    </article>
   );
 }
