@@ -1,6 +1,6 @@
 import { CircularProgress, circularProgressClasses } from "@mui/material";
 
-export default function Loading() {
+export default function Loading({ className }: any) {
   return (
     <CircularProgress
       variant="indeterminate"
@@ -8,7 +8,7 @@ export default function Loading() {
       size={20}
       thickness={5}
       sx={{
-        color: "#ffffff",
+        color: className.includes("text-black") ? "#000000" : "#ffffff",
         animationDuration: "550ms",
         [`& .${circularProgressClasses.circle}`]: {
           strokeLinecap: "round",

@@ -1,20 +1,22 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Post } from "@/app/social/page";
 import { deletePost } from "@/store/api";
 import EditPost from "./EditPost";
 
-import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import Delete from "@/public/social/Delete";
-import Edit from "@/public/social/Edit";
 import User from "@/public/social/User";
-import FriendRequest from "@/public/social/FriendRequest";
+
 import Report from "@/public/social/Report";
+import {
+  EllipsisHorizontalIcon,
+  ExclamationCircleIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 
 // 나의 게시물 / 친구 게시물 : isMyPost(boolean)
 interface PostSettingsProps {
@@ -30,9 +32,9 @@ export default function PostSettings({
   const queryClient = useQueryClient();
 
   // 게시물 (···) 메뉴
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -77,9 +79,13 @@ export default function PostSettings({
 
   return (
     <div className="relative">
-      <IconButton onClick={handleClick}>
-        <MoreHorizIcon sx={{ color: "#2D2422", fontSize: 20 }} />
-      </IconButton>
+      <button
+        onClick={handleClick}
+        className="rounded-full p-1 hover:bg-default-300"
+      >
+        <EllipsisHorizontalIcon className="size-6" />
+      </button>
+
       <Menu
         anchorEl={anchorEl}
         open={open}
@@ -97,42 +103,42 @@ export default function PostSettings({
       >
         {/* 나의 게시물 or 친구 게시물 */}
         {isMyPost ? (
-          <div className="flex flex-col px-5 py-1 ">
-            {/* <Divider sx={{ m: 0 }} /> */}
-
+          <div className="flex flex-col gap-1 px-2">
             <button
-              className="mb-1 mt-1 flex items-center "
+              type="button"
+              className="flex items-center gap-1 rounded-lg px-2 py-1 hover:bg-default-200"
               onClick={() => handleEditClick(postId)}
             >
-              <Edit className="mr-1 h-5 w-4 fill-current text-default-600" />
-
-              <div className=" text-sm font-medium text-default-700">Edit</div>
+              <PencilSquareIcon className="size-5" />
+              <span className="text-sm font-medium text-default-700">Edit</span>
             </button>
 
             <button
-              className="mt-2 flex items-center"
+              type="button"
+              className="flex items-center gap-1 rounded-lg px-2 py-1 hover:bg-default-200"
               onClick={() => handleDeletePost()}
             >
-              <Delete className="mr-1 h-5 w-6 fill-current text-default-600" />
-              <div className="text-sm font-medium text-default-700">Delete</div>
+              <TrashIcon className="size-5" />
+              <span className="text-sm font-medium text-default-700">
+                Delete
+              </span>
             </button>
           </div>
         ) : (
-          <div className="flex flex-col pb-3 pl-5 pr-5 pt-3">
-            <div className="mb-3 flex items-center">
-              <User className="mr-1 h-5 w-5 fill-current text-default-600" />
+          <div className="flex flex-col gap-1 px-2">
+            <button className="flex items-center gap-1 rounded-lg px-2 py-1 hover:bg-default-200">
+              <UserIcon className="size-5 stroke-2" />
+              <span className="text-sm font-medium text-default-700">
+                About
+              </span>
+            </button>
 
-              <div className="text-sm font-medium text-default-700">
-                About this account
-              </div>
-            </div>
-
-            <div className="mt-2 flex items-center">
-              <Report className="mr-1 h-4 w-4 fill-current text-default-600" />
-              <div className="text-sm font-semibold text-default-700">
+            <button className="flex items-center gap-1 rounded-lg px-2 py-1 hover:bg-default-200">
+              <ExclamationCircleIcon className="size-6 stroke-2 text-red-500" />
+              <span className="text-sm font-semibold text-default-700">
                 Report
-              </div>
-            </div>
+              </span>
+            </button>
           </div>
         )}
       </Menu>

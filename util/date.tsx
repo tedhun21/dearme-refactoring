@@ -54,15 +54,12 @@ export const getWeeksInMonth = (date: Dayjs) => {
   return lastDayOfWeek.diff(firstDayOfWeek, "week") + 1;
 };
 
-// month/day, year
-export const formatDate = (dateString: any): any => {
-  if (!dateString) return "";
-  const dateObj = new Date(dateString);
-  const year = dateObj.getFullYear();
-  const month = dateObj.getMonth() + 1;
-  const day = dateObj.getDate();
-
-  return `${month}/${day}, ${year}`;
+// month name day, year
+export const monthNameDayYear = (date: Dayjs) => {
+  const monthName = dayjs(date).format("MMM");
+  const day = dayjs(date).format("D");
+  const year = dayjs(date).format("YYYY");
+  return `${monthName} ${day}, ${year}`;
 };
 
 // 일기에 들어가는 날짜 형식
@@ -120,10 +117,37 @@ export const dayOftheWeek = (date: Dayjs) => {
   return dayjs(date).format("dddd").slice(0, 3);
 };
 
-// month name day, year
-export const monthNameDayYear = (date: Dayjs) => {
-  const monthName = dayjs(date).format("MMM");
-  const day = dayjs(date).format("D");
-  const year = dayjs(date).format("YYYY");
-  return `${monthName} ${day}, ${year}`;
+// ago
+export const timeAgo = (date: any) => {
+  const now = dayjs();
+  const postDate = dayjs(date);
+
+  const diffSeconds = now.diff(postDate, "second");
+
+  if (diffSeconds < 60) {
+    return "just now";
+  }
+
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  if (diffMinutes < 60) {
+    return `${diffMinutes} minute${diffMinutes > 1 ? "s" : ""} ago`;
+  }
+
+  const diffHours = Math.floor(diffSeconds / 3600);
+  if (diffHours < 24) {
+    return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+  }
+
+  const diffDays = Math.floor(diffSeconds / 86400);
+  if (diffDays < 30) {
+    return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  }
+
+  const diffMonths = Math.floor(diffSeconds / 2629800);
+  if (diffMonths < 12) {
+    return `${diffMonths} month${diffMonths > 1 ? "s" : ""} ago`;
+  }
+
+  const diffYears = Math.floor(diffSeconds / 31557600);
+  return `${diffYears} year${diffYears > 1 ? "s" : ""} ago`;
 };

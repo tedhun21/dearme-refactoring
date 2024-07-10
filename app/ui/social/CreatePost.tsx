@@ -3,31 +3,18 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
+import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getGoals, createPost } from "@/store/api";
-
-import Image from "next/image";
-import Link from "next/link";
+import Modal from "@mui/material/Modal";
+import { Switch } from "@mui/material";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import UploadPostImg from "./UploadPostImg";
-
-import AddIcon from "@mui/icons-material/Add";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { Switch } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
-import MenuItem from "@mui/material/MenuItem";
-
-import Close from "@/public/social/Close";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { getToday, monthNameDayYear } from "@/util/date";
-import dayjs from "dayjs";
 import Loading from "@/public/common/Loading";
+import { getGoals, createPost } from "@/store/api";
+import { getToday, monthNameDayYear } from "@/util/date";
 
 interface IForm {
   goalId: number;

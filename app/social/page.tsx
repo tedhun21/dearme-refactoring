@@ -57,8 +57,11 @@ export interface Post {
 export default function Social() {
   const router = useRouter();
 
+  // New post
+  const [postUploaded, setPostUploaded] = useState(false);
+
   // me
-  const { isSuccess, data: meData } = useQuery({
+  const { data: meData } = useQuery({
     queryKey: ["getMe"],
     queryFn: getMe,
   });
@@ -76,7 +79,12 @@ export default function Social() {
   // infinite scroll
   const [ref, inView] = useInView();
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<Post[], Error>({
+  const {
+    isSuccess: isPostDataSuccess,
+    data: postData,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<Post[], Error>({
     queryKey: ["getPostsWithPage", selectedTab],
     queryFn: ({ pageParam }) =>
       getPostWithPage({ tab: selectedTab, pageParam: pageParam }),
@@ -99,9 +107,6 @@ export default function Social() {
     fetchNextPage();
   }, [inView]);
 
-  // New post
-  const [postUploaded, setPostUploaded] = useState(false);
-
   return (
     <main className="flex min-h-screen w-full justify-center">
       <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
@@ -109,37 +114,46 @@ export default function Social() {
 
         <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
-        <div className="relative w-full pb-28">
-          {data?.pages &&
-            data.pages.map(
-              (posts: any) =>
-                Array.isArray(posts) &&
-                posts.map((post: any) => (
-                  <SocialPost key={post.id} post={post} />
-                )),
-            )}
-
-          {!hasNextPage &&
-          Array.isArray(data?.pages?.[0]) &&
-          data?.pages?.[0].length === 0 ? (
-            <div className="flex justify-center px-5 py-2 text-sm text-default-500">
-              No posts yet
-            </div>
+        <section className="relative w-full pb-10">
+          {isPostDataSuccess ? (
+            postData?.pages[0].length > 0 ? (
+              // 데이터 통신을 성공했고 데이터가 있을때
+              postData.pages.map(
+                (posts: any) =>
+                  Array.isArray(posts) &&
+                  posts.map((post: any) => (
+                    <SocialPost key={post.id} post={post} />
+                  )),
+              )
+            ) : (
+              // 데이터 성공했지만 데이터가 없고 다음 페이지도 없을 때
+              postData.pages[0].length === 0 &&
+              !hasNextPage && (
+                <div className="flex justify-center px-5 py-2 text-sm text-default-500">
+                  No posts yet
+                </div>
+              )
+            )
           ) : (
-            <div className="flex flex-col items-center">
-              <div className=" px-5 py-2 text-sm text-default-500">
-                All posts are loaded.
-              </div>
-              <button
-                onClick={() => window.scrollTo(0, 0)}
-                className="rounded-2xl bg-default-500 px-4 py-1 text-white hover:opacity-50"
-              >
-                <span className="text-sm">to the top</span>
-              </button>
+            <div className="text-center">
+              <Loading className="text-black" />
             </div>
           )}
-        </div>
-
+        </section>
+        {isPostDataSuccess && !hasNextPage && (
+          // 데이터 통신하고 그 다음 페이지가 없을 때
+          <div className="flex flex-col items-center pb-52">
+            <div className="px-5 py-2 text-sm text-default-500">
+              All posts are loaded.
+            </div>
+            <button
+              onClick={() => window.scrollTo(0, 0)}
+              className="rounded-2xl bg-default-500 px-4 py-1 text-white hover:opacity-50"
+            >
+              <span className="text-sm">to the top</span>
+            </button>
+          </div>
+        )}
         {hasNextPage && (
           <div ref={ref}>
             <Loading />
