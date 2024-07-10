@@ -9,15 +9,13 @@ import { EffectCards } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
 import "swiper/css/effect-cards";
+import { BookmarkIcon as OutlineBookmarkIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon as SolidBookmarkIcon } from "@heroicons/react/24/solid";
 
-import Yellow from "@/public/diary/Yellow";
-import RememberIcon from "@/public/me/RememberIcon";
-import Remembered from "@/public/diary/Remembered";
-
-import { getDiaryDate } from "@/util/date";
-import WeatherIcons from "./WeatherIcons";
-import { updateDiaryRemember } from "@/store/api";
 import TagSection from "./TagSection";
+import WeatherIcons from "./WeatherIcons";
+import { getDiaryDate } from "@/util/date";
+import { updateDiaryRemember } from "@/store/api";
 
 export default function ReadDiary({ date, diaryData }: any) {
   const queryClient = useQueryClient();
@@ -51,14 +49,14 @@ export default function ReadDiary({ date, diaryData }: any) {
   };
 
   /* feelings 문자열을 배열로 변환 */
-  const feelingsTags = diaryData ? diaryData.feelings?.split(" ") : [];
+  const feelingsTags = diaryData ? JSON.parse(diaryData.feelings) : [];
 
   return (
-    <article className="relative">
-      <section className="mb-5 mt-5 flex w-full min-w-[360px] max-w-[600px] flex-col rounded ">
+    <article>
+      <section className="flex w-full min-w-[360px] max-w-[600px] flex-col rounded ">
         {/* 이미지 있을 경우에만 (images &&)*/}
         {diaryData && diaryData.photos && diaryData.photos.length > 0 && (
-          <div>
+          <div className="relative">
             <Swiper
               effect={"cards"}
               cardsEffect={{
@@ -87,54 +85,48 @@ export default function ReadDiary({ date, diaryData }: any) {
                   </SwiperSlide>
                 ))}
             </Swiper>
+
             {/* 이미지 개수 -> text */}
-            <Yellow
-              className="top-70 absolute right-10 z-30 h-10 w-10 -translate-y-1/2 transform fill-current text-default-900"
-              text={`+${diaryData.photos.length}`}
-            />
+            <div className="absolute -bottom-4 right-10 z-10 flex size-10 items-center justify-center rounded-xl bg-default-900 text-sm font-semibold">
+              +{diaryData.photos.length}
+            </div>
           </div>
         )}
 
-        <div className="p-10">
-          <div className="mb-3 mt-4 flex items-center">
+        <div className="flex flex-col gap-4 px-8 py-6">
+          <div className="flex items-center gap-2">
             {/* 일기의 Remember */}
-            {diaryData.remember ? (
-              <Remembered
-                className="mr-2 h-5 w-5 cursor-pointer fill-current"
-                onClick={() => handleRemember()}
-              />
-            ) : (
-              <RememberIcon
-                className="mr-2 h-5 w-5 cursor-pointer fill-current"
-                onClick={() => handleRemember()}
-              />
-            )}
+            <button onClick={handleRemember}>
+              {diaryData.remember ? (
+                <SolidBookmarkIcon className="size-6 stroke-2" />
+              ) : (
+                <OutlineBookmarkIcon className="size-6 stroke-2" />
+              )}
+            </button>
+
             {/* 일기의 날짜 */}
             <h1 className="text-md font-semibold">{getDiaryDate(date)}</h1>
           </div>
-          {/* 일기의 제목 */}
-          <h1 className="mb-3 text-lg font-bold">
-            {diaryData ? diaryData.title : ""}
-          </h1>
-          {/* 일기의 내용 */}
-          <p className="mb-5 break-all text-base font-medium text-default-700">
-            {diaryData ? diaryData.body : ""}
-          </p>
+          <div className="flex flex-col gap-1 pb-10">
+            {/* 일기의 제목 */}
+            <h1 className="text-lg font-bold">{diaryData.title}</h1>
+            {/* 일기의 내용 */}
+            <p className="break-all text-base font-medium text-default-700">
+              {diaryData.body}
+            </p>
+          </div>
           {/* 일기의 날씨정보 */}
-          <div className="flex w-full items-center justify-end gap-1">
+          <div className="flex w-full items-center justify-end gap-2">
             <WeatherIcons
               weatherId={diaryData.weatherId}
-              className="h-4 w-4 fill-current text-black"
+              className="size-4 fill-current text-black"
             />
             <span className="text-sm font-medium">{diaryData.weather}</span>
           </div>
         </div>
       </section>
-
       {/* 태그 섹션 */}
-      <section className="mb-5 border-b-2 border-t-2 border-default-300 bg-default-200 pb-4 pl-10 pr-10 pt-4 ">
-        <TagSection feelingsTags={feelingsTags} />
-      </section>
+      <TagSection feelingsTags={feelingsTags} />
     </article>
   );
 }

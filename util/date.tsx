@@ -150,4 +150,8 @@ export const timeAgo = (date: any) => {
 
   const diffYears = Math.floor(diffSeconds / 31557600);
   return `${diffYears} year${diffYears > 1 ? "s" : ""} ago`;
+
+// YYYY-MM 으로 변경
+export const convertYearMonth = (date: Dayjs) => {
+  return dayjs(date).format("YYYY-MM");
 };

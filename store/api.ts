@@ -358,7 +358,6 @@ export const updateDiary = async ({ updateData, photos, diaryId }: any) => {
 };
 
 export const updateDiaryRemember = async ({ diaryId, remember }: any) => {
-  console.log(diaryId, remember);
   const access_token = getCookie("access_token");
   if (access_token) {
     const formData = new FormData();

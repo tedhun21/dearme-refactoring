@@ -6,14 +6,6 @@ import SnowWeather from "@/public/diary/SnowWeather";
 import ThunderstormWeather from "@/public/diary/ThunderstormWeather";
 import FogWeather from "@/public/diary/FogWeather";
 
-{
-  /* 사용
-   <WeatherIcons
-  weatherId={diary.weatherId}
-  className="h-4 w-4 fill-current text-white"
-/>; */
-}
-
 export default function WeatherIcons({
   weatherId,
   className,
@@ -45,5 +37,5 @@ export default function WeatherIcons({
 
   const Icon = getWeatherIcon(weatherId) || CloudsWeather;
 
-  return <div>{Icon || <div>Weather icon not available</div>}</div>;
+  return <div>{Icon || "Weather icon not available"}</div>;
 }
