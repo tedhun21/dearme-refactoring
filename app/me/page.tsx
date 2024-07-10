@@ -2,8 +2,8 @@ import Link from "next/link";
 
 import { getToday } from "@/util/date";
 
-import MeTodo from "../ui/me/MeTodo";
-import MeGoal from "../ui/me/plans/MeGoal";
+import MeTodo from "./(component)/MeTodo";
+import MeGoal from "./(component)/plans/MeGoal";
 
 export default async function Me() {
   return (

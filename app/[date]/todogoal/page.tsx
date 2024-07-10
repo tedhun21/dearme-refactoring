@@ -18,13 +18,14 @@ import {
 import Footer from "@/app/ui/footer/Footer";
 import { getMe, getMyGoals, getMyTodosWithDate } from "@/store/api";
 
-import TodogoalHeader from "@/app/ui/todogoal/TodogoalHeader";
-import TodogoalDragTodo from "@/app/ui/todogoal/todo/TodogoalDragTodo";
-import TodogoalGoalList from "@/app/ui/todogoal/goal/TodogoalGoalList";
-import TodogoalPropgress from "@/app/ui/todogoal/todo/TodoProgress";
-import GoalProgress from "@/app/ui/todogoal/goal/GoalProgress";
-import CalendarSelect from "@/app/ui/todogoal/todo/CalendarSelect";
-import CreateTodoGoal from "@/app/ui/todogoal/CreateTodoGoal";
+import TodogoalHeader from "@/app/[date]/todogoal/(component)/TodogoalHeader";
+import TodogoalDragTodo from "@/app/[date]/todogoal/(component)/todo/TodogoalDragTodo";
+import TodogoalGoalList from "@/app/[date]/todogoal/(component)/goal/TodogoalGoalList";
+import TodogoalPropgress from "@/app/[date]/todogoal/(component)/todo/TodoProgress";
+
+import CalendarSelect from "@/app/[date]/todogoal/(component)/todo/CalendarSelect";
+import CreateTodoGoal from "@/app/[date]/todogoal/(component)/CreateTodoGoal";
+import GoalProgress from "./(component)/goal/GoalProgress";
 
 export default function DailyTodoGoal() {
   const { data: meData } = useQuery({

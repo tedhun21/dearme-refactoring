@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import BackButton from "@/app/ui/backbutton";
 
 import { getMyFriendsAndBlock } from "@/store/api";
-import FollowList from "@/app/ui/me/followers/FollowList";
+import FollowList from "@/app/me/followers/(component)/FollowList";
 
 export default function Friends() {
   const [ref, inView] = useInView();

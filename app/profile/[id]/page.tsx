@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/app/ui/footer/Footer";
-import UserInfo from "@/app/ui/me/profile/user/UserInfo";
+import UserInfo from "@/app/profile/[id]/(component)/user/UserInfo";
 import { getMe } from "@/store/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -29,7 +29,7 @@ export default function Profile() {
     <main className="flex min-h-screen justify-center">
       <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
         <UserInfo me={meData} />
-        <Footer me={meData} />
+        <Footer />
       </div>
     </main>
   );

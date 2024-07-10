@@ -15,12 +15,12 @@ import {
   getDiaryForDay,
   updateDiary,
 } from "@/store/api";
-import ChooseMood from "@/app/ui/diary/ChooseMood";
-import ChooseEmotionTags from "@/app/ui/diary/ChooseEmotionTags";
-import ChooseCompanions from "@/app/ui/diary/ChooseCompanions";
-import DiaryModal from "@/app/ui/diary/DiaryModal";
-import UploadPhoto from "@/app/ui/diary/UploadPhoto";
-import UploadTodayPick from "@/app/ui/diary/UploadTodayPick";
+import ChooseMood from "@/app/[date]/diary/(component)/ChooseMood";
+import ChooseEmotionTags from "@/app/[date]/diary/(component)/ChooseEmotionTags";
+import ChooseCompanions from "@/app/[date]/diary/(component)/ChooseCompanions";
+import DiaryModal from "@/app/[date]/diary/(component)/DiaryModal";
+import UploadPhoto from "@/app/[date]/diary/(component)/UploadPhoto";
+import UploadTodayPick from "@/app/[date]/diary/(component)/UploadTodayPick";
 import { CircularProgress } from "@mui/material";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import Loading from "@/public/common/Loading";

@@ -4,8 +4,8 @@ import { cookies } from "next/headers";
 import axios from "axios";
 
 import Footer from "../ui/footer/Footer";
-import MeNav from "../ui/me/nav/MeNav";
-import MeProfile from "../ui/me/profile/me/MeProfile";
+import MeNav from "./(component)/nav/MeNav";
+import MeProfile from "../profile/[id]/(component)/me/MeProfile";
 import { useQuery } from "@tanstack/react-query";
 import { getMe } from "@/store/api";
 
@@ -41,7 +41,7 @@ export default function RootLayout({
         <MeProfile me={meData} />
         <MeNav />
         {children}
-        <Footer me={meData} />
+        <Footer />
       </div>
     </main>
   );

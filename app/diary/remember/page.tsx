@@ -13,7 +13,7 @@ import Select from "@mui/material/Select";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import MenuItem from "@mui/material/MenuItem";
 import { getToday } from "@/util/date";
-import MoodArrays from "@/app/ui/remember/MoodArrays";
+import MoodArrays from "@/app/diary/remember/(component)/MoodArrays";
 
 export interface RememberItem {
   id: number;
@@ -126,7 +126,7 @@ export default function Remeber() {
         </div>
 
         {/* Moods 카드 */}
-        <section className="overflow-scroll px-5 scrollbar-hide">
+        <section className="scrollbar-hide overflow-scroll px-5">
           <MoodArrays remembers={remembers} />
         </section>
       </div>

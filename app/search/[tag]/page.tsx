@@ -1,22 +1,19 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-import "../../globals.css";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 
 import { useQuery } from "@tanstack/react-query";
 import { getPostsByGoals } from "@/store/api";
 
 import Header from "@/app/ui/header/Header";
 import BackButton from "@/app/ui/backbutton";
-import ViewPostModal from "@/app/ui/search/ViewPostModal";
 
 import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
 import { Divider } from "@mui/material";
 
 import GoalTag from "@/public/search/GoalTag";
+import ViewPostModal from "./(component)/ViewPostModal";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 

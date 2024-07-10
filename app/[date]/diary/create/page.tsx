@@ -8,16 +8,16 @@ import { useMutation } from "@tanstack/react-query";
 
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
-import ChooseMood from "@/app/ui/diary/ChooseMood";
-import ChooseEmotionTags from "@/app/ui/diary/ChooseEmotionTags";
+import ChooseMood from "@/app/[date]/diary/(component)/ChooseMood";
+import ChooseEmotionTags from "@/app/[date]/diary/(component)/ChooseEmotionTags";
 
-import UploadPhoto from "@/app/ui/diary/UploadPhoto";
-import UploadTodayPick from "@/app/ui/diary/UploadTodayPick";
-import DiaryModal from "@/app/ui/diary/DiaryModal";
+import UploadPhoto from "@/app/[date]/diary/(component)/UploadPhoto";
+import UploadTodayPick from "@/app/[date]/diary/(component)/UploadTodayPick";
+import DiaryModal from "@/app/[date]/diary/(component)/DiaryModal";
 import { createDiary, createTodayPick } from "@/store/api";
 import { getDiaryDate } from "@/util/date";
 import Loading from "@/public/common/Loading";
-import ChooseCompanions from "@/app/ui/diary/ChooseCompanions";
+import ChooseCompanions from "@/app/[date]/diary/(component)/ChooseCompanions";
 
 function removeAllEmptyStrings(obj: any) {
   for (const key in obj) {

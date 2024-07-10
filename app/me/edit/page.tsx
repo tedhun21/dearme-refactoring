@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { getMe, updateMe } from "@/store/api";
 import { Switch } from "@mui/material";
 
-import EditInput from "./components/EditInput";
+import EditInput from "./(component)/EditInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loading from "@/public/common/Loading";
 

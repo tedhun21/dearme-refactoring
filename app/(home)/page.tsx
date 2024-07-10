@@ -8,9 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getMe } from "@/store/api";
 import Header from "../ui/header/Header";
 import Footer from "../ui/footer/Footer";
-import CustomCalendar from "../ui/home/CustomCalendar";
-import MeGoal from "../ui/me/plans/MeGoal";
-import HomeTodoAndDiary from "../ui/home/HomeTodoAndDiary";
+import CustomCalendar from "./(component)/CustomCalendar";
+import MeGoal from "../me/(component)/plans/MeGoal";
+import HomeTodoAndDiary from "./(component)/HomeTodoAndDiary";
 import { settingState } from "@/store/atoms";
 
 export default function Home() {

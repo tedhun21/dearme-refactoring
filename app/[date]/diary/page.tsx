@@ -9,11 +9,11 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Header from "@/app/ui/header/Header";
 import Footer from "@/app/ui/footer/Footer";
 import { getDiaryForDay, getMe } from "@/store/api";
-import ReadDiary from "@/app/ui/diary/ReadDiary";
-import ReadTodayPick from "@/app/ui/diary/ReadTodayPick";
-import MonthlyDiaryLink from "@/app/ui/diary/MonthlyDiaryLink";
-import DiaryActionButton from "@/app/ui/diary/DiaryActionButton";
-import SentimentalQuotes from "@/app/ui/diary/Sentimental Quotes";
+import ReadDiary from "@/app/[date]/diary/(component)/ReadDiary";
+import ReadTodayPick from "@/app/[date]/diary/(component)/ReadTodayPick";
+import MonthlyDiaryLink from "@/app/[date]/diary/(component)/MonthlyDiaryLink";
+import DiaryActionButton from "@/app/[date]/diary/(component)/DiaryActionButton";
+import SentimentalQuotes from "@/app/[date]/diary/(component)/Sentimental Quotes";
 
 export default function Diary() {
   const { date } = useParams();

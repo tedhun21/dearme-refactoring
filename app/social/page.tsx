@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import "../globals.css";
@@ -12,10 +11,10 @@ import { getMe, getPostWithPage } from "@/store/api";
 import { CircularProgress } from "@mui/material";
 
 import Header from "../ui/header/Header";
-import Tabs from "../ui/social/Tabs";
-import SocialPost from "../ui/social/SocialPost";
-import New from "../ui/social/New";
-import CreatePost from "../ui/social/CreatePost";
+import Tabs from "./(component)/Tabs";
+import SocialPost from "./(component)/SocialPost";
+import New from "./(component)/New";
+import CreatePost from "./(component)/CreatePost";
 import Footer from "../ui/footer/Footer";
 import Loading from "@/public/common/Loading";
 // post type
