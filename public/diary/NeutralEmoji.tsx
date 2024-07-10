@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-
-export default function NeutralEmoji({ selected, onClick }: any) {
+export default function NeutralEmoji({ selected, className }: any) {
   // Selected 상태일 때의 SVG path
   const selectedPath = (
     <path
@@ -20,26 +18,13 @@ export default function NeutralEmoji({ selected, onClick }: any) {
 
   return (
     <svg
-      onClick={onClick}
       width="28"
       height="28"
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="neutral-emoji"
+      className={className}
     >
-      <style jsx>{`
-            .neutral-emoji {
-              transition:
-                fill 0.2s ease,
-                box-shadow: none;
-            }
-            .neutral-emoji:hover {
-              box-shadow: 0 0 14px rgba(0, 0, 0, 0.25); /* 그림자 추가 */
-              border-radius: 50%; /* 모서리를 둥글게 */
-            }
-          `}</style>
-
       {selected ? selectedPath : defaultPath}
     </svg>
   );

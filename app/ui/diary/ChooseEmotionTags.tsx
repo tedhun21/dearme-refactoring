@@ -1,55 +1,84 @@
-import Tags from "@/public/diary/Tags";
+import { useWatch } from "react-hook-form";
+
+const tags = [
+  "FRESH",
+  "TIRED",
+  "HAPPY",
+  "MOTIVATED",
+  "ANNOYED",
+  "LONELY",
+  "PROUD",
+  "ANXIOUS",
+  "DEPRESSED",
+  "COZY",
+  "ANGRY",
+  "GLOOMY",
+  "EXCITED",
+  "STRESSED",
+  "SAD",
+  "DISGUSTED",
+  "AFRAID",
+  "BORED",
+  "CONTENT",
+  "RELIEVED",
+  "FRUSTRATED",
+  "OVERWHELMED",
+  "HOPEFUL",
+  "SURPRISED",
+  "LOVE",
+  "CONFUSED",
+  "GRATEFUL",
+  "CALM",
+  "LONGING",
+];
 
 export default function ChooseEmotionTags({
-  selectedTags,
-  setSelectedTags,
-  onTagSelect,
+  register,
+  setValue,
+  control,
 }: any) {
-  const tags = [
-    "#FRESH",
-    "#TIRED",
-    "#HAPPY",
-    "#MOTIVATED",
-    "#ANNOYING",
-    "#LONELY",
-    "#EXCITING",
-    "#PROUD",
-    "#ANXIETY",
-    "#DEPRESSED",
-    "#PIT-A-PAT",
-    "#COZY",
-    "#ANGRY",
-    "#GLOOMY",
-    "#EXCITED",
-    "#PRESSURE",
-  ];
+  const selectedFeelings = useWatch({ control, name: "feelings" }) || [];
 
-  const handleTagClick = (tag: string) => {
-    setSelectedTags((prevTags: any) => {
-      const isTagSelected = prevTags?.includes(tag);
-      let newTags;
-
-      if (isTagSelected) {
-        newTags = prevTags?.filter((prevTag: any) => prevTag !== tag);
-      } else {
-        newTags = [...prevTags, tag];
-      }
-
-      onTagSelect(newTags.join(" "));
-      return newTags;
-    });
+  const handleCheckboxChange = (value: string, checked: boolean) => {
+    if (checked) {
+      setValue("feelings", [...selectedFeelings, value]);
+    } else {
+      setValue(
+        "feelings",
+        selectedFeelings.filter((feeling: string) => feeling !== value),
+      );
+    }
   };
 
   return (
-    <span className="flex flex-wrap gap-2 px-6 pb-4">
-      {tags.map((tag) => (
-        <Tags
-          key={tag}
-          text={tag}
-          selected={selectedTags?.includes(tag)}
-          onClick={() => handleTagClick(tag)}
-        />
-      ))}
-    </span>
+    <div className="flex flex-wrap">
+      {tags.map((tag) => {
+        const isChecked = selectedFeelings.includes(tag);
+        return (
+          <div key={tag} className="px-1 py-2">
+            <input
+              type="checkbox"
+              id={tag}
+              value={tag}
+              {...register("feelings")}
+              onChange={(e) =>
+                handleCheckboxChange(e.target.value, e.target.checked)
+              }
+              className="hidden"
+            />
+            <label
+              htmlFor={tag}
+              className={`cursor-pointer rounded-lg border-2 border-default-400 bg-default-300 px-2 py-1 text-sm font-semibold xs:text-base ${
+                isChecked
+                  ? "border-default-800 bg-default-800 text-default-100 hover:bg-default-700"
+                  : "text-default-800 hover:border-default-600 hover:bg-default-400"
+              }`}
+            >
+              #{tag}
+            </label>
+          </div>
+        );
+      })}
+    </div>
   );
 }

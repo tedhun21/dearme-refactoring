@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-
-export default function HappyEmoji({ selected, onClick }: any) {
+export default function HappyEmoji({ selected, className }: any) {
   // Selected 상태일 때의 SVG path
   const selectedPath = (
     <path
@@ -19,26 +17,13 @@ export default function HappyEmoji({ selected, onClick }: any) {
 
   return (
     <svg
-      onClick={onClick}
       width="27"
       height="27"
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="happy-emoji"
+      className={className}
     >
-      <style jsx>{`
-        .happy-emoji {
-          transition:
-            fill 0.2s ease,
-            box-shadow: none;
-        }
-        .happy-emoji:hover {
-          box-shadow: 0 0 14px rgba(0, 0, 0, 0.25); /* 그림자 추가 */
-          border-radius: 50%; /* 모서리를 둥글게 */
-        }
-      `}</style>
-
       {selected ? selectedPath : defaultPath}
     </svg>
   );

@@ -43,6 +43,9 @@ const config: Config = {
       fontSize: {
         "2xs": ["0.625rem", "0.8rem"],
       },
+      boxShadow: {
+        rad: "0 0 14px rgba(0,0,0,0.3)",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],
