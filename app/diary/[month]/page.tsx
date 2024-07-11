@@ -1,7 +1,6 @@
 "use client";
 
-import "../../globals.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -9,7 +8,6 @@ import Link from "next/link";
 import dayjs from "dayjs";
 
 import { useQuery } from "@tanstack/react-query";
-import { getDiariesForMonth, getSearchDiaries } from "@/store/api";
 
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
@@ -24,6 +22,7 @@ import Sad from "@/public/diary/Sad";
 import Unhappy from "@/public/diary/Unhappy";
 import Remembered from "@/public/diary/Remembered";
 import Triangle from "@/public/social/Triangle";
+import { getDiariesForMonth, getSearchDiaries } from "@/api/diary/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
@@ -165,7 +164,7 @@ export default function MonthlyDiary() {
         />
 
         {/* 월별 일기 */}
-        <section className="m-5 grid grid-cols-2 gap-x-5 gap-y-6 overflow-scroll scrollbar-hide sm:grid-cols-2">
+        <section className="scrollbar-hide m-5 grid grid-cols-2 gap-x-5 gap-y-6 overflow-scroll sm:grid-cols-2">
           {Array.isArray(filteredDiaries) &&
             filteredDiaries.map((diary: any) => (
               // 일기 카드 컨테이너 (카드 + 날짜)

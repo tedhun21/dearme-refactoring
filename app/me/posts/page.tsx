@@ -6,8 +6,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { CircularProgress } from "@mui/material";
 
-import { getMyPostsWithPage } from "@/store/api";
-import MePostCard from "@/app/ui/me/posts/MePostCard";
+import MePostCard from "@/app/me/posts/(component)/MePostCard";
+import { getMyPostsWithPage } from "@/api/post/api";
 
 export default function MePost() {
   const [ref, inView] = useInView();

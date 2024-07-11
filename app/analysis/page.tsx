@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import clsx from "clsx";
+
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -146,23 +146,21 @@ export default function Analysis() {
             <div>
               <div className="group flex translate-x-1 rounded-2xl bg-default-400 p-1">
                 <button
-                  className={clsx(
-                    "flex-1 p-2 font-semibold",
+                  className={`flex-1 p-2 font-semibold ${
                     isMonth
                       ? "rounded-2xl bg-default-300"
-                      : "text-default-500 hover:text-black",
-                  )}
+                      : "text-default-500 hover:text-black"
+                  }`}
                   onClick={() => setIsMonth(true)}
                 >
                   Month
                 </button>
                 <button
-                  className={clsx(
-                    "flex-1 p-2 font-semibold",
+                  className={`flex-1 p-2 font-semibold ${
                     !isMonth
                       ? "rounded-2xl bg-default-300"
-                      : "text-default-500 hover:text-black",
-                  )}
+                      : "text-default-500 hover:text-black"
+                  }`}
                   onClick={() => setIsMonth(false)}
                 >
                   Year

@@ -1,17 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import "../globals.css";
-import React from "react";
-
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "@/store/api";
 
-import SearchBar from "../ui/search/SearchBar";
 import Footer from "../ui/footer/Footer";
 
-import BackIcon from "@/public/signup/BackIcon";
 import SearchTitle from "@/public/search/SearchTitle";
+import BackIcon from "@/public/common/BackIcon";
+import SearchBar from "./(component)/SearchBar";
+import { getMe } from "@/api/user/api";
 
 export default function Search() {
   // me
@@ -37,7 +33,7 @@ export default function Search() {
           <SearchBar />
         </div>
 
-        <Footer me={meData} />
+        <Footer />
       </div>
     </main>
   );

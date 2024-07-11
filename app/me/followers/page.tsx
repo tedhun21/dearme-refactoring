@@ -4,8 +4,11 @@ import Link from "next/link";
 
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getMyFriendsWithPage, getMyRequestsWithPage } from "@/store/api";
-import FollowList from "@/app/ui/me/followers/FollowList";
+import FollowList from "@/app/me/followers/(component)/FollowList";
+import {
+  getMyFriendsWithPage,
+  getMyRequestsWithPage,
+} from "@/api/friendship/api";
 
 export default function MeFriend() {
   const queryClient = useQueryClient();

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import LoginInputs from "../ui/login/LoginInputs";
+import LoginInputs from "./(component)/LoginInputs";
 import BackIcon from "@/public/common/BackIcon";
 import DearmeLogo from "@/public/login/DearmeLogo";
 

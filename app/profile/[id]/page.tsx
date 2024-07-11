@@ -1,12 +1,13 @@
 "use client";
 
 import Footer from "@/app/ui/footer/Footer";
-import UserInfo from "@/app/ui/me/profile/user/UserInfo";
-import { getMe } from "@/store/api";
+import UserInfo from "@/app/profile/[id]/(component)/user/UserInfo";
+
 import { useQuery } from "@tanstack/react-query";
 
 import axios from "axios";
 import { cookies } from "next/headers";
+import { getMe } from "@/api/user/api";
 
 // const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,14 +23,14 @@ export default function Profile() {
 
   const { data: meData } = useQuery({
     queryKey: ["getMe"],
-    queryFn: () => getMe(),
+    queryFn: getMe,
   });
 
   return (
     <main className="flex min-h-screen justify-center">
       <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-default-200 shadow-lg">
         <UserInfo me={meData} />
-        <Footer me={meData} />
+        <Footer />
       </div>
     </main>
   );

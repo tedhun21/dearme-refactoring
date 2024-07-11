@@ -8,7 +8,7 @@ export default function Loading({ className }: any) {
       size={20}
       thickness={5}
       sx={{
-        color: className.includes("text-black") ? "#000000" : "#ffffff",
+        color: className?.includes("text-black") ? "#000000" : "#ffffff",
         animationDuration: "550ms",
         [`& .${circularProgressClasses.circle}`]: {
           strokeLinecap: "round",

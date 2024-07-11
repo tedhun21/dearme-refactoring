@@ -3,15 +3,13 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { useMutation } from "@tanstack/react-query";
 
-import { Modal } from "@mui/joy";
-import { IconButton, Menu, Switch } from "@mui/material";
+import { IconButton, Menu } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import XIcon from "@/public/todo/XIcon";
 import EditIcon from "@/public/me/EditIcon";
 import { deleteMyTodo } from "@/store/api";
 import { todoListState } from "@/store/atoms";
-import CreateTodoModal from "../todogoal/goal/CreateGoalModal";
 
 export default function TodoSetting({ date, todo, setCanEdit }: any) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -19,7 +17,7 @@ export default function TodoSetting({ date, todo, setCanEdit }: any) {
   const setTodos = useSetRecoilState(todoListState);
 
   // delete Todo
-  const { mutate: deleteTodoMutate, data } = useMutation({
+  const { mutate: deleteTodoMutate } = useMutation({
     mutationKey: ["deleteMyTodo"],
     mutationFn: deleteMyTodo,
     onSuccess: ({ data }: any) => {

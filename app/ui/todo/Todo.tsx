@@ -8,10 +8,10 @@ import TodoCheckFalseIcon from "@/public/me/TodoCheckFalseIcon";
 import TodoCheckTrueIcon from "@/public/me/TodoCheckTrueIcon";
 import TodoMenu from "./TodoMenu";
 import { todoListState } from "@/store/atoms";
-import { updateMyTodo, updateMyTodoDone } from "@/store/api";
 
 import SendIcon from "@/public/todogoal/SendIcon";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { updateMyTodo, updateMyTodoDone } from "@/api/todo/api";
 
 export default function Todo({ date, todo }: any) {
   const [done, setDone] = useState<boolean>();
