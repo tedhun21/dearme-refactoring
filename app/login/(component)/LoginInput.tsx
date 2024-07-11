@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
 
-import clsx from "clsx";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 import { LoginFormValues } from "./LoginInputs";
@@ -27,9 +26,7 @@ export default function LoginInput({
 
   return (
     <div className="flex flex-col gap-2">
-      <div
-        className={clsx("flex flex-col", type === "password" ? "relative" : "")}
-      >
+      <div className={`flex flex-col ${type === "password" ? "relative" : ""}`}>
         <label
           htmlFor={type}
           className="text-sm font-semibold text-default-800"
@@ -41,10 +38,9 @@ export default function LoginInput({
           type={!showPassword && type === "password" ? "password" : "text"}
           {...register(type)}
           placeholder={placeholder || ""}
-          className={clsx(
-            "border-b-2 border-default-400 bg-transparent p-2 placeholder:text-default-500 hover:border-default-800 hover:placeholder:text-default-600 focus:border-default-900 focus:outline-none focus:placeholder:text-default-500",
-            error ? "text-red-600" : "",
-          )}
+          className={`border-b-2 border-default-400 bg-transparent p-2 placeholder:text-default-500 hover:border-default-800 hover:placeholder:text-default-600 focus:border-default-900 focus:outline-none focus:placeholder:text-default-500 ${
+            error ? "text-red-600" : ""
+          }`}
         />
         {type === "password" ? (
           <button

@@ -2,17 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import clsx from "clsx";
 import { useMutation } from "@tanstack/react-query";
 
 import SignUpInput from "./SignUpInput";
-
 import Loading from "@/public/common/Loading";
-import { useRouter } from "next/navigation";
 import { checkEmail, checkNickname, createUser } from "@/api/user/api";
 
 export interface SignUpFormValues {
@@ -208,10 +206,9 @@ export default function SignUpInputs() {
           />
           <label
             htmlFor="agreeToTermsAndServices"
-            className={clsx(
-              "text-defalut-800 text-sm underline hover:text-default-600",
-              errors.isChecked ? "text-red-500" : "",
-            )}
+            className={`text-sm text-default-800 underline hover:text-default-600 ${
+              errors.isChecked ? "text-red-500" : ""
+            }`}
           >
             AGREE TO TERMS AND SERVICES
           </label>

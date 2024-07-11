@@ -1,10 +1,9 @@
 "use client";
 
-import clsx from "clsx";
+import { useQuery } from "@tanstack/react-query";
 
 import GoalList from "../GoalList";
 import { getToday } from "@/util/date";
-import { useQuery } from "@tanstack/react-query";
 import { getMyGoals } from "@/api/goal/api";
 
 export default function MeGoal({ route }: any) {
@@ -14,15 +13,14 @@ export default function MeGoal({ route }: any) {
   });
 
   return (
-    <section className={clsx(route === "/" ? "" : "px-4")}>
+    <section className={`${route === "/" ? "" : "px-4"}`}>
       {route !== "/" ? (
         <div className="font-semibold text-default-700">Goal</div>
       ) : null}
       <div
-        className={clsx(
-          "flex flex-col gap-3 bg-default-100 px-4 py-3",
-          route === "/" ? "rounded-b-xl" : "rounded-xl",
-        )}
+        className={`flex flex-col gap-3 bg-default-100 px-4 py-3 ${
+          route === "/" ? "rounded-b-xl" : "rounded-xl"
+        }`}
       >
         {Array.isArray(goalData) && goalData.length !== 0 ? (
           goalData.map((goal: any) => (

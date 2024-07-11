@@ -2,16 +2,15 @@ import { ChangeEvent, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import clsx from "clsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import BackButton from "../../../../ui/backbutton";
 
+import { deleteImage } from "@/api/api";
 import PencilIcon from "@/public/me/PencilIcon";
+import { updateUserPhoto } from "@/api/user/api";
 import MeProfileHeaderMeatball from "./MeProfileHeaderMeatball";
 import UserWithNoImage from "@/public/social/UserWithNoImage";
-import { updateUserPhoto } from "@/api/user/api";
-import { deleteImage } from "@/api/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
@@ -80,10 +79,9 @@ export default function MeProfileHeader({ me, route }: any) {
 
   return (
     <div
-      className={clsx(
-        "z-10 flex w-full flex-col",
-        route === "edit" ? "" : "justify-between",
-      )}
+      className={`z-10 flex w-full flex-col ${
+        route === "edit" ? "" : "justify-between"
+      }`}
     >
       <div className="flex items-center justify-between">
         {route === "edit" ? (
@@ -215,67 +213,4 @@ export default function MeProfileHeader({ me, route }: any) {
       ) : null}
     </div>
   );
-}
-
-{
-  /* {deleteHover ? (
-              <button
-                type="button"
-                className="absolute top-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-700"
-                onClick={() => handleDeleteUserPhoto()}
-              >
-                &times;
-              </button>
-            ) : null} */
-}
-
-{
-  /* <div className="absolute -bottom-10 right-10 z-10 h-48 w-48">
-          {userPhoto ? (
-            <div className="relative h-full w-full overflow-hidden rounded-full bg-default-300 shadow-2xl">
-              <Image
-                src={userPhoto && URL.createObjectURL(userPhoto)}
-                alt="user photo"
-                fill
-                quality={80}
-                priority
-                className="z-0 object-cover"
-              />
-              <div>hi</div>
-            </div>
-          ) : (me as any)?.photo ? (
-            <div className="h-full w-full">
-              <div className="h-full w-full overflow-hidden rounded-full bg-default-300 shadow-2xl">
-                <Image
-                  src={`${BUCKET_URL}${(me as any).photo.url}`}
-                  alt="user photo"
-                  fill
-                  className="object-z-0 object-cover"
-                />
-              </div>
-              <button>delete photo</button>
-            </div>
-          ) : (
-            <UserWithNoImage className="h-full w-full" />
-          )}
-
-          <input
-            className="hidden"
-            type="file"
-            accept="image/jpg,image/png,image/jpeg"
-            ref={userfileInput}
-            onChange={handleUserPhotoChange}
-          />
-
-          <button
-            onClick={() => {
-              (userfileInput.current as any).click();
-            }}
-            className="group absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-full bg-default-900 shadow-2xl hover:bg-default-800"
-          >
-            <PencilIcon className="h-5 w-5 fill-current group-hover:text-default-100" />
-          </button>
-        </div>
-      ) : null}
-    </div> */
 }

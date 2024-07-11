@@ -1,11 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import clsx from "clsx";
+import { useMutation } from "@tanstack/react-query";
 
-import { deleteDiary } from "@/store/api";
 import Delete from "@/public/search/Delete";
 import EditPost from "@/public/social/EditPost";
+import { deleteDiary } from "@/api/diary/api";
 
 export default function DiaryActionButton({
   date,
@@ -47,12 +46,11 @@ export default function DiaryActionButton({
   return (
     <button
       type="button"
-      className={clsx(
-        "rounded-lg border-2 p-2",
+      className={`rounded-lg border-2 p-2 ${
         actionType === "Delete"
           ? "border-black bg-default-800 hover:bg-default-700"
-          : "border-default-400 bg-default-300 hover:bg-default-400",
-      )}
+          : "boder-default-400 bg-default-300 hover:bg-default-400"
+      }`}
       onClick={() => handleDeleteClick()}
     >
       <div className="flex items-center justify-center">
