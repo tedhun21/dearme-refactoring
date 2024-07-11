@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
-import { deleteImage } from "@/store/api";
 import PhotoIcon from "@/public/diary/PhotoIcon";
+import { deleteImage } from "@/api/api";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 

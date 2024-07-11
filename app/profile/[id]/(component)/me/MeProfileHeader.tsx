@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import BackButton from "../../../../ui/backbutton";
+import BackButton from "../../../../ui/Backbutton";
 
 import { deleteImage } from "@/api/api";
 import PencilIcon from "@/public/me/PencilIcon";

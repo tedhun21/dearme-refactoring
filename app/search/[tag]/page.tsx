@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 
 import Header from "@/app/ui/header/Header";
-import BackButton from "@/app/ui/backbutton";
+import BackButton from "@/app/ui/Backbutton";
 
 import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
 import { Divider } from "@mui/material";

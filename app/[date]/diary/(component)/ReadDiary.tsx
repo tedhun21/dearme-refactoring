@@ -15,7 +15,7 @@ import { BookmarkIcon as SolidBookmarkIcon } from "@heroicons/react/24/solid";
 import TagSection from "./TagSection";
 import WeatherIcons from "./WeatherIcons";
 import { getDiaryDate } from "@/util/date";
-import { updateDiaryRemember } from "@/store/api";
+import { updateDiaryRemember } from "@/api/diary/api";
 
 export default function ReadDiary({ date, diaryData }: any) {
   const queryClient = useQueryClient();

@@ -7,7 +7,7 @@ import { useInView } from "react-intersection-observer";
 import { CircularProgress, Divider } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import BackButton from "@/app/ui/backbutton";
+import BackButton from "@/app/ui/Backbutton";
 
 import FollowList from "@/app/me/followers/(component)/FollowList";
 import { getMyFriendsAndBlock } from "@/api/friendship/api";

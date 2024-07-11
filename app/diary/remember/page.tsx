@@ -1,10 +1,7 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getRemembersForMonth } from "@/store/api";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +11,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import MenuItem from "@mui/material/MenuItem";
 import { getToday } from "@/util/date";
 import MoodArrays from "@/app/diary/remember/(component)/MoodArrays";
+import { getRemembersForMonth } from "@/api/diary/api";
 
 export interface RememberItem {
   id: number;
