@@ -1,121 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import Select from "@mui/material/Select";
+import dayjs, { Dayjs } from "dayjs";
+
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import MenuItem from "@mui/material/MenuItem";
+
 import { getToday } from "@/util/date";
+
 import MoodArrays from "@/app/diary/remember/(component)/MoodArrays";
-import { getRemembersForMonth } from "@/api/diary/api";
-
-export interface RememberItem {
-  id: number;
-  date: string;
-  mood: string;
-  title: string;
-  photos: any;
-}
-
-// Month
-const months = [
-  { month: "Jan", value: "01" },
-  { month: "Feb", value: "02" },
-  { month: "Mar", value: "03" },
-  { month: "Apr", value: "04" },
-  { month: "May", value: "05" },
-  { month: "Jun", value: "06" },
-  { month: "Jul", value: "07" },
-  { month: "Aug", value: "08" },
-  { month: "Sep", value: "09" },
-  { month: "Oct", value: "10" },
-  { month: "Nov", value: "11" },
-  { month: "Dec", value: "12" },
-];
 
 export default function Remeber() {
-  //   Select
-  const [selectedMonth, setSelectedMonth] = useState(getToday().slice(5, 7));
-  const handleMonthChange = (e: any) => {
-    setSelectedMonth(e.target.value);
-  };
-
-  // get _ remembers
-  const { data: remembers, refetch: refecthRemeberDiary } = useQuery({
-    queryKey: ["selectedMonth"],
-    queryFn: () => getRemembersForMonth(selectedMonth),
-  });
-
-  useEffect(() => {
-    refecthRemeberDiary();
-  }, [selectedMonth]);
+  const [selectedMonth, setSelectedMonth] = useState<Dayjs | null>(
+    dayjs(getToday()),
+  );
 
   return (
     <main className="relative flex min-h-screen justify-center">
       <div className="flex w-full min-w-[360px] max-w-[600px] flex-col bg-black shadow-lg">
         {/* 헤더 */}
-        <header className="flex w-full flex-row justify-between p-5">
+        <header className="flex w-full items-center justify-between p-5">
           <Link href="/">
             <Image
               src="/remember/whitelogo.png"
-              width={77}
-              height={20}
               alt="logo"
-              quality={80}
+              width={80}
+              height={26}
+              style={{ width: "80px", height: "26px" }}
               priority
             />
           </Link>
 
           {/* Year & Month */}
-          <div className="flex flex-row  p-1 ">
-            <Select
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={selectedMonth}
+              onChange={(newValue) => setSelectedMonth(newValue)}
+              views={["month", "year"]}
               sx={{
-                "&.MuiOutlinedInput-root": {
-                  width: "100px",
-                  height: "20px",
-                  fontSize: "14px",
-                  color: "white",
-                  fontWeight: "600",
-                  paddingLeft: "16px",
-                  ".MuiOutlinedInput-notchedOutline": { border: 0 },
-                  "& .MuiSvgIcon-root": {
-                    right: "unset",
-                    left: "0px",
+                width: "180px",
+                backgroundColor: "transparent",
+
+                ".Mui-focused": {
+                  "&.MuiOutlinedInput-notchedOutline": {
+                    border: "2px solid #EDA323 !important",
+                    borderColor: "#EDA323 !important",
                   },
                 },
+                ".MuiInputBase-root": {
+                  borderRadius: "12px",
+                  padding: "0px",
+                  fontFamily: "inherit",
+                  fontSize: "14px",
+                  lineHeight: "20px",
+                  fontWeight: 600,
+                  color: "#ffffff",
+
+                  ".MuiInputBase-input": {
+                    padding: "8px 0 8px 16px",
+                  },
+                  ".MuiInputAdornment-root": {
+                    ".MuiButtonBase-root": {
+                      marginRight: "0px",
+                    },
+                  },
+                },
+                ".Mui-selected": {
+                  backgroundColor: "#EDA323 !important",
+                },
+
+                // ".base-Popper-root": {
+                //   ".MuiPaper-root": {
+                //     ".MuiPickersMonth": {
+                //       "&.MuiPickersMonth-monthButton + .Mui-selected": {
+                //         backgroundColor: "#EDA323 !important",
+                //       },
+                //     },
+                //   },
+                // },
               }}
-              IconComponent={({ ...rest }) => (
-                <KeyboardArrowDownRoundedIcon
-                  {...rest}
-                  sx={{
-                    width: "20px",
-                    height: "24px",
-                    fill: "#ffffff",
-                    stroke: "white",
-                    // strokeWidth: "0.5",
-                  }}
-                />
-              )}
-              value={selectedMonth}
-              onChange={handleMonthChange}
-            >
-              {/* map */}
-              {months.map((month) => (
-                <MenuItem
-                  key={month.value}
-                  sx={{ fontSize: "14px" }}
-                  value={month.value}
-                >
-                  {month.month}
-                </MenuItem>
-              ))}
-            </Select>
-            <span className="pr-5 text-sm font-semibold text-white">2024</span>
-          </div>
+              slots={{
+                openPickerIcon: () => (
+                  <KeyboardArrowDownRoundedIcon className="stroke-2 text-white" />
+                ),
+              }}
+            />
+          </LocalizationProvider>
         </header>
 
         <div className="flex items-baseline gap-1 p-5">
@@ -125,7 +99,7 @@ export default function Remeber() {
 
         {/* Moods 카드 */}
         <section className="scrollbar-hide overflow-scroll px-5">
-          <MoodArrays remembers={remembers} />
+          <MoodArrays selectedMonth={selectedMonth} />
         </section>
       </div>
     </main>

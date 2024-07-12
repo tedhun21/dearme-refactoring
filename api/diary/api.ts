@@ -107,14 +107,14 @@ export const deleteDiary = async (diaryId: string) => {
   }
 };
 
-// Read _ Remember
-export const getRemembersForMonth = async (month: any) => {
+// For Month: remembers in diaries
+export const getRemembersForMonth = async (date: any) => {
   const access_token = getCookie("access_token");
 
   if (access_token) {
     const headers = { Authorization: `Bearer ${access_token}` };
     const { data } = await axios.get(
-      `${API_URL}/diaries?date=2024-${month}&remember=true`,
+      `${API_URL}/diaries?date=${date}&remember=true`,
       { headers },
     );
 

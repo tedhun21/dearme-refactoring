@@ -1,9 +1,9 @@
-import { Divider, IconButton } from "@mui/material";
-import { getDate } from "./MoodArrays";
 import { useState } from "react";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import RememberModal from "./RememberModal";
 import Image from "next/image";
+
+import RememberModal from "./RememberModal";
+import dayjs from "dayjs";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
@@ -12,7 +12,7 @@ export default function DiaryCard({ remember }: any) {
 
   const [open, setOpen] = useState(false);
 
-  const handleOpen = (): void => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -21,7 +21,7 @@ export default function DiaryCard({ remember }: any) {
   return (
     <div className="group relative flex flex-shrink-0">
       <div
-        className="relative h-[300px] w-[240px] cursor-pointer overflow-hidden rounded-2xl bg-white"
+        className="relative h-[300px] w-[240px] cursor-pointer overflow-hidden rounded-2xl"
         onClick={() => handleOpen()}
       >
         {remember.photos ? (
@@ -32,7 +32,7 @@ export default function DiaryCard({ remember }: any) {
             fill
           />
         ) : (
-          <div className="rounded-2xl bg-default-800 group-hover:opacity-95" />
+          <div className="h-full w-full rounded-2xl bg-default-800 group-hover:opacity-95" />
         )}
 
         {/* 호버링 컨테이너 */}
@@ -40,10 +40,10 @@ export default function DiaryCard({ remember }: any) {
           {/* date */}
           <div className="flex flex-col">
             <span className="text-2xl font-semibold">
-              {getDate(remember.date).day}
+              {dayjs(remember.date).format("DD")}
             </span>
             <span className="font-base text-xl">
-              {getDate(remember.date).month}
+              {dayjs(remember.date).format("MMM")}
             </span>
           </div>
           {/* 일기 타이틀 */}
@@ -51,15 +51,19 @@ export default function DiaryCard({ remember }: any) {
             <span className="font-semibold">{'"' + remember.title + '"'}</span>
           </div>
           {/* 연도 & more */}
-          <div className="flex items-center justify-between">
+          <div className="flex w-full items-center justify-between">
             <div className="flex-grow">
-              <span>{getDate(remember.date).year}</span>
-              <Divider className="border-white" />
+              <span>{dayjs(remember.date).format("YYYY")}</span>
+              <div className="h-[1px] bg-white" />
             </div>
             <div className="flex-0">
-              <IconButton aria-label="more" id="long-button">
-                <MoreVertRoundedIcon sx={{ color: "#ffffff" }} />
-              </IconButton>
+              <button
+                type="button"
+                onClick={handleOpen}
+                className="size-7 rounded-full p-1 hover:bg-default-500"
+              >
+                <EllipsisVerticalIcon className="stroke-2 text-white" />
+              </button>
             </div>
           </div>
         </div>
@@ -72,37 +76,3 @@ export default function DiaryCard({ remember }: any) {
     </div>
   );
 }
-
-//  {/* date */}
-//  <div className="absolute left-0 top-0 m-2 flex items-center">
-//  <div className="flex flex-col items-center justify-center">
-//    <span className="text-2xl font-semibold text-white">
-//      {getDate(remember.date).day}
-//    </span>
-
-//    <span className="font-base text-xl text-white">
-//      {getDate(remember.date).month}
-//    </span>
-//  </div>
-// </div>
-// {/* 일기 타이틀 */}
-// <div className="absolute max-w-[240px] whitespace-pre-wrap break-words px-2 text-center text-base font-semibold text-white">
-//  {'"' + remember.title + '"'}
-// </div>
-// {/* 연도 & more */}
-// <div className="absolute bottom-5 flex w-[180px] ">
-//  <div>
-//    <span className=" font-base text-lg font-light text-white">
-//      {getDate(remember.date).year}
-//    </span>
-//    <Divider className=" w-[160px] border-white px-2" />
-//  </div>
-//  <IconButton aria-label="more" id="long-button">
-//    <MoreVertRoundedIcon sx={{ color: "#ffffff" }} />
-//  </IconButton>
-//  <RememberModal
-//    remember={remember}
-//    open={open}
-//    handleClose={handleClose}
-//  />
-// </div>
