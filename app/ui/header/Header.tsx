@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import HeaderUserModal from "./LogoutUserModal";
-import LoginUserModal from "./LoginUserModal";
+import HeaderUserMenu from "./HeaderUserMenu";
 
 export default function Header({ me }: any) {
   return (
@@ -11,13 +10,13 @@ export default function Header({ me }: any) {
         <Image
           src="/header/logo.png"
           alt="logo"
-          width={80}
-          height={26}
-          style={{ width: "80px", height: "26px" }}
+          width={100}
+          height={32}
+          style={{ width: "100px", height: "32px" }}
           priority
         />
       </Link>
-      {me ? <LoginUserModal me={me} /> : <HeaderUserModal />}
+      <HeaderUserMenu me={me} />
     </header>
   );
 }
