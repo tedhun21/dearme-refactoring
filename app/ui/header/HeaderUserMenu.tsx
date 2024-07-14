@@ -14,7 +14,6 @@ import { deleteCookie } from "@/util/tokenCookie";
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
 export default function HeaderUserMenu({ me }: any) {
-  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
@@ -59,7 +58,7 @@ export default function HeaderUserMenu({ me }: any) {
             className="object-cover"
           />
         ) : me && !me.photo ? (
-          <UserWithNoImage className="size-6" />
+          <UserWithNoImage className="h-full w-full" />
         ) : (
           <UserIcon className="size-6 stroke-2" />
         )}
