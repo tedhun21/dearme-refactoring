@@ -18,9 +18,9 @@ export default function RecentSearch({ recent, onRecentRemove }: any) {
         className="flex flex-grow items-center gap-3"
       >
         {recent?.text.startsWith("#") ? (
-          <button className="flex size-12 items-center justify-center rounded-full bg-white">
-            <HashtagIcon className="size-6" />
-          </button>
+          <div className="flex size-12 items-center justify-center rounded-full bg-white">
+            <HashtagIcon className="size-6 stroke-2 text-default-500" />
+          </div>
         ) : recent?.photo ? (
           <div className="relative size-12 overflow-hidden rounded-full">
             <Image

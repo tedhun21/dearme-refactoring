@@ -94,7 +94,7 @@ export default function SocialPost({ post }: SocialPostProps) {
           href={`/profile/${post.user.id}`}
           className="flex gap-2"
         >
-          <div className="relative size-10 rounded-full">
+          <div className="relative size-10 overflow-hidden rounded-full">
             {post.user?.photo?.url ? (
               <Image
                 src={`${BUCKET_URL}${post?.user?.photo?.url}`}

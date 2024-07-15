@@ -5,15 +5,13 @@ import Image from "next/image";
 
 import { useQuery } from "@tanstack/react-query";
 
+import { HashtagIcon } from "@heroicons/react/24/outline";
+import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
+
 import Header from "@/app/ui/header/Header";
 import BackButton from "@/app/ui/Backbutton";
-
-import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
-import { Divider } from "@mui/material";
-
-import GoalTag from "@/public/search/GoalTag";
-import ViewPostModal from "./(component)/ViewPostModal";
 import { getPostsByGoals } from "@/api/post/api";
+import ViewPostModal from "./(component)/ViewPostModal";
 
 const BUCKET_URL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
@@ -21,13 +19,11 @@ export default function SearchResults({ params }: { params: { tag: string } }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   // # 목표 검색
-  const { data: getGoalSearchResult } = useQuery({
-    queryKey: ["geGoalSearchResult"],
+  const { data: searchPostData } = useQuery({
+    queryKey: ["searchGoalData"],
     queryFn: () => getPostsByGoals(searchTerm),
     enabled: searchTerm !== "",
-    staleTime: 0,
   });
-  const searchedPosts = getGoalSearchResult || [];
 
   // 포스트 조회 모달
   const [open, setOpen] = useState(false);
@@ -56,56 +52,47 @@ export default function SearchResults({ params }: { params: { tag: string } }) {
         </div>
 
         {/* #목표 & 목표 개수 */}
-        <section className=" mx-5 my-10 flex items-center">
-          <GoalTag className="h-10 w-10" />
+        <section className="flex items-center gap-2 px-5 py-8">
+          <div className="flex size-10 items-center justify-center rounded-full bg-white">
+            <HashtagIcon className="size-6 stroke-2 text-default-500" />
+          </div>
           <div className="flex flex-col">
-            <span className="ml-2 text-base font-semibold text-default-700">
+            <span className="text-base font-semibold text-default-700">
               #{searchTerm}
             </span>
-            <span className="ml-2 text-xs font-medium text-default-500">
-              {searchedPosts.length}{" "}
-              {searchedPosts.length <= 1 ? " post" : " posts"}
+            <span className="text-xs font-medium text-default-500">
+              {searchPostData?.length}{" "}
+              {searchPostData?.length <= 1 ? " post" : " posts"}
             </span>
           </div>
         </section>
 
+        <div className="h-[2px] bg-default-400" />
         {/* #목표 관련 포스트 */}
-        {searchedPosts.length > 0 ? (
+        {searchPostData?.length > 0 ? (
           <section>
-            <Divider
-              sx={{
-                borderColor: "#EBE3D5",
-                height: "2px",
-                marginBottom: "20px",
-              }}
-            />
-            <h1 className=" mb-3 ml-5 mt-5 text-sm font-semibold text-default-700">
+            <h1 className="p-5 text-sm font-semibold text-default-700">
               Recent posts
             </h1>
-            <div className="grid grid-cols-3 gap-0.5">
-              {Array.isArray(searchedPosts) &&
-                searchedPosts.map((post: any) => (
-                  <div
+            <div className="grid grid-cols-3 gap-0.5 xs:grid-cols-4">
+              {Array.isArray(searchPostData) &&
+                searchPostData.map((post: any) => (
+                  <button
                     key={post.id}
-                    className="flex cursor-pointer items-center justify-center"
+                    type="button"
+                    onClick={() => handleOpen(post.id)}
+                    className="flex items-center justify-center"
                   >
-                    <div
-                      style={{
-                        position: "relative",
-                        width: "100%",
-                        paddingBottom: "100%",
-                      }}
-                      onClick={() => handleOpen(post.id)}
-                    >
+                    <div className="relative h-[140px] w-full xs:h-[160px]">
                       <Image
                         src={`${BUCKET_URL}${post.photo.url}`}
                         alt="Post Image"
                         fill
-                        sizes="160px"
                         priority
+                        className="object-cover"
                       />
                     </div>
-                  </div>
+                  </button>
                 ))}
             </div>
           </section>
