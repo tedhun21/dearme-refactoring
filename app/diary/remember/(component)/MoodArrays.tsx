@@ -1,58 +1,55 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
-import { RememberItem } from "@/app/diary/remember/page";
+import { useEffect } from "react";
 
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import IconButton from "@mui/material/IconButton";
-import { Divider } from "@mui/material";
-import RememberModal from "./RememberModal";
-import { useState } from "react";
-import MoodCard from "./MoodArray";
+import { Dayjs } from "dayjs";
+import { useQuery } from "@tanstack/react-query";
+
+import { getRemembersForMonth } from "@/api/diary/api";
 import MoodArray from "./MoodArray";
+import Loading from "@/public/common/Loading";
 
 interface MoodCardsProps {
-  remembers: RememberItem[];
+  selectedMonth: Dayjs | null;
 }
-export const getDate = (date: any) => {
-  const monthEng = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const [year, month, day] = date.split("-");
-  const monthIndex = parseInt(month, 10) - 1;
-  return {
-    year: year,
-    month: monthEng[monthIndex],
-    day: day,
-  };
-};
 
-export default function MoodArrays({ remembers }: MoodCardsProps) {
+export default function MoodArrays({ selectedMonth }: MoodCardsProps) {
+  // get _ remembers
+  const {
+    isPending: isRememberPending,
+    data: rememberData,
+    refetch: refecthRemeberDiary,
+  } = useQuery({
+    queryKey: ["getRemebersForMonth"],
+    queryFn: () => getRemembersForMonth(selectedMonth?.format("YYYY-MM")),
+  });
+
+  useEffect(() => {
+    refecthRemeberDiary();
+  }, [selectedMonth]);
+
   const moods =
-    Array.isArray(remembers) &&
-    Array.from(new Set(remembers.map((remember) => remember.mood)));
+    Array.isArray(rememberData) &&
+    rememberData
+      .map((remember) => remember.mood)
+      .filter((mood, index, self) => self.indexOf(mood) === index);
 
   return (
     <section className="flex flex-col gap-5">
-      {Array.isArray(remembers) && Array.isArray(moods) && moods.length > 0 ? (
+      {!isRememberPending &&
+      Array.isArray(rememberData) &&
+      Array.isArray(moods) &&
+      moods.length > 0 ? (
         moods.map((mood: any, index: number) => (
-          <MoodArray key={index} mood={mood} remembers={remembers} />
+          <MoodArray key={index} mood={mood} remembers={rememberData} />
         ))
-      ) : (
+      ) : rememberData?.length === 0 ? (
         <div className="m-5 flex justify-center text-sm text-default-500 ">
           No remembered moments yet
         </div>
-      )}
+      ) : isRememberPending ? (
+        <div className="text-center">
+          <Loading />
+        </div>
+      ) : null}
     </section>
   );
 }
