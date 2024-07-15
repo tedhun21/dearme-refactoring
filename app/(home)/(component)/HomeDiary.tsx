@@ -4,9 +4,8 @@ import Link from "next/link";
 
 import { useRecoilState } from "recoil";
 import dayjs from "dayjs";
-import { BookmarkSquareIcon } from "@heroicons/react/24/outline";
+import { BookmarkSquareIcon, PhotoIcon } from "@heroicons/react/24/outline";
 
-import ImageIcon from "@/public/home/ImageIcon";
 import { IDiary, diaryListState, settingState } from "@/store/atoms";
 import WeatherIcons from "@/app/[date]/diary/(component)/WeatherIcons";
 
@@ -34,10 +33,10 @@ export default function HomeDiary() {
                   </span>
                   <div className="flex gap-1">
                     {diaryOfDay.remember && (
-                      <BookmarkSquareIcon className="size-6" />
+                      <BookmarkSquareIcon className="size-6 stroke-2 text-default-600 group-hover:text-white" />
                     )}
                     {diaryOfDay.photos?.length > 0 && (
-                      <ImageIcon className="h-5 w-5" />
+                      <PhotoIcon className="size-6 stroke-2 text-default-600 group-hover:text-white" />
                     )}
                   </div>
                 </div>
@@ -46,19 +45,22 @@ export default function HomeDiary() {
                     <div className="flex items-center gap-3">
                       <div className="flex gap-1 text-2xl">
                         <span>{dayjs(date).format("MMMM")}</span>
-                        <span>{dayjs(date).format("DD")},</span>
+                        <span>{dayjs(date).format("D")},</span>
+                        <span>{dayjs(date).format("YYYY")}</span>
                       </div>
-                      <span>{dayjs(date).format("YYYY")}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <WeatherIcons weatherId={diaryOfDay.weatherId} />
-                      <span>{diaryOfDay.weather}</span>
                     </div>
                   </div>
                   <div className="flex">
                     <span className="flex justify-center">
                       {diaryOfDay.title}
                     </span>
+                  </div>
+                  <div className="flex items-center justify-end gap-2 text-sm">
+                    <WeatherIcons
+                      weatherId={diaryOfDay.weatherId}
+                      className="size-5 fill-current text-black"
+                    />
+                    <span>{diaryOfDay.weather}</span>
                   </div>
                 </div>
               </div>

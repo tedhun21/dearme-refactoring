@@ -5,8 +5,7 @@ import { Button } from "@mui/material";
 
 import { ISetting, settingState } from "@/store/atoms";
 
-import LoginUserModal from "../../../ui/header/LoginUserModal";
-import LogoutUserModal from "../../../ui/header/LogoutUserModal";
+import HeaderUserMenu from "@/app/ui/header/HeaderUserMenu";
 
 export default function TodogoalHeader({ me }: any) {
   const [{ todogoalTitle }, setSetting] =
@@ -69,9 +68,7 @@ export default function TodogoalHeader({ me }: any) {
           </Button>
         </div>
       </div>
-      <div className="flex justify-end">
-        {me ? <LoginUserModal me={me} /> : <LogoutUserModal />}
-      </div>
+      <HeaderUserMenu me={me} />
     </section>
   );
 }

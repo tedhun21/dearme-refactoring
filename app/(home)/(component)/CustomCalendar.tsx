@@ -208,12 +208,12 @@ export default function CustomCalendar() {
           sx={{
             "&.MuiDateCalendar-root": {
               width: "100%",
-              maxHeight: "480px", // 6줄일때 480 5줄일때 420
+              maxHeight: "510px", // 6줄일때 510 5줄일때 420
               height: `${
                 weekOfMonth === 6
-                  ? "480px"
+                  ? "510px"
                   : weekOfMonth === 5
-                    ? "420px"
+                    ? "450px"
                     : "360px"
               }`,
               "& .MuiPickersCalendarHeader-labelContainer": {
@@ -228,11 +228,12 @@ export default function CustomCalendar() {
               },
               "& .MuiPickersSlideTransition-root": {
                 overflowX: "unset",
-                "& .MuiDayCalendar-monthContainer": {
+                ".MuiDayCalendar-monthContainer": {
                   display: "flex",
                   flexDirection: "column",
-                  gap: "26px",
-                  "& .MuiDayCalendar-weekContainer": {
+                  paddingY: "8px",
+                  gap: "30px",
+                  ".MuiDayCalendar-weekContainer": {
                     paddingX: "20px",
                     justifyContent: "space-between",
                   },
