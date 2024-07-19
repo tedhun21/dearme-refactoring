@@ -99,12 +99,20 @@ export const goalListState = atom<IGoal[]>({
   default: [],
 });
 
+export enum Tag {
+  ALL = "ALL",
+  WITH = "WITH",
+  MOOD = "MOOD",
+}
+
 export interface ISetting {
-  isLogin: false;
+  isLogin: boolean;
   isDiary: boolean;
   date: Dayjs;
   todogoalTitle: string;
   todogoalDate: Dayjs;
+  isMonth: boolean;
+  tag: Tag;
 }
 
 export const settingState = atom<ISetting>({
@@ -115,6 +123,8 @@ export const settingState = atom<ISetting>({
     date: dayjs(),
     todogoalTitle: "Todo",
     todogoalDate: dayjs(),
+    isMonth: true,
+    tag: Tag.ALL,
   },
 });
 

@@ -136,3 +136,18 @@ export const getPostsByGoals = async (goal: any) => {
   );
   return response.data;
 };
+
+export const getTagCountsByDiary = async ({ date, tag, page, size }: any) => {
+  const access_token = getCookie("access_token");
+  if (access_token) {
+    const headers = { Authorization: `Bearer ${access_token}` };
+    const { data } = await axios.get(
+      `${API_URL}/diaries/tags?tag=${tag}&date=${date}&page=${page}&size=${size}`,
+      {
+        headers,
+      },
+    );
+
+    return data;
+  }
+};
